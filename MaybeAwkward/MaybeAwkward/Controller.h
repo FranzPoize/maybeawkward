@@ -1,7 +1,7 @@
 #ifndef Controller_h__
 #define Controller_h__
 
-namespace AB
+namespace MA
 {
 
 class Entity;

@@ -10,6 +10,7 @@
 
 #include "Entity.h"
 #include "DrawerSprite.h"
+#include "GraphicWrapper.h"
 #include "XBoxController.h"
 
 class ConsoleProgram

@@ -9,7 +9,7 @@
 #include "Entity.h"
 
 
-using namespace AB;
+using namespace MA;
 
 XBoxController::XBoxController(int aControllerId) :
     mControllerNum(aControllerId)

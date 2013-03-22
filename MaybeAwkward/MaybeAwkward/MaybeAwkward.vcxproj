@@ -16,11 +16,13 @@
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="DrawerSprite.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="World.h" />
     <ClInclude Include="XBoxController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawerSprite.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GraphicWrapper.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="XBoxController.cpp" />
   </ItemGroup>

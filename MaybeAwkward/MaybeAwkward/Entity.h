@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace AB
+namespace MA
 {
 
 class Controller;

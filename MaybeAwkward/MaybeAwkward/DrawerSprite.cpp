@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-using namespace AB;
+using namespace MA;
 
 DrawerSprite::DrawerSprite(CL_GraphicContext &gc, CL_Sprite aSprite):
     mGc(gc),

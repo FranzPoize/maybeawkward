@@ -6,7 +6,7 @@
 
 #include "Controller.h"
 
-namespace AB
+namespace MA
 {
 
 class XBoxController : public Controller

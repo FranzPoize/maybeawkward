@@ -6,7 +6,7 @@
 #include "constants.h"
 #include <ClanLib/core.h>
 
-using namespace AB;
+using namespace MA;
 
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
     mController(aController),

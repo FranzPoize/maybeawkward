@@ -1,7 +1,7 @@
 #ifndef Drawer_h__
 #define Drawer_h__
 
-namespace AB
+namespace MA
 {
 
 class Entity;

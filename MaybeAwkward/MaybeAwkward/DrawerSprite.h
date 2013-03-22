@@ -6,7 +6,7 @@
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
 
-namespace AB
+namespace MA
 {
 
 class Entity;

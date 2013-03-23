@@ -6,6 +6,8 @@
 #include <memory>
 
 #include <ClanLib/core.h>
+#include <ClanLib/application.h>
+#include <ClanLib/display.h>
 
 #include "XBoxController.h"
 #include "MessageReceiver.h"

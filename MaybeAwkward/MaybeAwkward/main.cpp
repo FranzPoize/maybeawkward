@@ -13,7 +13,10 @@
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
+#include "Camera.h"
+#include "FuckYouChoucheController.h"
 #include "MockController.h"
+#include "AIFlyingInPenisFormation.h"
 
 class ConsoleProgram
 {
@@ -49,22 +52,41 @@ public:
         //Business starts here
         try
         {
+			//Player Instanciation
             CL_SpriteDescription pibiDescription;
             pibiDescription.add_frame(ASSET_PATH+"placeholders/nounours_corps.png");
             
             CL_Sprite pibiSprite(gc, pibiDescription);
             pibiSprite.set_alignment(origin_bottom_left);
-            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
 
+			//Enemy Instanciation
+			CL_SpriteDescription enemyDescription;
+			enemyDescription.add_frame(ASSET_PATH+"crap/enemy.png");
+
+			CL_Sprite enemySprite(gc,enemyDescription);
+			enemySprite.set_alignment(origin_bottom_left);
+
+			std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
+			MA::GraphicWrapper gw(gc,camera);
+            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
+			std::shared_ptr<MA::Drawer> enemyDrawer = std::make_shared<MA::DrawerSprite>(gw, enemySprite);
 #ifdef WIN32
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
 #else 
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif
-            MA::Entity pibi(pibiController, pibiDrawer);
-            MA::PhysicsSystem::addEntity(pibi, MA::PHYSICS_BOX_GRAVITY);
-            MA::PhysicsSystem::setPosition(pibi.physicsID(), 100.0f, 540.0f);
 
+			std::shared_ptr<MA::Controller> enemyController = std::make_shared<MA::AIFlyingInPenisFormation>();
+
+            std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
+			camera->followEntity(pibi);
+
+			std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
+
+			MA::PhysicsSystem::addEntity(*pibi,MA::PHYSICS_BOX_GRAVITY);
+			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
+            MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+			MA::PhysicsSystem::setPosition(enemy->physicsID(),100.0f,100.0f);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
@@ -77,9 +99,12 @@ public:
                 MA::PhysicsSystem::update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
-
-                pibi.update(delta);
-                pibi.draw();
+                
+				camera->update();
+				enemy->update(delta);
+                pibi->update(delta);
+				enemy->draw();
+                pibi->draw();
 
                 window.flip(1);
                 CL_KeepAlive::process(0);

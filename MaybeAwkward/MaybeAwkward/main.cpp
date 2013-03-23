@@ -10,6 +10,7 @@
 
 #include "Entity.h"
 #include "Physics.h"
+#include "GameLogic.h"
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
@@ -79,6 +80,9 @@ public:
 			std::shared_ptr<MA::Controller> enemyController = std::make_shared<MA::AIFlyingInPenisFormation>();
 
             std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
+
+            std::shared_ptr<MA::GameLogic> gameplay = std::make_shared<MA::GameLogic>(nullptr);
+
             pibi->families().push_back(MA::FRIEND);
             pibi->families().push_back(MA::PLAYER);
             camera->followEntity(pibi);

@@ -4,14 +4,15 @@
 
 #include "Closure.h"
 #include "Entity.h"
+#include "World.h"
 
+#include <map>
 #include <list>
 
 namespace MA {
 
 class Entity;
 
-namespace GameLogic {
 
 struct EntityPair {
     Entity* e1;
@@ -30,11 +31,20 @@ struct CollisionRule {
     Family _f2;
 };
 
-CollisionRule& onBoxCollision(Family f1, Family f2);
+typedef std::map<uint64_t, CollisionRule> CollisionRuleMap;
 
-void update(float dt);
+class GameLogic {
+public:
+    GameLogic(std::shared_ptr<MA::World> w) : _world(w) {}
 
-} // GameLogic
+    CollisionRule& onBoxCollision(Family f1, Family f2);
+
+    void update(float dt);
+private:
+    CollisionRuleMap _collisionRules;
+    std::shared_ptr<MA::World> _world;
+};
+
 
 } // namespace
 

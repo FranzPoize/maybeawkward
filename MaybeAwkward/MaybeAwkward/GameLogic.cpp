@@ -4,23 +4,19 @@
 #include <stdint.h>
 
 namespace MA {
-namespace GameLogic {
 
-uint64_t key(Family f1, Family f2) {
+static uint64_t key(Family f1, Family f2) {
     return (uint64_t)f1 + (uint64_t) f2 << 32;
 }
 
-typedef std::map<uint64_t, CollisionRule> CollisionRuleMap;
-static CollisionRuleMap _collisionRules;
-
-CollisionRule& onBoxCollision(Family f1, Family f2)
+CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
 {
     CollisionRule& c = _collisionRules[key(f1, f2)];
     c._f1 = f1;
     c._f2 = f2;
 }
 
-void update(float dt)
+void GameLogic::update(float dt)
 {
     CollisionRuleMap::iterator it = _collisionRules.begin(); 
     CollisionRuleMap::iterator stop = _collisionRules.end();
@@ -47,5 +43,4 @@ CollisionRule::~CollisionRule() {
 }
 
 
-} // namespace
 } // namespace

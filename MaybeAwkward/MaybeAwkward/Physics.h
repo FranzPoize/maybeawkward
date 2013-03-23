@@ -45,9 +45,9 @@ public:
     }
 
     virtual ~PhysicalObject() {};
-    float setAngle(float a) { _angle = a; }
-    float setXVelocity(float vx) { _dx = vx; }
-    float setYVelocity(float vy) { _dx = vy; }
+    void setAngle(float a) { _angle = a; }
+    void setXVelocity(float vx) { _dx = vx; }
+    void setYVelocity(float vy) { _dx = vy; }
 
     float x() const { return _x; }
     float y() const { return _y; }

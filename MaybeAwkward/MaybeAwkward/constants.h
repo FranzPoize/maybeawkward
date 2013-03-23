@@ -13,9 +13,10 @@ const float ORBITAL_ENEMY_WEIGHT = 20;
 const float ORBITAL_PLAYER_WEIGHT = 20;
 const float ORBITAL_STARTING_SPEED = 20;
 
-const float SINUS_STYLE_MOVEMENT_SPEED = 20;
+const float SINUS_STYLE_MOVEMENT_SPEED = 200;
 
-const float AI_REACTION_DISTANCE = 500;
+const float AI_REACTION_DISTANCE = 1500;
+const float AI_ATTRACTION_TO_TARGET = 1500;
 
 //pixels/sec
 const float TOP_SPEED = 200;

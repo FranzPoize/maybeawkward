@@ -1,8 +1,10 @@
 #ifndef constants_h__
 #define constants_h__
 
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
+#include "user_constants.h"
+
+#define WIN_WIDTH 1024
+#define WIN_HEIGHT 768
 
 
 

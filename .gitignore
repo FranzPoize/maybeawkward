@@ -146,3 +146,7 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+
+logfile.txt
+MaybeAwkward/MaybeAwkward/MaybeAwkward.vcxproj
+user_constants.h

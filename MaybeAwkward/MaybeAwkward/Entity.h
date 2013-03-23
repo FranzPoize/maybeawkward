@@ -1,6 +1,9 @@
 #ifndef Entity_h__
 #define Entity_h__
 
+#include "Node.h"
+#include "Visitor.h"
+
 #include <memory>
 
 namespace MA
@@ -9,7 +12,7 @@ namespace MA
 class Controller;
 class Drawer;
 
-class Entity
+class Entity : public Node
 {
 public:
     //Entity(std::shared_ptr<Controller> aController);
@@ -30,6 +33,12 @@ public:
     {
         return mYpos;
     }
+
+    virtual void getVisited(Visitor &aVisitor)
+    {
+        aVisitor.visit(this);
+    }
+
 
 protected:
     std::shared_ptr<Controller> mController;

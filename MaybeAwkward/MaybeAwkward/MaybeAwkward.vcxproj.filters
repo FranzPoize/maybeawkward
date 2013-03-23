@@ -36,6 +36,15 @@
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MovableEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FuckYouChoucheController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawerSprite.cpp">
@@ -52,6 +61,15 @@
     </ClCompile>
     <ClCompile Include="GraphicWrapper.h">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FuckYouChoucheController.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
+#include "MockController.h"
 
 class ConsoleProgram
 {
@@ -53,8 +54,11 @@ public:
             pibiSprite.set_alignment(origin_bottom_left);
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
 
+#ifdef WIN32
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
-
+#else 
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
+#endif
             MA::Entity pibi(pibiController, pibiDrawer);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;

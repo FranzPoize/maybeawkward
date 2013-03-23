@@ -1,6 +1,9 @@
 #ifndef XBoxController_h__
 #define XBoxController_h__
 
+#include "Controller.h"
+
+#ifdef WIN32
 #include <XInput.h>
 #pragma comment(lib,"XInput.lib")
 
@@ -27,5 +30,8 @@ private:
     int mControllerNum;
 };
 
-}
+
+} // namespace
+
+#endif // WIN32
 #endif // XBoxController_h__

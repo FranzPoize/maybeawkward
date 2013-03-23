@@ -1,5 +1,7 @@
+#ifdef WIN32
 #include <iostream>
 #include <Windows.h>
+
 #include <cmath>
 #include <memory>
 
@@ -11,6 +13,7 @@
 
 
 using namespace MA;
+
 
 XBoxController::XBoxController(int aControllerId) :
     mControllerNum(aControllerId)
@@ -96,3 +99,5 @@ void XBoxController::vibrate(int leftVal, int rightVal)
     vibration.wRightMotorSpeed = rightVal;
     XInputSetState( mControllerNum, &vibration );
 }
+
+#endif // WIN32

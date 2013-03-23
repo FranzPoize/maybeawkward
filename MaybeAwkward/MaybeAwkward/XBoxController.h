@@ -9,11 +9,13 @@
 namespace MA
 {
 
+class MessageReceiver;
+
 class XBoxController : public Controller
 {
 public:
     XBoxController(int aControllerId=0);
-    void update(Entity &aEntity, float dt);
+    void update(MessageReceiver &aReceiver, float dt);
 
 protected:
     DWORD updateState();

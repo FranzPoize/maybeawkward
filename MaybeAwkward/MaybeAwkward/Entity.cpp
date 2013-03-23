@@ -13,9 +13,7 @@ using namespace MA;
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
     mMessageBox(),
     mController(aController),
-    mDrawer(aDrawer),
-    mXpos(10.f),
-    mYpos(500.f)
+    mDrawer(aDrawer)
 {
 }
 
@@ -43,11 +41,7 @@ void Entity::draw()
 void Entity::move(float dt, float aXInput, bool aJump)
 {
     float mv = aXInput*TOP_SPEED*dt;
-    mXpos += mv;
-    if(mXpos<0.)
-    {
-        mXpos = 0.;
-    }
+    PhysicsSystem::applyForce(mPhysics, mv, 0.0);
 }
 
 void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
@@ -58,6 +52,6 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 
 void Entity::visit(MoveMessage *aMessage, const VisitInfo &info)
 {
-    move(info.dt, aMessage->X, aMessage->jump);
+	PhysicsSystem::applyForce(mPhysics,aMessage->X,aMessage->Y);
     cl_log_event("info", "Move message received, X:%1, jmp:%2.", aMessage->X, aMessage->jump);
 }

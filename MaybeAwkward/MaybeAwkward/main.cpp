@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "Entity.h"
+#include "Physics.h"
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
@@ -26,6 +27,7 @@ public:
         HANDLE process = GetCurrentProcess();
         SetPriorityClass(process, ABOVE_NORMAL_PRIORITY_CLASS);
 #endif
+        MA::PhysicsSystem::init();
 
         CL_SetupCore setup_core;
         CL_SetupDisplay setup_display;
@@ -81,6 +83,11 @@ public:
 
 			std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
 
+            MA::Entity pibi(pibiController, pibiDrawer);
+			MA::PhysicsSystem::addEntity(*pibi);
+			MA::PhysicsSystem::addEntity(*enemy);
+            MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
             {
@@ -89,13 +96,21 @@ public:
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
 
+                MA::PhysicsSystem::update(delta);
+
                 gc.clear(CL_Colorf::whitesmoke);
+<<<<<<< HEAD
                 
 				camera->update();
 				enemy->update(delta);
                 pibi->update(delta);
 				enemy->draw();
                 pibi->draw();
+=======
+
+                pibi.update(delta);
+                pibi.draw();
+>>>>>>> d18aa1ec5d7823f1a487d86cd52fb306a522dcde
 
                 window.flip(1);
                 CL_KeepAlive::process(0);

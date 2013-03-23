@@ -3,8 +3,11 @@
 
 #include "Node.h"
 #include "Visitor.h"
+#include "Physics.h"
 
+#include <assert.h>
 #include <memory>
+#include <stdio.h>
 
 namespace MA
 {
@@ -18,20 +21,20 @@ public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
 
-
     void update(float dt);
     void draw();
 
     void move(float dt, float aXInput, bool aJump);
 
-    const float &x() const
+    const float x() const
     {
-        return mXpos;
+        return PhysicsSystem::get(mPhysics)->x();
+        printf("get x: %f\n", PhysicsSystem::get(mPhysics)->x());
     }
 
-    const float &y() const
+    const float y() const
     {
-        return mYpos;
+        return PhysicsSystem::get(mPhysics)->y();
     }
 
     virtual void getVisited(Visitor &aVisitor)
@@ -39,14 +42,20 @@ public:
         aVisitor.visit(this);
     }
 
+    void setPhysicsID(PhysicsID id) {
+        assert(mPhysics.type == PHYSICS_INVALID || 
+               id.type == PHYSICS_INVALID);
+        mPhysics = id;
+    }
+
+    PhysicsID physicsID() const {
+        return mPhysics;
+    }
 
 protected:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
-
-    float mXpos;
-    float mYpos;
-
+    PhysicsID mPhysics;
 };
 
 }

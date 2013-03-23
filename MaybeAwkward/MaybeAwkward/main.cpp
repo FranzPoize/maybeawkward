@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "Entity.h"
+#include "Physics.h"
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
@@ -23,6 +24,7 @@ public:
         HANDLE process = GetCurrentProcess();
         SetPriorityClass(process, ABOVE_NORMAL_PRIORITY_CLASS);
 #endif
+        MA::PhysicsSystem::init();
 
         CL_SetupCore setup_core;
         CL_SetupDisplay setup_display;
@@ -60,6 +62,9 @@ public:
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif
             MA::Entity pibi(pibiController, pibiDrawer);
+            MA::PhysicsSystem::addEntity(pibi);
+            MA::PhysicsSystem::setPosition(pibi.physicsID(), 100.0f, 540.0f);
+
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
@@ -69,8 +74,10 @@ public:
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
 
+                MA::PhysicsSystem::update(delta);
+
                 gc.clear(CL_Colorf::whitesmoke);
-                
+
                 pibi.update(delta);
                 pibi.draw();
 

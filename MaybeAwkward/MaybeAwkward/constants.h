@@ -14,4 +14,9 @@ const int FRAME_TIME_TARGET = 13;
 //pixels/sec
 const float TOP_SPEED = 200;
 
+const float GRAVITY_X = 0.0f;
+const float GRAVITY_Y = 30.0f;
+
+const int PHYSICS_Y_LIMIT = 800;
+
 #endif // constants_h__

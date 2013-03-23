@@ -10,9 +10,7 @@ using namespace MA;
 
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
     mController(aController),
-    mDrawer(aDrawer),
-    mXpos(10.f),
-    mYpos(500.f)
+    mDrawer(aDrawer)
 {
 }
 
@@ -29,9 +27,5 @@ void Entity::draw()
 void Entity::move(float dt, float aXInput, bool aJump)
 {
     float mv = aXInput*TOP_SPEED*dt;
-    mXpos += mv;
-    if(mXpos<0.)
-    {
-        mXpos = 0.;
-    }
+    PhysicsSystem::applyForce(mPhysics, mv, 0.0);
 }

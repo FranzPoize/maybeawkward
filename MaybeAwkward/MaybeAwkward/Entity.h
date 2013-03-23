@@ -21,6 +21,15 @@ class AbstractMessage;
 class MoveMessage;
 class AttackMessage;
 
+enum Family {
+    ENEMY,
+    PLAYER,
+    FRIEND,
+    ITEM,
+    ENEMY_BULLET,
+    FRIEND_BULLET,
+};
+
 class Entity : public MessageVisitor, public MessageReceiver
 {
 public:

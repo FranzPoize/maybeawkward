@@ -5,22 +5,23 @@
 
 #include <ClanLib/core.h>
 #include <ClanLib/display.h>
+#include <memory>
 
 namespace MA
 {
 
 class Entity;
+class GraphicWrapper;
 
 class DrawerSprite : public Drawer
 {
 public:
-    DrawerSprite(CL_GraphicContext &gc, CL_Sprite aSprite);
+    DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite);
 
     void draw(const Entity &aEntity);
 
-
 private:
-    CL_GraphicContext &mGc;
+    GraphicWrapper &mGc;
     CL_Sprite mSprite;
 };
 

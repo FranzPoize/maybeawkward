@@ -149,4 +149,5 @@ $RECYCLE.BIN/
 
 logfile.txt
 MaybeAwkward/MaybeAwkward/MaybeAwkward.vcxproj
+MaybeAwkward/MaybeAwkward/MaybeAwkward.vcxproj.filters
 user_constants.h

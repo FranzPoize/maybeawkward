@@ -14,6 +14,7 @@
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
 #include "MockController.h"
+#include "Camera.h"
 
 class ConsoleProgram
 {
@@ -52,17 +53,20 @@ public:
             CL_SpriteDescription pibiDescription;
             pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_marche/nounours_marche_00.png");
             
+            std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
+            MA::GraphicWrapper gw(gc, camera);
+
             CL_Sprite pibiSprite(gc, pibiDescription);
             pibiSprite.set_alignment(origin_bottom_left);
-            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
-            
+            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
+
             CL_SpriteDescription rightArmDescritpion;
             rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
 
             CL_Sprite leftArmSprite(gc, rightArmDescritpion);
             leftArmSprite.set_alignment(origin_bottom_left);
             leftArmSprite.set_rotation_hotspot(origin_top_left, -33, -111);
-            std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(gc, leftArmSprite);
+            std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(gw, leftArmSprite);
 
 
 #ifdef WIN32

@@ -6,10 +6,16 @@
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
 
-
-
 const int ABNORMAL_TIME = 20;
 const int FRAME_TIME_TARGET = 13;
+
+const float ORBITAL_ENEMY_WEIGHT = 500;
+const float ORBITAL_STARTING_SPEED = 20;
+
+const float SINUS_STYLE_MOVEMENT_SPEED = 450;
+
+const float AI_REACTION_DISTANCE = 300;
+const float AI_ATTRACTION_TO_TARGET = 1500;
 
 //pixels/sec
 const float TOP_SPEED = 200;

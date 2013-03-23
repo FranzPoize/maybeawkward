@@ -1,23 +1,26 @@
 #ifndef Entity_h__
 #define Entity_h__
 
-#include "Node.h"
-#include "Visitor.h"
+#include "MessageVisitor.h"
+#include "MessageReceiver.h"
+#include "AbstractMessage.h"
 
 #include <memory>
+#include <deque>
 
 namespace MA
 {
 
 class Controller;
 class Drawer;
+class AbstractMessage;
+class MoveMessage;
 
-class Entity : public Node
+class Entity : public MessageVisitor, public MessageReceiver
 {
 public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
-
 
     void update(float dt);
     void draw();
@@ -34,19 +37,26 @@ public:
         return mYpos;
     }
 
-    virtual void getVisited(Visitor &aVisitor)
+    void receiveMessage(std::shared_ptr<AbstractMessage> aInputMessage)
     {
-        aVisitor.visit(this);
+        mMessageBox.push_back(aInputMessage);
     }
 
+public:
+    // To be overloaded in derived class (will cause name hiding problems...)
+    void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
 
-protected:
+    void visit(MoveMessage *aMessage, const VisitInfo &info);
+private:
+    typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
+    typedef MessageBoxType::iterator MessageBoxIterator;
+
+    MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
 
     float mXpos;
     float mYpos;
-
 };
 
 }

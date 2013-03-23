@@ -4,12 +4,12 @@
 namespace MA
 {
 
-class Entity;
+class MessageReceiver;
 
 class Controller
 {
 public:
-    virtual void update(Entity &aEntity, float dt) =0;
+    virtual void update(MessageReceiver &aReceiver, float dt) =0;
 };
 
 }

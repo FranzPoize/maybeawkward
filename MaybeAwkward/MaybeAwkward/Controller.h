@@ -9,7 +9,7 @@ class MessageReceiver;
 class Controller
 {
 public:
-    virtual void update(MessageReceiver &aReceiver, float dt) =0;
+    virtual void update(MessageReceiver &aReceiver float dt) =0;
 };
 
 }

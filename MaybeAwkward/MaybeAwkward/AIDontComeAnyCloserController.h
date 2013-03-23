@@ -6,11 +6,12 @@
 namespace MA
 {
 class Entity;
+class MessageReceiver;
 class AIDontComeAnyCloserController : public Controller
 {
 public:
 	AIDontComeAnyCloserController(Entity &aTarget);
-	void update(Entity &aEntity, float dt);
+	void update(MessageReceiver &aMessageReceiver, float dt);
 private:
 	Entity &mTarget;
 };

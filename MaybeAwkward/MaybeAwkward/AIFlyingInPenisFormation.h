@@ -5,6 +5,7 @@
 
 namespace MA
 {
+class Entity;
 class MessageReceiver;
 
 class AIFlyingInPenisFormation : public Controller

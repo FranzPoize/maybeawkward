@@ -1,5 +1,6 @@
 #include "AIRoundingAroundYourDickController.h"
 #include "Entity.h"
+#include "MessageReceiver.h"
 #include "constants.h"
 
 using namespace MA;
@@ -12,16 +13,16 @@ AIRoundingAroundYourDickController::AIRoundingAroundYourDickController(Entity &a
 	mCurrentYSpeed = 0;
 }
 
-void AIRoundingAroundYourDickController::update(Entity &aEntity,float dt)
+void AIRoundingAroundYourDickController::update(MessageReceiver &aMessageReceiver,float dt)
 {
 	//distance between target and entity
-	float radius = sqrt(pow(mTarget.x() - aEntity.x(),2) + pow(mTarget.y() - aEntity.y(),2));
+	float radius = sqrt(pow(mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x(),2) + pow(mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y(),2));
 
 	//Strength of the pull on entity
 	float forceValue = (ORBITAL_ENEMY_WEIGHT + ORBITAL_PLAYER_WEIGHT)/radius;
 
-	float xComponent = (mTarget.x() - aEntity.x()) / radius;
-	float yComponent = (mTarget.y() - aEntity.y()) / radius;
+	float xComponent = (mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
+	float yComponent = (mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;
 
 	if (mTimeFromStart == 0)
 	{

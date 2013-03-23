@@ -3,17 +3,13 @@
 #define GDP4_PHYSICS_H
 
 #include "Slice.h"
+#include "collisions.h"
+
 #include <vector>
 
 namespace MA {
 
 class Entity;
-
-struct Rect {
-    Rect(float aX = 0, float aY = 0, float aW = 0, float aH = 0)
-    : x(aX), y(aY), width(aW), height(aH) {}
-    float x, y, width, height;
-};
 
 enum PhysicsType {
     PHYSICS_INVALID,
@@ -29,11 +25,14 @@ struct PhysicsID {
 };
 
 struct PhysicsMaterial {
-    PhysicsMaterial(float af = 0, float gf = 0, float m = 1.0)
-    : airFriction(af), groundFriction(gf), mass(m) {}
+    PhysicsMaterial(float af = 0, float gf = 0, float m = 1.0, float w = 0, float h = 0)
+    : airFriction(af), groundFriction(gf), mass(m)
+    , width(w), height(h) {}
     float airFriction;
     float groundFriction;
     float mass;
+    float width;
+    float height;
 };
 
 class PhysicsSystem;
@@ -87,13 +86,11 @@ public:
     static void checkFloorCollision(Slice<BoxPhysicalObject> objects);
 
     virtual Rect boundingRect() {
-        return Rect(x(), y(), _width, _height);
+        return Rect(x(), y(), _material.width, _material.height);
     }
 
     friend class MA::PhysicsSystem;
 protected:
-    float _width;
-    float _height;
 };
 
 

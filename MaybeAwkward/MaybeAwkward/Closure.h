@@ -23,6 +23,12 @@ private:
     FuncPtr _function;
 };
 
+template<class T>
+FunctionClosure<T>*
+closure( typename FunctionClosure<T>::FuncPtr f ) {
+    return new FunctionClosure<T>(f);
+}
+
 } // namespace
 
 #endif

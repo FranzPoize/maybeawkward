@@ -25,6 +25,10 @@
 #include "SpawnPoint.h"
 #include "World.h"
 
+namespace MA {
+void init_gameplay(GameLogic* logic);
+} // namespace
+
 class ConsoleProgram
 {
 public:
@@ -87,6 +91,7 @@ public:
             std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
 
             std::shared_ptr<MA::GameLogic> gameplay = std::make_shared<MA::GameLogic>();
+            init_gameplay(gameplay.get());
 
             pibi->families().push_back(MA::FRIEND);
             pibi->families().push_back(MA::PLAYER);

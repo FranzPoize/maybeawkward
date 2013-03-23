@@ -16,6 +16,7 @@ CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
     CollisionRule& c = _collisionRules[key(f1, f2)];
     c._f1 = f1;
     c._f2 = f2;
+	return c;
 }
 
 void GameLogic::update(float dt)

@@ -52,7 +52,7 @@ public:
     virtual ~PhysicalObject() {};
     void setAngle(float a) { _angle = a; }
     void setXVelocity(float vx) { _dx = vx; }
-    void setYVelocity(float vy) { _dx = vy; }
+    void setYVelocity(float vy) { _dy = vy; }
 
     float x() const { return _x; }
     float y() const { return _y; }
@@ -61,6 +61,9 @@ public:
         // default rect
         return Rect(x(), y(), 0.0, 0.0);
     }
+
+    void setX(float x) {_x=x;}
+    void setY(float y) {_y=y;}
 protected:
 
     // position

@@ -1,23 +1,23 @@
 #ifdef WIN32
 #include <iostream>
 #include <Windows.h>
+#include <intsafe.h>
 
 #include <cmath>
 #include <memory>
 
 #include <ClanLib/core.h>
-#include <ClanLib/application.h>
-#include <ClanLib/display.h>
 
 #include "XBoxController.h"
 #include "MessageReceiver.h"
 #include "MoveMessage.h"
-
+#include "AttackMessage.h"
 
 using namespace MA;
 
 
 XBoxController::XBoxController(int aControllerId) :
+    mControlTypes(0),
     mControllerNum(aControllerId)
 {
 }
@@ -27,52 +27,61 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
     int enter = CL_System::get_time();
     if (updateState()==ERROR_SUCCESS)
     {
-        float xInput = 0.f;
 
-        float LX = mControllerState.Gamepad.sThumbLX;
-        float LY = mControllerState.Gamepad.sThumbLY;
+        float leftAngle=0.f, rightAngle=0.f;
+        bool leftAttack=false, rightAttack=false;
 
-        //determine how far the controller is pushed
-        float lMagnitude = sqrt(LX*LX + LY*LY);
-
-        //check if the controller is outside a circular dead zone
-        if (lMagnitude > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+        if(mControlTypes & MOVE)
         {
-            //clip the lMagnitude at its expected maximum value
-            if (lMagnitude > 32767) lMagnitude = 32767;
+            float leftTrigger=0.f, rightTrigger=0.f;
 
-            //adjust lMagnitude relative to the end of the dead zone
-            lMagnitude -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+            BYTE LT = mControllerState.Gamepad.bLeftTrigger;
+            BYTE RT = mControllerState.Gamepad.bRightTrigger;
 
-            float dampener = LX > 0 ? -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE : XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE+1;
-            xInput = (LX+dampener)/float(32767-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+            if (LT > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+            {
+                leftTrigger = float(LT)/BYTE_MAX;
+            }
+            if ( RT > XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+            {
+                rightTrigger = float(RT)/BYTE_MAX;
+            }
+
+            WORD buttons = mControllerState.Gamepad.wButtons;
+            bool jump = buttons & XINPUT_GAMEPAD_A;
+
+            aReceiver.receiveMessage( std::make_shared<MoveMessage>(MoveMessage(leftTrigger, rightTrigger, jump)) );
         }
-        else //if the controller is in the deadzone zero out the lMagnitude
+
+        if (mControlTypes & LEFT_ATTACK)
         {
-            lMagnitude = 0.0;
+
+            float LX = mControllerState.Gamepad.sThumbLX;
+            float LY = mControllerState.Gamepad.sThumbLY;
+
+
+            //check if the controller is outside a circular dead zone
+            if (sqrt(LX*LX + LY*LY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+            {
+                leftAttack = true;
+                leftAngle = -atan2(LY, LX);
+            }
+
+            aReceiver.receiveMessage( std::make_shared<AttackMessage>(AttackMessage(leftAttack, leftAngle)));
         }
+        if (mControlTypes & RIGHT_ATTACK)
+        {
+            float RX = mControllerState.Gamepad.sThumbRX;
+            float RY = mControllerState.Gamepad.sThumbRY;
 
-        //bool left = false;
-        //bool right = false;
-        //bool jump = false;
+            if (sqrt(RX*RX + RY*RY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+            {
+                rightAttack = true;
+                rightAngle = -atan2(RY, RX);
+            }
 
-        //if (LX < 0 && lMagnitude > 0) left = true;
-        //else if (LX > 0 && lMagnitude > 0) right = true;
-        //// REV: redondant
-        //else 
-        //{
-        //    left = false;
-        //    right = false;
-        //}
-
-
-        //CL_Console::write_line("Value : %1", xInput);
-        int middle = CL_System::get_time();
-
-        WORD buttons = mControllerState.Gamepad.wButtons;
-        bool jump = buttons & XINPUT_GAMEPAD_A;
-
-        aReceiver.receiveMessage( std::make_shared<MoveMessage>(MoveMessage(xInput, 0.f, jump)) );
+            aReceiver.receiveMessage( std::make_shared<AttackMessage>(AttackMessage(rightAttack, rightAngle)));
+        }
     }
 }
 

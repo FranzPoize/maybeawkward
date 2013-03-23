@@ -1,3 +1,4 @@
+
 #include "constants.h"
 
 #include <ClanLib/core.h>
@@ -7,7 +8,6 @@
 #include <string>
 
 #include <memory>
-#include <vector>
 
 #include "Entity.h"
 #include "Physics.h"
@@ -15,19 +15,13 @@
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
-#include "Camera.h"
-#include "FuckYouChoucheController.h"
 #include "MockController.h"
-#include "AIFlyingInPenisFormation.h"
-#include "AIDontComeAnyCloserController.h"
-#include "MultipleSpawnPattern.h"
-#include "Pattern.h"
-#include "SpawnPoint.h"
-#include "World.h"
+#include "Camera.h"
 
 namespace MA {
 void init_gameplay(GameLogic* logic);
 } // namespace
+
 
 class ConsoleProgram
 {
@@ -63,64 +57,51 @@ public:
         //Business starts here
         try
         {
-			//Player Instanciation
             CL_SpriteDescription pibiDescription;
-            pibiDescription.add_frame(ASSET_PATH+"placeholders/nounours_corps.png");
+            pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_marche/nounours_marche_00.png");
             
+            std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
+            MA::GraphicWrapper gw(gc, camera);
+
             CL_Sprite pibiSprite(gc, pibiDescription);
             pibiSprite.set_alignment(origin_bottom_left);
-
-			//Enemy Instanciation
-			CL_SpriteDescription enemyDescription;
-			enemyDescription.add_frame(ASSET_PATH+"crap/enemy.png");
-
-			CL_Sprite enemySprite(gc,enemyDescription);
-			enemySprite.set_alignment(origin_bottom_left);
-
-			std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
-			MA::GraphicWrapper gw(gc,camera);
-
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
-			std::shared_ptr<MA::Drawer> enemyDrawer = std::make_shared<MA::DrawerSprite>(gw, enemySprite);
+
+            CL_SpriteDescription rightArmDescritpion;
+            rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
+
+            CL_Sprite leftArmSprite(gc, rightArmDescritpion);
+            leftArmSprite.set_alignment(origin_bottom_left);
+            leftArmSprite.set_rotation_hotspot(origin_top_left, -33, -111);
+            std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(gw, leftArmSprite);
+
+
 #ifdef WIN32
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
+            std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
+            pibiController->switchControlType(MA::XBoxController::MOVE);
+
+            std::shared_ptr<MA::XBoxController> rightArmController = std::make_shared<MA::XBoxController>();
+            rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
 #else 
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
+            std::shared_ptr<MA::Controller> rightArmController = std::make_shared<MA::MockController>();
 #endif
-
-            std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
-
             std::shared_ptr<MA::GameLogic> gameplay = std::make_shared<MA::GameLogic>();
             init_gameplay(gameplay.get());
 
-            pibi->families().push_back(MA::FRIEND);
-            pibi->families().push_back(MA::PLAYER);
-            camera->followEntity(pibi);
+            MA::Entity pibi(pibiController, pibiDrawer);
+            pibi.families().push_back(MA::FRIEND);
 
-            std::vector<MA::SpawnPoint> spawnPointVector;
+            MA::PhysicsSystem::addEntity(pibi, MA::PHYSICS_BOX_GRAVITY);
+            MA::PhysicsSystem::setPosition(pibi.physicsID(), 100.0f, 540.0f);
 
-            for (int pute = 1; pute < 10; pute++) {
-                spawnPointVector.push_back(MA::SpawnPoint(MA::SpawnPoint::NORMAL,0.0f,(float)WIN_HEIGHT/10*pute));
-            }
-
-            std::shared_ptr<MA::Pattern> pattern = std::make_shared<MA::MultipleSpawnPattern>(*pibi,MA::MultipleSpawnPattern::FORMATION,spawnPointVector);
-            camera->followEntity(pibi);
-
-            std::shared_ptr<MA::Controller> enemyController = std::make_shared<MA::AIDontComeAnyCloserController>(*pibi);
-
-            MA::PhysicsMaterial matEnemy(12.0f,0.0f,0.00001f);
-            std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
-            enemy->families().push_back(MA::ENEMY);
-
-			MA::PhysicsSystem::addEntity(*pibi,MA::PHYSICS_BOX_GRAVITY);
-			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX,&matEnemy);
-            MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
-			MA::PhysicsSystem::setPosition(enemy->physicsID(),100.0f,100.0f);
-			//MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(SINUS_STYLE_MOVEMENT_SPEED);
+            std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
+            MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
+            MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
+            
+            pibi.addChild(rightArm, 1);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
-			//Launch the pattern
-			pattern->launchPattern(gw);
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
             {
                 current_time = CL_System::get_time();
@@ -131,14 +112,9 @@ public:
                 MA::PhysicsSystem::update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
-                
-				camera->update();
-				enemy->update(delta);
-                pibi->update(delta);
 
-				//for (std::list<Entity>::iterator i = World::instance.e
-				enemy->draw();
-                pibi->draw();
+                pibi.update(delta);
+                pibi.draw();
 
                 window.flip(1);
                 CL_KeepAlive::process(0);

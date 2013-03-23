@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "MoveMessage.h"
+#include "AttackMessage.h"
 
 #include <ClanLib/core.h>
 
@@ -13,7 +14,8 @@ using namespace MA;
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
     mMessageBox(),
     mController(aController),
-    mDrawer(aDrawer)
+    mDrawer(aDrawer),
+    mChildEntities()
 {
 }
 
@@ -31,11 +33,37 @@ void Entity::update(float dt)
     }
 
     mMessageBox.clear();
+
+    for(ChildIterator childIt = mChildEntities.begin();
+        childIt != mChildEntities.end();
+        ++childIt)
+    {
+        childIt->second->update(dt);
+    }
 }
 
 void Entity::draw()
 {
-    mDrawer->draw(*this);
+    if(mChildEntities.size() == 0)
+    {
+        mDrawer->draw(*this);
+    }
+    else
+    {
+        bool crossedZeroOrder = false;
+        for(ChildIterator childIt = mChildEntities.begin();
+            childIt != mChildEntities.end();
+            ++childIt)
+        {
+            if ( (!crossedZeroOrder) && (childIt->first >= 0) )
+            {
+                mDrawer->draw(*this);
+                crossedZeroOrder = true;
+            }
+            childIt->second->translate(x(), y());
+            childIt->second->draw();
+        }
+    }
 }
 
 void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
@@ -46,6 +74,16 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 
 void Entity::visit(MoveMessage *aMessage, const VisitInfo &info)
 {
-	PhysicsSystem::applyForce(mPhysics,aMessage->X,aMessage->Y);
-    cl_log_event("info", "Move message received, X:%1, jmp:%2.", aMessage->X, aMessage->jump);
+    PhysicsSystem::applyForce(mPhysics, aMessage->Y-aMessage->X, 0.f);
+    if(aMessage->jump)
+        PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
+}
+
+void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
+{
+    if(aMessage->attack)
+    {
+
+    }
+    PhysicsSystem::get(mPhysics)->setAngle(aMessage->angle);
 }

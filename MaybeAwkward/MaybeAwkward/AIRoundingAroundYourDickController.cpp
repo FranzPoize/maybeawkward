@@ -20,7 +20,7 @@ void AIRoundingAroundYourDickController::update(MessageReceiver &aMessageReceive
 	float radius = sqrt(pow(mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x(),2) + pow(mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y(),2));
 
 	//Strength of the pull on entity
-	float forceValue = (ORBITAL_ENEMY_WEIGHT + ORBITAL_PLAYER_WEIGHT)/radius;
+	float forceValue = (ORBITAL_ENEMY_WEIGHT)/radius;
 
 	float xComponent = (mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
 	float yComponent = (mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;

@@ -19,6 +19,7 @@ public:
     DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite);
 
     void draw(const Entity &aEntity);
+
 private:
     GraphicWrapper &mGc;
     CL_Sprite mSprite;

@@ -3,6 +3,7 @@
 #include "MessageReceiver.h"
 #include "MoveMessage.h"
 
+#include <cmath>
 #include <memory>
 
 using namespace MA;

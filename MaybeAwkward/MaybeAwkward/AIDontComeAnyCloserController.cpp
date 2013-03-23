@@ -3,6 +3,7 @@
 #include "constants.h"
 #include "MessageReceiver.h"
 #include "MoveMessage.h"
+#include <cmath>
 
 using namespace MA;
 

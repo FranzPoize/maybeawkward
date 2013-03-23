@@ -14,5 +14,5 @@ DrawerSprite::DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite):
 
 void DrawerSprite::draw(const Entity &aEntity)
 {
-	mSprite.draw(mGc.cl(), floor(aEntity.x()+0.5f - mGc.camera().pos()), aEntity.y());
+	mSprite.draw(mGc.cl(), (float)floor(aEntity.x()+0.5f - mGc.camera().pos()), (float)aEntity.y());
 }

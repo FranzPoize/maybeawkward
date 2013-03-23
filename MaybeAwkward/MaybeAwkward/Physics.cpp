@@ -23,8 +23,8 @@ void BoxPhysicalObject::applyForce(Slice<BoxPhysicalObject> objects, float fx, f
 {
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (it != objects.end()) {
-        it->_dx += fx;
-        it->_dy += fy;
+        it->_dx += fx / it->_material.mass;
+        it->_dy += fy / it->_material.mass;
         ++it;
     }
 }
@@ -71,16 +71,16 @@ void PhysicsSystem::update(float dt)
                                             _system->_boxesWithGravity.size()));
 }
 
-void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, PhysicsParams* params)
+void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params)
 {
     switch (type) {
         case PHYSICS_BOX: {
-            _system->_boxesNoGravity.push_back(BoxPhysicalObject());
+            _system->_boxesNoGravity.push_back(BoxPhysicalObject(params));
             aEntity.setPhysicsID(PhysicsID(_system->_boxesNoGravity.size()-1, type));
             break;
         }
         case PHYSICS_BOX_GRAVITY: {
-            _system->_boxesWithGravity.push_back(BoxPhysicalObject());
+            _system->_boxesWithGravity.push_back(BoxPhysicalObject(params));
             aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
             break;    
         }

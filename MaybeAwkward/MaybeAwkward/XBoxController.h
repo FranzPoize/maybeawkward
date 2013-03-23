@@ -7,7 +7,9 @@
 #include <XInput.h>
 #pragma comment(lib,"XInput.lib")
 
-namespace AB
+#include "Controller.h"
+
+namespace MA
 {
 
 class XBoxController : public Controller
@@ -26,29 +28,8 @@ private:
     int mControllerNum;
 };
 
-#else
 
-namespace AB
-{
+} // namespace
 
-#define DWORD int
-
-class DummyController : public Controller
-{
-public:
-    DummyController(int aControllerId=0);
-    void update(Entity &aEntity, float dt);
-
-protected:
-    DWORD updateState();
-    bool isConnected();
-    void vibrate(int leftVal = 0, int rightVal = 0);
-
-private:
-};
-
-
-#endif // win32
-
-}
+#endif // WIN32
 #endif // XBoxController_h__

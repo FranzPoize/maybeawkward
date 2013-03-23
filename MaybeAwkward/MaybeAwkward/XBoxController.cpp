@@ -1,7 +1,7 @@
-#include <iostream>
 #ifdef WIN32
+#include <iostream>
 #include <Windows.h>
-#endif
+
 #include <cmath>
 
 #include <ClanLib/core.h>
@@ -11,9 +11,8 @@
 #include "Entity.h"
 
 
-using namespace AB;
+using namespace MA;
 
-#ifdef WIN32
 
 XBoxController::XBoxController(int aControllerId) :
     mControllerNum(aControllerId)
@@ -102,4 +101,4 @@ void XBoxController::vibrate(int leftVal, int rightVal)
     XInputSetState( mControllerNum, &vibration );
 }
 
-#endif
+#endif // WIN32

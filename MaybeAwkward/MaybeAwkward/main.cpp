@@ -58,7 +58,7 @@ public:
 			MA::GraphicWrapper gw(gc,camera);
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
 #ifdef WIN32
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::FuckYouChoucheController>();
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
 #else 
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif

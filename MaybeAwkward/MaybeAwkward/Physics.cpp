@@ -52,26 +52,32 @@ void BoxPhysicalObject::update(const Entity &aEntity, float dt)
 
 void PhysicsSystem::init()
 {
-    _system->_boxes.reserve(1024);
+    _system->_boxesWithGravity.reserve(1024);
 }
 
 void PhysicsSystem::update(float dt)
 {
-    BoxPhysicalObject::applyForce(slice(&_system->_boxes[0],
-                                         _system->_boxes.size()),
+    // gravity
+    BoxPhysicalObject::applyForce(slice(&_system->_boxesWithGravity[0],
+                                         _system->_boxesWithGravity.size()),
                                   GRAVITY_X,
                                   GRAVITY_Y);
-    BoxPhysicalObject::applyVelocity(slice(&_system->_boxes[0],
-                                            _system->_boxes.size()),
+    // apply speed to position
+    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesWithGravity[0],
+                                            _system->_boxesWithGravity.size()),
                                      dt);
-    BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxes[0],
-                                            _system->_boxes.size()));
+    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesNoGravity[0],
+                                            _system->_boxesNoGravity.size()),
+                                     dt);
+    // make sure objects stay in the scene
+    BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxesWithGravity[0],
+                                            _system->_boxesWithGravity.size()));
 }
 
-void PhysicsSystem::addEntity(Entity &aEntity)
+void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type)
 {
-    _system->_boxes.push_back(BoxPhysicalObject());
-    aEntity.setPhysicsID(PhysicsID(_system->_boxes.size()-1, PHYSICS_BOX));
+    _system->_boxesWithGravity.push_back(BoxPhysicalObject());
+    aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
 }
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
@@ -81,10 +87,11 @@ void PhysicsSystem::removeEntity(Entity &aEntity)
 
 PhysicalObject* PhysicsSystem::get(PhysicsID id)
 {
-    if (id.type == PHYSICS_INVALID) {
-        return nullptr;
+    switch (id.type) {
+        case PHYSICS_BOX: return &_system->_boxesNoGravity[id.index];
+        case PHYSICS_BOX_GRAVITY: return &_system->_boxesWithGravity[id.index];
+        default:  return nullptr;
     }
-    return &_system->_boxes[id.index];
 }
 
 void PhysicsSystem::applyForce(PhysicsID id, float fx, float fy)

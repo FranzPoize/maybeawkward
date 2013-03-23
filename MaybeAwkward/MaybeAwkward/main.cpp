@@ -83,8 +83,8 @@ public:
 
 			std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
 
-			MA::PhysicsSystem::addEntity(*pibi);
-			MA::PhysicsSystem::addEntity(*enemy);
+			MA::PhysicsSystem::addEntity(*pibi,MA::PHYSICS_BOX_GRAVITY);
+			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
             MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),100.0f,100.0f);
 

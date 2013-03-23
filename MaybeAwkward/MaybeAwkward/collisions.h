@@ -4,7 +4,9 @@
 
 namespace MA {
 
+class Rect;
 
+bool rectCollision(const Rect& r1, const Rect& r2);
 
 } // namespace
 

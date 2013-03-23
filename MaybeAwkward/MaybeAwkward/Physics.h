@@ -9,6 +9,12 @@ namespace MA {
 
 class Entity;
 
+struct Rect {
+    Rect(float aX = 0, float aY = 0, float aW = 0, float aH = 0)
+    : x(aX), y(aY), width(aW), height(aH) {}
+    float x, y, width, height;
+};
+
 enum PhysicsType {
     PHYSICS_INVALID,
     PHYSICS_BOX,
@@ -45,13 +51,17 @@ public:
     }
 
     virtual ~PhysicalObject() {};
-    float setAngle(float a) { _angle = a; }
-    float setXVelocity(float vx) { _dx = vx; }
-    float setYVelocity(float vy) { _dx = vy; }
+    void setAngle(float a) { _angle = a; }
+    void setXVelocity(float vx) { _dx = vx; }
+    void setYVelocity(float vy) { _dx = vy; }
 
     float x() const { return _x; }
     float y() const { return _y; }
     float angle() const { return _angle; }
+    virtual Rect boundingRect() {
+        // default rect
+        return Rect(x(), y(), 0.0, 0.0);
+    }
 protected:
 
     // position
@@ -76,8 +86,14 @@ public:
     static void applyForce(Slice<BoxPhysicalObject> objects, float fx, float fy);
     static void checkFloorCollision(Slice<BoxPhysicalObject> objects);
 
+    virtual Rect boundingRect() {
+        return Rect(x(), y(), _width, _height);
+    }
+
     friend class MA::PhysicsSystem;
 protected:
+    float _width;
+    float _height;
 };
 
 

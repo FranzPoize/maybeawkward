@@ -1,7 +1,8 @@
 
 #include "GameLogic.h"
-#include <map>
 #include <stdint.h>
+#include "World.h"
+#include "collisions.h"
 
 namespace MA {
 
@@ -20,15 +21,49 @@ void GameLogic::update(float dt)
 {
     CollisionRuleMap::iterator it = _collisionRules.begin(); 
     CollisionRuleMap::iterator stop = _collisionRules.end();
+    EntityList& entities = *World::instance.allEntities();
 
     while (it != stop) {
-        EntityPair pair;
+        uint64_t pair_key = key(it->second._f1, it->second._f2);
 
-        std::list<CollisionCallback*>::iterator it2 = it->second._callbacks.begin();
-        std::list<CollisionCallback*>::iterator stop2 = it->second._callbacks.end();
-        while (it2 != stop2) {
-            (*it2)->call(pair, dt);
-            ++it2;
+        EntityList::iterator main_entity_it = entities.begin();
+        EntityList::iterator main_entity_stop = entities.end();
+        while (main_entity_it != main_entity_stop) {
+            EntityList::iterator secondary_entity_it = entities.begin();
+            EntityList::iterator secondary_entity_stop = entities.end();
+            while (secondary_entity_it != secondary_entity_stop) {
+                bool families_matched = false;
+                FamilyVector::iterator family_it1 = (*main_entity_it)->families().begin();
+                FamilyVector::iterator family_stop1 = (*main_entity_it)->families().end();
+                while (family_it1 != family_stop1) {
+                    FamilyVector::iterator family_it2 = (*secondary_entity_it)->families().begin();
+                    FamilyVector::iterator family_stop2 = (*secondary_entity_it)->families().end();
+                    while (family_it2 != family_stop2) {
+                        if (key(*family_it1, *family_it2) == pair_key) {
+                            families_matched = true;
+                            break;
+                        }
+                        ++family_it2;
+                    }
+                    if (families_matched) break;
+                    ++family_it1;
+                }
+                Rect r1 = PhysicsSystem::get((*main_entity_it)->physicsID())->boundingRect();
+                Rect r2 = PhysicsSystem::get((*secondary_entity_it)->physicsID())->boundingRect();
+                if (families_matched) {
+                    if (rectCollision(r1, r2)) {
+                        CallbackList::iterator callbacks_it = it->second._callbacks.begin();
+                        CallbackList::iterator callbacks_stop = it->second._callbacks.end();
+                        EntityPair pair(&**main_entity_it, &**secondary_entity_it);
+                        while (callbacks_it != callbacks_stop) {
+                            (*callbacks_it)->call(pair, dt);
+                            ++callbacks_it;
+                        }
+                    }
+                }
+                ++secondary_entity_it;
+            }
+            ++main_entity_it;
         }
         ++it;
     }

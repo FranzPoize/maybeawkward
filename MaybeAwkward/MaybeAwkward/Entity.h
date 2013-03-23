@@ -28,6 +28,7 @@ enum Family {
     ENEMY_BULLET,
     FRIEND_BULLET,
 };
+typedef std::vector<Family> FamilyVector;
 
 class Entity : public MessageVisitor, public MessageReceiver
 {

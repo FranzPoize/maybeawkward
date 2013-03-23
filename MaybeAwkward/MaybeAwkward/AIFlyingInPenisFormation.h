@@ -5,14 +5,16 @@
 
 namespace MA
 {
-class Entity;
+class MessageReceiver;
+
 class AIFlyingInPenisFormation : public Controller
 {
 public:
 	AIFlyingInPenisFormation();
-	void update(Entity &aEntity, float dt);
+	void update(MessageReceiver &aMessageReceiver, float dt);
 private:
 	float mXSpeed;
+	float mTimeFromStart;
 };
 }
 #endif

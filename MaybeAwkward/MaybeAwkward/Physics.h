@@ -22,6 +22,14 @@ struct PhysicsID {
     char type;
 };
 
+struct PhysicsParams {
+    PhysicsParams(float af = 0, float gf = 0, float m = 1.0)
+    : airFriction(af), groundFriction(gf), mass(m) {}
+    float airFriction;
+    float groundFriction;
+    float mass;
+};
+
 class PhysicsSystem;
 
 class PhysicalObject
@@ -45,6 +53,7 @@ protected:
     // velocity
     float _dx, _dy;
     float _angle;
+    PhysicsParams params;
     friend class MA::PhysicsSystem;
 };
 
@@ -69,7 +78,7 @@ public:
     static void applyForce(PhysicsID id, float fx, float fy);
     static void setPosition(PhysicsID id, float px, float py);
 
-    static void addEntity(Entity &aEntity, PhysicsType type);
+    static void addEntity(Entity &aEntity, PhysicsType type, PhysicsParams* params = 0);
     static void removeEntity(Entity &aEntity);
     static PhysicalObject* get(PhysicsID id);
 private:

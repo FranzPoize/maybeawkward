@@ -31,14 +31,11 @@ void BoxPhysicalObject::applyForce(Slice<BoxPhysicalObject> objects, float fx, f
 
 void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
 {
-    printf("batched apply force \n");
-
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (it != objects.end()) {
         if (it->_y > PHYSICS_Y_LIMIT) {
             it->_y = PHYSICS_Y_LIMIT;
             it->_dy = -it->_dy * 0.5;
-            printf("BWIING! \n");
         }
         ++it;
     }
@@ -74,10 +71,21 @@ void PhysicsSystem::update(float dt)
                                             _system->_boxesWithGravity.size()));
 }
 
-void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type)
+void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, PhysicsParams* params)
 {
-    _system->_boxesWithGravity.push_back(BoxPhysicalObject());
-    aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
+    switch (type) {
+        case PHYSICS_BOX: {
+            _system->_boxesNoGravity.push_back(BoxPhysicalObject());
+            aEntity.setPhysicsID(PhysicsID(_system->_boxesNoGravity.size()-1, type));
+            break;
+        }
+        case PHYSICS_BOX_GRAVITY: {
+            _system->_boxesWithGravity.push_back(BoxPhysicalObject());
+            aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
+            break;    
+        }
+        default: break;
+    }
 }
 
 void PhysicsSystem::removeEntity(Entity &aEntity)

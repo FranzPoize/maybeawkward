@@ -24,26 +24,27 @@ MultipleSpawnPattern::MultipleSpawnPattern(Entity &aTarget,MultipleSpawnPattern:
 }
 
 void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
-	std::shared_ptr<Controller> controller;
-	switch(mControllerType)
-	{
-	case ControllerType::AROUND:
-		controller = std::make_shared<AIRoundingAroundYourDickController>(mTarget);
-		break;
-	case ControllerType::CLOSE:
-		controller = std::make_shared<AIDontComeAnyCloserController>(mTarget);
-		break;
-	case ControllerType::FORMATION:
-		controller = std::make_shared<AIFlyingInPenisFormation>();
-		break;
-	default:
-		break;
-	}
 
 	for(std::vector<SpawnPoint>::iterator i = mSpawnPointArray.begin();
 		i != mSpawnPointArray.end();
 		i++)
 	{
+		std::shared_ptr<Controller> controller;
+		switch(mControllerType)
+		{
+		case ControllerType::AROUND:
+			controller = std::make_shared<AIRoundingAroundYourDickController>(mTarget);
+			break;
+		case ControllerType::CLOSE:
+			controller = std::make_shared<AIDontComeAnyCloserController>(mTarget);
+			break;
+		case ControllerType::FORMATION:
+			controller = std::make_shared<AIFlyingInPenisFormation>();
+			break;
+		default:
+			break;
+		}
+
 		std::shared_ptr<Entity> enemy;
 		switch(i->mType)
 		{
@@ -59,6 +60,8 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 
 			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),i->x,i->y);
+			MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(i->xSpeed);
+			MA::PhysicsSystem::get(enemy->physicsID())->setYVelocity(i->ySpeed);
 
 			World::instance.everybodyList()->push_back(enemy);
 		}

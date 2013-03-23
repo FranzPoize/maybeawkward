@@ -9,14 +9,18 @@ public:
 	{
 		NORMAL
 	};
-	SpawnPoint(EnemyType aType,float aX, float aY):
+	SpawnPoint(EnemyType aType,float aX, float aY,float aXSpeed, float aYSpeed):
 		mType(aType),
 		x(aX),
-		y(aY)
+		y(aY),
+		xSpeed(aXSpeed),
+		ySpeed(aYSpeed)
 		{}
 	EnemyType mType;
 	float x;
 	float y;
+	float xSpeed;
+	float ySpeed;
 };
 }
 #endif

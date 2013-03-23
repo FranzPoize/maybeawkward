@@ -88,10 +88,10 @@ public:
 
 			for (int pute = 1;pute < 10;pute++) 
 			{
-				spawnPointVector.push_back(MA::SpawnPoint(MA::SpawnPoint::NORMAL,0.0f,(float)WIN_HEIGHT/10*pute));
+				spawnPointVector.push_back(MA::SpawnPoint(MA::SpawnPoint::NORMAL,0.0f,(float)WIN_HEIGHT/10*pute,0.0f,0.0f));
 			}
 
-			std::shared_ptr<MA::Pattern> pattern = std::make_shared<MA::MultipleSpawnPattern>(*pibi,MA::MultipleSpawnPattern::FORMATION,spawnPointVector);
+			std::shared_ptr<MA::Pattern> pattern = std::make_shared<MA::MultipleSpawnPattern>(*pibi,MA::MultipleSpawnPattern::CLOSE,spawnPointVector);
 			camera->followEntity(pibi);
 
 			std::shared_ptr<MA::Controller> enemyController = std::make_shared<MA::AIDontComeAnyCloserController>(*pibi);
@@ -103,7 +103,7 @@ public:
 			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX,&matEnemy);
             MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),100.0f,100.0f);
-			//MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(SINUS_STYLE_MOVEMENT_SPEED);
+			MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(SINUS_STYLE_MOVEMENT_SPEED);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
 			//Launch the pattern
@@ -123,7 +123,13 @@ public:
 				enemy->update(delta);
                 pibi->update(delta);
 
-				//for (std::list<Entity>::iterator i = World::instance.e
+				for (std::list<std::shared_ptr<MA::Entity>>::iterator i = MA::World::instance.everybodyList()->begin();
+					i != MA::World::instance.everybodyList()->end();
+					i++)
+				{
+					i->get()->update(delta);
+					i->get()->draw();
+				}
 				enemy->draw();
                 pibi->draw();
 

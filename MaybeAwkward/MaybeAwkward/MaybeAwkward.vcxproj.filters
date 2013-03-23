@@ -63,6 +63,9 @@
     <ClInclude Include="MessageVisitor.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="AttackMessage.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DrawerSprite.cpp">

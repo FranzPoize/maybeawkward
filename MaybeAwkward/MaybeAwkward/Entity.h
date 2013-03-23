@@ -15,6 +15,7 @@ class Controller;
 class Drawer;
 class AbstractMessage;
 class MoveMessage;
+class AttackMessage;
 
 class Entity : public MessageVisitor, public MessageReceiver
 {
@@ -47,6 +48,7 @@ public:
     void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
 
     void visit(MoveMessage *aMessage, const VisitInfo &info);
+    void visit(AttackMessage *aMessage, const VisitInfo &info);
 private:
     typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
     typedef MessageBoxType::iterator MessageBoxIterator;

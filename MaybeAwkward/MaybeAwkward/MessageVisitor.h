@@ -5,6 +5,7 @@ namespace MA
 {
 class AbstractMessage;
 class MoveMessage;
+class AttackMessage;
 
 struct VisitInfo
 {
@@ -16,12 +17,8 @@ class MessageVisitor
 public:
     virtual void visit(AbstractMessage *aVisitedNode, const VisitInfo &info) =0;
     
-    virtual void visit(MoveMessage *aMoveMessage, const VisitInfo &info)
-    {
-        /// \todo
-
-        //visit(static_cast<AbstractMessage*>(aMoveMessage));
-    }
+    virtual void visit(AttackMessage *aAttackeMessage, const VisitInfo &info) =0;
+    virtual void visit(MoveMessage *aMoveMessage, const VisitInfo &info) =0;
 };
 
 }

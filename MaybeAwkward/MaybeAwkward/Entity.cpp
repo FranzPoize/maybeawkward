@@ -5,6 +5,7 @@
 
 #include "constants.h"
 #include "MoveMessage.h"
+#include "AttackMessage.h"
 
 #include <ClanLib/core.h>
 
@@ -58,6 +59,15 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 
 void Entity::visit(MoveMessage *aMessage, const VisitInfo &info)
 {
-    move(info.dt, aMessage->X, aMessage->jump);
+    move(info.dt, (aMessage->Y-aMessage->X), aMessage->jump);
     cl_log_event("info", "Move message received, X:%1, jmp:%2.", aMessage->X, aMessage->jump);
+}
+
+void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
+{
+    if(aMessage->attack)
+    {
+        CL_Console::write_line("Attack with angle : %1", aMessage->angle);
+    }
+        
 }

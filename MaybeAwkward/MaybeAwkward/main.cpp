@@ -55,7 +55,9 @@ public:
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
 
 #ifdef WIN32
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
+            std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
+            pibiController->switchControlType(MA::XBoxController::MOVE);
+            pibiController->switchControlType(MA::XBoxController::RIGHT_ATTACK);
 #else 
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif

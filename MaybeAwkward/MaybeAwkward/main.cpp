@@ -110,6 +110,7 @@ public:
                 //CL_Console::write_line("dt : %1", delta);
 
                 MA::PhysicsSystem::update(delta);
+                gameplay->update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 

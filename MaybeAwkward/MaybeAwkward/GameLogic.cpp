@@ -1,6 +1,7 @@
 
 #include "GameLogic.h"
 #include <stdint.h>
+#include <stdio.h>
 #include "World.h"
 #include "collisions.h"
 
@@ -19,27 +20,33 @@ CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
 
 void GameLogic::update(float dt)
 {
+    printf("GameLogic::update\n\n");
     CollisionRuleMap::iterator it = _collisionRules.begin(); 
     CollisionRuleMap::iterator stop = _collisionRules.end();
     EntityList& entities = *World::instance.allEntities();
 
     while (it != stop) {
+        printf("GameLogic::update - iterating over the rules\n");
         uint64_t pair_key = key(it->second._f1, it->second._f2);
 
         EntityList::iterator main_entity_it = entities.begin();
         EntityList::iterator main_entity_stop = entities.end();
         while (main_entity_it != main_entity_stop) {
+            printf("   GameLogic::update - iterating over the first entity\n");
             EntityList::iterator secondary_entity_it = entities.begin();
             EntityList::iterator secondary_entity_stop = entities.end();
             while (secondary_entity_it != secondary_entity_stop) {
+                printf("      GameLogic::update - iterating over the second entity\n");
                 bool families_matched = false;
                 FamilyVector::iterator family_it1 = (*main_entity_it)->families().begin();
                 FamilyVector::iterator family_stop1 = (*main_entity_it)->families().end();
                 while (family_it1 != family_stop1) {
+                    printf("         GameLogic::update - iterating over the first family\n");
                     FamilyVector::iterator family_it2 = (*secondary_entity_it)->families().begin();
                     FamilyVector::iterator family_stop2 = (*secondary_entity_it)->families().end();
                     while (family_it2 != family_stop2) {
                         if (key(*family_it1, *family_it2) == pair_key) {
+                            printf("            GameLogic::update - iterating over the second family\n");
                             families_matched = true;
                             break;
                         }

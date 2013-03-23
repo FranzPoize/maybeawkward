@@ -23,8 +23,8 @@ void BoxPhysicalObject::applyForce(Slice<BoxPhysicalObject> objects, float fx, f
 {
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (it != objects.end()) {
-        it->_dx += fx;
-        it->_dy += fy;
+        it->_dx += fx / it->_material.mass;
+        it->_dy += fy / it->_material.mass;
         ++it;
     }
 }
@@ -60,27 +60,31 @@ void PhysicsSystem::update(float dt)
                                   GRAVITY_X,
                                   GRAVITY_Y);
     // apply speed to position
-    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesWithGravity[0],
-                                            _system->_boxesWithGravity.size()),
-                                     dt);
-    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesNoGravity[0],
-                                            _system->_boxesNoGravity.size()),
-                                     dt);
-    // make sure objects stay in the scene
-    BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxesWithGravity[0],
-                                            _system->_boxesWithGravity.size()));
+    if (_system->_boxesNoGravity.size() > 0) {
+        BoxPhysicalObject::applyVelocity(slice(&_system->_boxesNoGravity[0],
+                                                _system->_boxesNoGravity.size()),
+                                         dt);
+    }
+    if (_system->_boxesWithGravity.size() > 0) {
+        BoxPhysicalObject::applyVelocity(slice(&_system->_boxesWithGravity[0],
+                                                _system->_boxesWithGravity.size()),
+                                         dt);        
+        // make sure objects stay in the scene
+        BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxesWithGravity[0],
+                                                _system->_boxesWithGravity.size()));
+    }
 }
 
-void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, PhysicsParams* params)
+void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params)
 {
     switch (type) {
         case PHYSICS_BOX: {
-            _system->_boxesNoGravity.push_back(BoxPhysicalObject());
+            _system->_boxesNoGravity.push_back(BoxPhysicalObject(params));
             aEntity.setPhysicsID(PhysicsID(_system->_boxesNoGravity.size()-1, type));
             break;
         }
         case PHYSICS_BOX_GRAVITY: {
-            _system->_boxesWithGravity.push_back(BoxPhysicalObject());
+            _system->_boxesWithGravity.push_back(BoxPhysicalObject(params));
             aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
             break;    
         }

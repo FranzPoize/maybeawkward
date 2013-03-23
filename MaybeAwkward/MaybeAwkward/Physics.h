@@ -3,6 +3,8 @@
 #define GDP4_PHYSICS_H
 
 #include "Slice.h"
+#include "collisions.h"
+
 #include <vector>
 
 namespace MA {
@@ -23,11 +25,14 @@ struct PhysicsID {
 };
 
 struct PhysicsMaterial {
-    PhysicsMaterial(float af = 0, float gf = 0, float m = 1.0)
-    : airFriction(af), groundFriction(gf), mass(m) {}
+    PhysicsMaterial(float af = 0, float gf = 0, float m = 1.0, float w = 0, float h = 0)
+    : airFriction(af), groundFriction(gf), mass(m)
+    , width(w), height(h) {}
     float airFriction;
     float groundFriction;
     float mass;
+    float width;
+    float height;
 };
 
 class PhysicsSystem;
@@ -52,6 +57,10 @@ public:
     float x() const { return _x; }
     float y() const { return _y; }
     float angle() const { return _angle; }
+    virtual Rect boundingRect() {
+        // default rect
+        return Rect(x(), y(), 0.0, 0.0);
+    }
 
     void setX(float x) {_x=x;}
     void setY(float y) {_y=y;}
@@ -78,6 +87,10 @@ public:
     static void applyVelocity(Slice<BoxPhysicalObject> objects, float dt);
     static void applyForce(Slice<BoxPhysicalObject> objects, float fx, float fy);
     static void checkFloorCollision(Slice<BoxPhysicalObject> objects);
+
+    virtual Rect boundingRect() {
+        return Rect(x(), y(), _material.width, _material.height);
+    }
 
     friend class MA::PhysicsSystem;
 protected:

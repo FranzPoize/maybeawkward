@@ -32,12 +32,12 @@ void BoxPhysicalObject::applyForce(Slice<BoxPhysicalObject> objects, float fx, f
 void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
 {
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
-    while (it != objects.end()) {
-        if (it->_y > PHYSICS_Y_LIMIT) {
-            it->_y = PHYSICS_Y_LIMIT;
-            it->_dy = -it->_dy * 0.5;
+    while (!objects.empty()) {
+        if (objects.front()._y > PHYSICS_Y_LIMIT) {
+            objects.front()._y = PHYSICS_Y_LIMIT;
+            objects.front()._dy = - objects.front()._dy * 0.5;
         }
-        ++it;
+        objects.shrinkLeft();
     }
 }
 

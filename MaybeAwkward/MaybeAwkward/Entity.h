@@ -1,3 +1,4 @@
+
 #ifndef Entity_h__
 #define Entity_h__
 
@@ -30,6 +31,8 @@ enum Family {
     ENEMY_BULLET,
     FRIEND_BULLET,
 };
+
+typedef std::vector<Family> FamilyVector;
 
 class Entity : public MessageVisitor, public MessageReceiver
 {
@@ -73,6 +76,8 @@ public:
         return mPhysics;
     }
 
+    std::vector<Family>& families() { return mFamilies; }
+
     // To be overloaded in derived class (will cause name hiding problems...)
     void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
 
@@ -100,6 +105,7 @@ private:
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
     PhysicsID mPhysics;
+    std::vector<Family> mFamilies;
 
     // (order, entity) order : of drawing, negative before parent, positive after
     typedef std::map<int, std::shared_ptr<Entity> > ChildrenMap;

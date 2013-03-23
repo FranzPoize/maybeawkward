@@ -10,11 +10,19 @@
 
 #include "Entity.h"
 #include "Physics.h"
+#include "GameLogic.h"
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
 #include "MockController.h"
 #include "Camera.h"
+#include "World.h"
+
+namespace MA {
+    void init_gameplay(GameLogic* logic);
+} // namespace
+
+
 #include "World.h"
 
 class ConsoleProgram
@@ -38,27 +46,28 @@ public:
         std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
 
 #ifdef WIN32
-            std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
-            pibiController->switchControlType(MA::XBoxController::MOVE);
+        std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
+        pibiController->switchControlType(MA::XBoxController::MOVE);
 
-            std::shared_ptr<MA::XBoxController> rightArmController = std::make_shared<MA::XBoxController>();
-            rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
+        std::shared_ptr<MA::XBoxController> rightArmController = std::make_shared<MA::XBoxController>();
+        rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
 #else 
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
+        std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif
-            std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
-            MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY);
-            MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+        std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
+        MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY);
+        MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
 
-            aWorld.getGraphicWrapper().camera().followEntity(pibi);
+        aWorld.getGraphicWrapper().camera().followEntity(pibi);
 
-            std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
-            MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
-            MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
-            
-            pibi->addChild(rightArm, 1);
+        std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
+        MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
+        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
 
-            aWorld.everybodyList().push_back(pibi);
+        pibi->addChild(rightArm, 1);
+        pibi->families().push_back(MA::FRIEND);
+
+        aWorld.everybodyList().push_back(pibi);
     }
 
     static int main(const std::vector<CL_String> &args)
@@ -92,11 +101,11 @@ public:
         //Business starts here
         try
         {
-
             std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
             std::shared_ptr<MA::GraphicWrapper> gw(new MA::GraphicWrapper(gc, camera));
             MA::World &world = MA::World::instance;
             world.setGraphicWrapper(gw);
+            world.init();
 
             createPibi(world);
 
@@ -107,8 +116,6 @@ public:
                 float delta = (current_time-last_time)/1000.f;
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
-
-                MA::PhysicsSystem::update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 
@@ -130,7 +137,7 @@ public:
         }
         catch(CL_Exception &exception)
         {
-            // Create a console window for text-output if not available
+            // Create a console window for text-output if notf available
             //CL_ConsoleWindow console("Console", 80, 160);
             CL_Console::write_line("Error: " + exception.get_message_and_stack_trace());
             console.display_close_message();
@@ -143,4 +150,5 @@ public:
 
 // Create global application object, you MUST include this line or
 // the application start-up will fail to locate your application object.
+
 CL_ClanApplication app(&ConsoleProgram::main);

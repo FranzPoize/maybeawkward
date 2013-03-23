@@ -5,24 +5,50 @@
 #include "Closure.h"
 #include "Entity.h"
 
+#include <map>
+#include <list>
+
 namespace MA {
 
 class Entity;
 
-namespace GameLogic {
-
 struct EntityPair {
+    EntityPair(Entity* aE1, Entity* aE2)
+    : e1(aE1), e2(aE2)
+    {}
+
     Entity* e1;
     Entity* e2;
 };
 
-class CollisionRule {
-    void add(Closure<EntityPair>& callback);
+typedef Closure<EntityPair> CollisionCallback;
+typedef std::list<CollisionCallback*> CallbackList;
+
+struct CollisionRule {
+    void add(CollisionCallback* callback) {
+        _callbacks.push_front(callback);
+    }
+    ~CollisionRule();
+
+    std::list<CollisionCallback*> _callbacks;
+    Family _f1;
+    Family _f2;
 };
 
-CollisionRule& onBoxCollision(Family f1, Family f2);
+typedef std::map<uint64_t, CollisionRule> CollisionRuleMap;
 
-} // GameLogic
+class GameLogic {
+public:
+    CollisionRule& onBoxCollision(Family f1, Family f2);
+
+    void update(float dt);
+private:
+    CollisionRuleMap _collisionRules;
+};
+
+
+void init_gameplay(GameLogic* logic);
+
 
 } // namespace
 

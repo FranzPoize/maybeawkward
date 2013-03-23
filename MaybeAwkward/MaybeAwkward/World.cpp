@@ -10,6 +10,9 @@ World World::instance;
 
 void World::step(float dt)
 {
+    mGameplay->update(dt);
+    PhysicsSystem::update(dt);
+
     for (EntityIterator entityIt = everybodyList().begin();
         entityIt != everybodyList().end();
         ++entityIt)

@@ -4,16 +4,27 @@
 #include <list>
 #include <memory>
 
+#include "GameLogic.h"
+
 namespace MA
 {
 	class Entity;
     class GraphicWrapper;
 
+    typedef std::list<std::shared_ptr<Entity>> EntityContainer;
+    typedef EntityContainer::iterator EntityIterator;
+    typedef EntityContainer EntityList;
 
     class World
     {
 	public:
 		static World instance;
+
+        void init()
+        {
+            mGameplay = std::make_shared<GameLogic>();
+            init_gameplay(mGameplay.get());
+        }
 
         void setGraphicWrapper(std::shared_ptr<GraphicWrapper> aWrapper)
         {
@@ -34,9 +45,9 @@ namespace MA
 	private:
         std::shared_ptr<GraphicWrapper> mGW;
 
-        typedef std::list<std::shared_ptr<Entity>> EntityContainer;
-        typedef EntityContainer::iterator EntityIterator;
 		EntityContainer mEverybodyList;
+
+        std::shared_ptr<MA::GameLogic> mGameplay;
 
     };
 }

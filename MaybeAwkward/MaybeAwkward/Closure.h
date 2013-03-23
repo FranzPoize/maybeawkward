@@ -5,21 +5,29 @@
 namespace MA {
 
 template<class T>
-class Closure {
-    virtual void call(T& param) = 0;
+struct Closure {
+    virtual void call(T& param, float dt) = 0;
 };
 
 template<class T>
 class FunctionClosure : public Closure<T> {
-    typedef void(*FuncPtr)(T&);
+public:
+    typedef void(*FuncPtr)(T&, float dt);
     FunctionClosure(FuncPtr callback)
     : _function(callback) {}
- 
-    void call(T& params) {
-        _function(params);
+
+    void call(T& params, float dt) {
+        _function(params, dt);
     }
+private:
     FuncPtr _function;
 };
+
+template<class T>
+FunctionClosure<T>*
+closure( typename FunctionClosure<T>::FuncPtr f ) {
+    return new FunctionClosure<T>(f);
+}
 
 } // namespace
 

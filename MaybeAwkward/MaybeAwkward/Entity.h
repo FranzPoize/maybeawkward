@@ -20,6 +20,7 @@ class Drawer;
 class AbstractMessage;
 class MoveMessage;
 class AttackMessage;
+class Attacker;
 
 enum Family {
     ENEMY,
@@ -97,6 +98,7 @@ private:
     MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
+    std::shared_ptr<Attacker> mAttacker;
     PhysicsID mPhysics;
 
     // (order, entity) order : of drawing, negative before parent, positive after

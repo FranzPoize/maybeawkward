@@ -7,16 +7,37 @@
 namespace MA
 {
 	class Entity;
+    class GraphicWrapper;
+
+
     class World
     {
 	public:
 		static World instance;
-		std::list<std::shared_ptr<Entity>> *everybodyList()
+
+        void setGraphicWrapper(std::shared_ptr<GraphicWrapper> aWrapper)
+        {
+            mGW = aWrapper;
+        }
+        GraphicWrapper &getGraphicWrapper()
+        {
+            return *mGW;
+        }
+
+		std::list<std::shared_ptr<Entity>> &everybodyList()
 		{
-			return &mEverybodyList;	
+			return mEverybodyList;	
 		};
+        
+
+        void step(float dt);
 	private:
-		std::list<std::shared_ptr<Entity>> mEverybodyList;
+        std::shared_ptr<GraphicWrapper> mGW;
+
+        typedef std::list<std::shared_ptr<Entity>> EntityContainer;
+        typedef EntityContainer::iterator EntityIterator;
+		EntityContainer mEverybodyList;
+
     };
 }
 

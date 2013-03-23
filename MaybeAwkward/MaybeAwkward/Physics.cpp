@@ -60,15 +60,19 @@ void PhysicsSystem::update(float dt)
                                   GRAVITY_X,
                                   GRAVITY_Y);
     // apply speed to position
-    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesWithGravity[0],
-                                            _system->_boxesWithGravity.size()),
-                                     dt);
-    BoxPhysicalObject::applyVelocity(slice(&_system->_boxesNoGravity[0],
-                                            _system->_boxesNoGravity.size()),
-                                     dt);
-    // make sure objects stay in the scene
-    BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxesWithGravity[0],
-                                            _system->_boxesWithGravity.size()));
+    if (_system->_boxesNoGravity.size() > 0) {
+        BoxPhysicalObject::applyVelocity(slice(&_system->_boxesNoGravity[0],
+                                                _system->_boxesNoGravity.size()),
+                                         dt);
+    }
+    if (_system->_boxesWithGravity.size() > 0) {
+        BoxPhysicalObject::applyVelocity(slice(&_system->_boxesWithGravity[0],
+                                                _system->_boxesWithGravity.size()),
+                                         dt);        
+        // make sure objects stay in the scene
+        BoxPhysicalObject::checkFloorCollision(slice(&_system->_boxesWithGravity[0],
+                                                _system->_boxesWithGravity.size()));
+    }
 }
 
 void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params)

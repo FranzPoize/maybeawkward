@@ -40,7 +40,11 @@ public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
 
-    void update(float dt);
+    void setAttacker(std::shared_ptr<Attacker> aAttacker)
+    {
+        mAttacker = aAttacker;
+    }
+    bool update(float dt);
     void draw();
 
     void move(float dt, float aXInput, bool aJump);

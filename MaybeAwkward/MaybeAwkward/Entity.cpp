@@ -6,6 +6,11 @@
 #include "constants.h"
 #include "MoveMessage.h"
 #include "AttackMessage.h"
+#include "AttackerNull.h"
+
+#include "World.h"
+#include "GraphicWrapper.h"
+#include "Camera.h"
 
 #include <ClanLib/core.h>
 
@@ -15,12 +20,19 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mMessageBox(),
     mController(aController),
     mDrawer(aDrawer),
+    mAttacker(std::make_shared<AttackerNull>()),
     mChildEntities()
 {
 }
 
-void Entity::update(float dt)
+bool Entity::update(float dt)
 {
+    Camera &worldCam = World::instance.getGraphicWrapper().camera();
+    if( (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) || (pow(y(), 2) > WIN_HEIGHT_SQUARED))
+    {
+        return true;
+    }
+
     mController->update(*this, dt);
 
     VisitInfo info;
@@ -40,6 +52,8 @@ void Entity::update(float dt)
     {
         childIt->second->update(dt);
     }
+
+    return false;
 }
 
 void Entity::draw()
@@ -83,7 +97,7 @@ void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
 {
     if(aMessage->attack)
     {
-
+        mAttacker->attack(aMessage, *this);
     }
     PhysicsSystem::get(mPhysics)->setAngle(aMessage->angle);
 }

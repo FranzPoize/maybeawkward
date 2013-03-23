@@ -6,7 +6,7 @@ namespace MA
 {
 class AttackerBullet : public Attacker
 {
-    void attack(const AttackMessage &aAttackMessage);
+    void attack(const AttackMessage *aAttackMessage, const Entity &aEntity);
 };
 }
 #endif // AttackerBullet_h__

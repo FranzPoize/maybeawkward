@@ -10,6 +10,7 @@
 #include <memory>
 #include <stdio.h>
 #include <deque>
+#include <vector>
 
 namespace MA
 {
@@ -63,6 +64,8 @@ public:
         return mPhysics;
     }
 
+    std::vector<Family>& families() { return mFamilies; }
+
     // To be overloaded in derived class (will cause name hiding problems...)
     void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
 
@@ -75,6 +78,7 @@ public:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     PhysicsID mPhysics;
+    std::vector<Family> mFamilies;
 };
 
 }

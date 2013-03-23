@@ -56,6 +56,10 @@ public:
         return _start <= _end && _start != nullptr;
     }
 
+    T& front() {
+        return *_start;
+    }
+
     T& pop_front() {
         assert(_start < _end);
         return *_start++;
@@ -66,12 +70,12 @@ public:
         return *--_end;
     }
 
-    void shrinkLeft(uint32_t num) {
+    void shrinkLeft(uint32_t num = 1) {
         _start += num;
         assert (_start <= _end);
     }
 
-    void shrinkRight(uint32_t num) {
+    void shrinkRight(uint32_t num = 1) {
         _end -= num;
         assert (_start <= _end);
     }

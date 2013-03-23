@@ -79,9 +79,12 @@ public:
 			std::shared_ptr<MA::Controller> enemyController = std::make_shared<MA::AIFlyingInPenisFormation>();
 
             std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
-			camera->followEntity(pibi);
+            pibi->families().push_back(MA::FRIEND);
+            pibi->families().push_back(MA::PLAYER);
+            camera->followEntity(pibi);
 
-			std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
+            std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
+            enemy->families().push_back(MA::ENEMY);
 
 			MA::PhysicsSystem::addEntity(*pibi,MA::PHYSICS_BOX_GRAVITY);
 			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);

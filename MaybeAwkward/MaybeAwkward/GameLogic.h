@@ -5,6 +5,8 @@
 #include "Closure.h"
 #include "Entity.h"
 
+#include <list>
+
 namespace MA {
 
 class Entity;
@@ -16,11 +18,21 @@ struct EntityPair {
     Entity* e2;
 };
 
-class CollisionRule {
-    void add(Closure<EntityPair>& callback);
+typedef Closure<EntityPair> CollisionCallback;
+struct CollisionRule {
+    void add(CollisionCallback* callback) {
+        _callbacks.push_front(callback);
+    }
+    ~CollisionRule();
+
+    std::list<CollisionCallback*> _callbacks;
+    Family _f1;
+    Family _f2;
 };
 
 CollisionRule& onBoxCollision(Family f1, Family f2);
+
+void update(float dt);
 
 } // GameLogic
 

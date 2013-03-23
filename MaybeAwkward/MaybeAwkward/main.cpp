@@ -50,16 +50,27 @@ public:
         try
         {
             CL_SpriteDescription pibiDescription;
-            pibiDescription.add_frame(ASSET_PATH+"placeholders/nounours_corps.png");
+            pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_marche/nounours_marche_00.png");
             
             CL_Sprite pibiSprite(gc, pibiDescription);
             pibiSprite.set_alignment(origin_bottom_left);
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
+            
+            CL_SpriteDescription rightArmDescritpion;
+            rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
+
+            CL_Sprite leftArmSprite(gc, rightArmDescritpion);
+            leftArmSprite.set_alignment(origin_bottom_left);
+            leftArmSprite.set_rotation_hotspot(origin_top_left, -33, -111);
+            std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(gc, leftArmSprite);
+
 
 #ifdef WIN32
             std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
             pibiController->switchControlType(MA::XBoxController::MOVE);
-            pibiController->switchControlType(MA::XBoxController::RIGHT_ATTACK);
+
+            std::shared_ptr<MA::XBoxController> rightArmController = std::make_shared<MA::XBoxController>();
+            rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
 #else 
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif
@@ -67,6 +78,11 @@ public:
             MA::PhysicsSystem::addEntity(pibi, MA::PHYSICS_BOX_GRAVITY);
             MA::PhysicsSystem::setPosition(pibi.physicsID(), 100.0f, 540.0f);
 
+            std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
+            MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
+            MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
+            
+            pibi.addChild(rightArm, 1);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)

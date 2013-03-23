@@ -18,6 +18,7 @@ public:
 
     void draw(const Entity &aEntity);
 
+
 private:
     CL_GraphicContext &mGc;
     CL_Sprite mSprite;

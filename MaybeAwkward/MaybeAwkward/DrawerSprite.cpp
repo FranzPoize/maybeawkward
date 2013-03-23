@@ -13,5 +13,6 @@ DrawerSprite::DrawerSprite(CL_GraphicContext &gc, CL_Sprite aSprite):
 
 void DrawerSprite::draw(const Entity &aEntity)
 {
+    mSprite.set_angle(CL_Angle(aEntity.angle(), cl_radians));
     mSprite.draw(mGc, floor(aEntity.x()+0.5f), aEntity.y());
 }

@@ -64,7 +64,7 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
             if (sqrt(LX*LX + LY*LY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
             {
                 leftAttack = true;
-                leftAngle = atan2(LY, LX);
+                leftAngle = -atan2(LY, LX);
             }
 
             aReceiver.receiveMessage( std::make_shared<AttackMessage>(AttackMessage(leftAttack, leftAngle)));
@@ -77,7 +77,7 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
             if (sqrt(RX*RX + RY*RY) > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
             {
                 rightAttack = true;
-                rightAngle = atan2(RY, RX);
+                rightAngle = -atan2(RY, RX);
             }
 
             aReceiver.receiveMessage( std::make_shared<AttackMessage>(AttackMessage(rightAttack, rightAngle)));

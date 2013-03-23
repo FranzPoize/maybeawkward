@@ -10,6 +10,7 @@
 #include <memory>
 #include <stdio.h>
 #include <deque>
+#include <map>
 
 namespace MA
 {
@@ -42,6 +43,11 @@ public:
         return PhysicsSystem::get(mPhysics)->y();
     }
 
+    const float angle() const
+    {
+        return PhysicsSystem::get(mPhysics)->angle();
+    }
+
     void receiveMessage(std::shared_ptr<AbstractMessage> aInputMessage)
     {
         mMessageBox.push_back(aInputMessage);
@@ -60,9 +66,20 @@ public:
     // To be overloaded in derived class (will cause name hiding problems...)
     void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
 
+    void addChild(std::shared_ptr<Entity> aEntity, int aOrder)
+    {
+        mChildEntities.insert(ChildPair(aOrder, aEntity));
+    }
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
+
+    void translate(float x, float y)
+    {
+        PhysicsSystem::get(mPhysics)->setX(x);
+        PhysicsSystem::get(mPhysics)->setY(y);
+    }
 
 private:
     typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
@@ -72,6 +89,12 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     PhysicsID mPhysics;
+
+    // (order, entity) order : of drawing, negative before parent, positive after
+    typedef std::map<int, std::shared_ptr<Entity> > ChildrenMap;
+    typedef std::pair<int, std::shared_ptr<Entity> > ChildPair;
+    typedef ChildrenMap::iterator ChildIterator;
+    ChildrenMap mChildEntities;
 };
 
 }

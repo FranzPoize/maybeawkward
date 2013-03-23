@@ -12,7 +12,6 @@ namespace MA {
 
 class Entity;
 
-
 struct EntityPair {
     EntityPair(Entity* aE1, Entity* aE2)
     : e1(aE1), e2(aE2)
@@ -40,12 +39,15 @@ typedef std::map<uint64_t, CollisionRule> CollisionRuleMap;
 
 class GameLogic {
 public:
-    CollisionRule& onBoxCollision(Family f1, Family f2);   
+    CollisionRule& onBoxCollision(Family f1, Family f2);
 
     void update(float dt);
 private:
     CollisionRuleMap _collisionRules;
 };
+
+
+void init_gameplay(GameLogic* logic);
 
 
 } // namespace

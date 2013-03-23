@@ -21,6 +21,7 @@ class Drawer;
 class AbstractMessage;
 class MoveMessage;
 class AttackMessage;
+class Attacker;
 
 enum Family {
     ENEMY,
@@ -102,6 +103,7 @@ private:
     MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
+    std::shared_ptr<Attacker> mAttacker;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;
 

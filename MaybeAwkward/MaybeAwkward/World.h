@@ -4,23 +4,51 @@
 #include <list>
 #include <memory>
 
+#include "GameLogic.h"
+
 namespace MA
 {
 	class Entity;
-    typedef std::list<std::shared_ptr<Entity>> EntityList;
+    class GraphicWrapper;
+
+    typedef std::list<std::shared_ptr<Entity>> EntityContainer;
+    typedef EntityContainer::iterator EntityIterator;
+    typedef EntityContainer EntityList;
+
     class World
     {
 	public:
 		static World instance;
 
-		EntityList *everybodyList() {
-			return &mEverybodyList;
-		}
-        EntityList *allEntities() {
-            return &mEverybodyList;
+        void init()
+        {
+            mGameplay = std::make_shared<GameLogic>();
+            init_gameplay(mGameplay.get());
         }
+
+        void setGraphicWrapper(std::shared_ptr<GraphicWrapper> aWrapper)
+        {
+            mGW = aWrapper;
+        }
+        GraphicWrapper &getGraphicWrapper()
+        {
+            return *mGW;
+        }
+
+		std::list<std::shared_ptr<Entity>> &everybodyList()
+		{
+			return mEverybodyList;	
+		};
+        
+
+        void step(float dt);
 	private:
-	EntityList mEverybodyList;
+        std::shared_ptr<GraphicWrapper> mGW;
+
+		EntityContainer mEverybodyList;
+
+        std::shared_ptr<MA::GameLogic> mGameplay;
+
     };
 }
 

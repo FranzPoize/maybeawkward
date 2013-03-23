@@ -14,6 +14,7 @@
 #include "XBoxController.h"
 #include "Camera.h"
 #include "FuckYouChoucheController.h"
+#include "MockController.h"
 
 class ConsoleProgram
 {
@@ -56,11 +57,15 @@ public:
 			std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
 			MA::GraphicWrapper gw(gc,camera);
             std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
-
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::FuckYouChoucheController>(ic);
+#ifdef WIN32
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::FuckYouChoucheController>();
+#else 
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
+#endif
 
             std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
 			camera->followEntity(pibi);
+
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)

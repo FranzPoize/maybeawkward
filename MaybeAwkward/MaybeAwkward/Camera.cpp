@@ -5,17 +5,17 @@
 
 using namespace MA;
 
-Camera::Camera(std::shared_ptr<Entity> aFollowedEntity,float aCameraXPos):
-	mFollowedEntity(aFollowedEntity),
+Camera::Camera(float aCameraXPos):
 	mCameraXPos(aCameraXPos)
 {
+	mFollowedEntity = 0;
 }
 
 void Camera::update()
 {
 	if(mFollowedEntity->x() - mCameraXPos > WIN_WIDTH / 2)
 	{
-		mCameraXPos = mFollowedEntity->x();
+		mCameraXPos = mFollowedEntity->x() - WIN_WIDTH/2;
 	}
 
 }

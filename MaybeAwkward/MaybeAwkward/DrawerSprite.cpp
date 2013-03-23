@@ -10,7 +10,6 @@ DrawerSprite::DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite):
     mGc(gc),
     mSprite(aSprite)
 {
-
 }
 
 void DrawerSprite::draw(const Entity &aEntity)

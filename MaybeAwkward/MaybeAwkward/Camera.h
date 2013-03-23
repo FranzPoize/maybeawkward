@@ -9,10 +9,14 @@ class Entity;
 class Camera
 {
 public:
-	Camera(std::shared_ptr<Entity> aFollowedEntity,float aCameraXPos);
+	Camera(float aCameraXPos);
 	float pos()
 	{
 		return mCameraXPos;
+	}
+	void followEntity(std::shared_ptr<Entity> aFollowedEntity)
+	{
+		mFollowedEntity = aFollowedEntity;
 	}
 	void update();
 private:

@@ -12,6 +12,8 @@
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
 #include "XBoxController.h"
+#include "Camera.h"
+#include "FuckYouChoucheController.h"
 
 class ConsoleProgram
 {
@@ -51,11 +53,14 @@ public:
             
             CL_Sprite pibiSprite(gc, pibiDescription);
             pibiSprite.set_alignment(origin_bottom_left);
-            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
+			std::shared_ptr<MA::Camera> camera(new MA::Camera(0.0f));
+			MA::GraphicWrapper gw(gc,camera);
+            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gw, pibiSprite);
 
-            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::FuckYouChoucheController>(ic);
 
-            MA::Entity pibi(pibiController, pibiDrawer);
+            std::shared_ptr<MA::Entity> pibi(new MA::Entity(pibiController, pibiDrawer));
+			camera->followEntity(pibi);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
@@ -67,8 +72,9 @@ public:
 
                 gc.clear(CL_Colorf::whitesmoke);
                 
-                pibi.update(delta);
-                pibi.draw();
+				camera->update();
+                pibi->update(delta);
+                pibi->draw();
 
                 window.flip(1);
                 CL_KeepAlive::process(0);

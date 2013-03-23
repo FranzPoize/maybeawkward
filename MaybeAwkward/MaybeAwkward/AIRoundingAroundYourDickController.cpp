@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "MessageReceiver.h"
 #include "constants.h"
+#include <cmath>
 
 using namespace MA;
 

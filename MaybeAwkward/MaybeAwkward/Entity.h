@@ -41,12 +41,6 @@ public:
         return PhysicsSystem::get(mPhysics)->y();
     }
 
-	void setCoord(float x,float y)
-	{
-		mXpos = x;
-		mYpos = y;
-	}
-
     void receiveMessage(std::shared_ptr<AbstractMessage> aInputMessage)
     {
         mMessageBox.push_back(aInputMessage);

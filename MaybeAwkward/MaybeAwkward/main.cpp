@@ -83,10 +83,10 @@ public:
 
 			std::shared_ptr<MA::Entity> enemy(new MA::Entity(enemyController,enemyDrawer));
 
-            MA::Entity pibi(pibiController, pibiDrawer);
 			MA::PhysicsSystem::addEntity(*pibi);
 			MA::PhysicsSystem::addEntity(*enemy);
             MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+			MA::PhysicsSystem::setPosition(enemy->physicsID(),100.0f,100.0f);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
@@ -99,18 +99,12 @@ public:
                 MA::PhysicsSystem::update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
-<<<<<<< HEAD
                 
 				camera->update();
 				enemy->update(delta);
                 pibi->update(delta);
 				enemy->draw();
                 pibi->draw();
-=======
-
-                pibi.update(delta);
-                pibi.draw();
->>>>>>> d18aa1ec5d7823f1a487d86cd52fb306a522dcde
 
                 window.flip(1);
                 CL_KeepAlive::process(0);

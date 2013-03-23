@@ -46,17 +46,18 @@ public:
         //Business starts here
         try
         {
-            ////CL_SpriteDescription pibiDescription;
-            ////pibiDescription.add_frame("./pibi.png");
-            //CL_Sprite pibiSprite(gc, pibiDescription);
-            //pibiSprite.set_alignment(origin_bottom_left);
-            //std::shared_ptr<AB::Drawer> pibiDrawer = std::make_shared<AB::DrawerSprite>(gc, pibiSprite);
+            CL_SpriteDescription pibiDescription;
+            pibiDescription.add_frame(ASSET_PATH+"placeholders/nounours_corps.png");
+            
+            CL_Sprite pibiSprite(gc, pibiDescription);
+            pibiSprite.set_alignment(origin_bottom_left);
+            std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(gc, pibiSprite);
 
-            //std::shared_ptr<AB::Controller> pibiController = std::make_shared<AB::XBoxController>();
+            std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::XBoxController>();
 
-            //AB::Entity pibi(pibiController, pibiDrawer);
+            MA::Entity pibi(pibiController, pibiDrawer);
 
-            unsigned int current_time=CL_System::get_time(), last_time=current_time-1, flip_time;
+            unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
             {
                 current_time = CL_System::get_time();
@@ -66,11 +67,11 @@ public:
 
                 gc.clear(CL_Colorf::whitesmoke);
                 
-                //pibi.update(delta);
-                //pibi.draw();
+                pibi.update(delta);
+                pibi.draw();
 
                 window.flip(1);
-                CL_KeepAlive::process();
+                CL_KeepAlive::process(0);
 
                 current_time = CL_System::get_time();
                 if(current_time-last_time>ABNORMAL_TIME)

@@ -11,8 +11,8 @@ using namespace MA;
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
     mController(aController),
     mDrawer(aDrawer),
-    mXpos(0.f),
-    mYpos(0.f)
+    mXpos(10.f),
+    mYpos(500.f)
 {
 }
 

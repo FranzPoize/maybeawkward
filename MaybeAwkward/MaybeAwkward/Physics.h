@@ -9,9 +9,10 @@ namespace MA {
 
 class Entity;
 
-enum {
-    PHYSICS_INVALID = 0,
-    PHYSICS_BOX = 1
+enum PhysicsType {
+    PHYSICS_INVALID,
+    PHYSICS_BOX,
+    PHYSICS_BOX_GRAVITY
 };
 
 struct PhysicsID {
@@ -29,17 +30,21 @@ public:
     virtual void update(const Entity &aEntity, float dt) = 0;
 
     PhysicalObject()
-    : _x(0), _y(0), _dx(0), _dy(0) {}
+    : _x(0), _y(0), _dx(0), _dy(0), _angle(0) {}
 
     virtual ~PhysicalObject() {};
+    float setAngle(float a) { _angle = a; }
 
-    float x() { return _x; }
-    float y() { return _y; }
+    float x() const { return _x; }
+    float y() const { return _y; }
+    float angle() const { return _angle; }
+protected:
 
     // position
     float _x, _y;
     // velocity
     float _dx, _dy;
+    float _angle;
     friend class MA::PhysicsSystem;
 };
 
@@ -57,7 +62,6 @@ protected:
 };
 
 
-
 class PhysicsSystem {
 public:
     static void init();
@@ -65,11 +69,12 @@ public:
     static void applyForce(PhysicsID id, float fx, float fy);
     static void setPosition(PhysicsID id, float px, float py);
 
-    static void addEntity(Entity &aEntity);
+    static void addEntity(Entity &aEntity, PhysicsType type);
     static void removeEntity(Entity &aEntity);
     static PhysicalObject* get(PhysicsID id);
 private:
-    std::vector<BoxPhysicalObject> _boxes;
+    std::vector<BoxPhysicalObject> _boxesWithGravity;
+    std::vector<BoxPhysicalObject> _boxesNoGravity;
 };
 
 } // namespace

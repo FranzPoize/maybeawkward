@@ -62,7 +62,7 @@ public:
             std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
 #endif
             MA::Entity pibi(pibiController, pibiDrawer);
-            MA::PhysicsSystem::addEntity(pibi);
+            MA::PhysicsSystem::addEntity(pibi, MA::PHYSICS_BOX_GRAVITY);
             MA::PhysicsSystem::setPosition(pibi.physicsID(), 100.0f, 540.0f);
 
 

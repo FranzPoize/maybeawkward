@@ -3,8 +3,8 @@
 
 #include "user_constants.h"
 
-#define WIN_WIDTH 1024
-#define WIN_HEIGHT 768
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
 
 
 

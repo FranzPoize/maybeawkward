@@ -3,12 +3,13 @@
 #include <Windows.h>
 
 #include <cmath>
+#include <memory>
 
 #include <ClanLib/core.h>
 
 #include "XBoxController.h"
-
-#include "Entity.h"
+#include "MessageReceiver.h"
+#include "MoveMessage.h"
 
 
 using namespace MA;
@@ -19,7 +20,7 @@ XBoxController::XBoxController(int aControllerId) :
 {
 }
     
-void XBoxController::update(Entity &aEntity, float dt)
+void XBoxController::update(MessageReceiver &aReceiver, float dt)
 {
     int enter = CL_System::get_time();
     if (updateState()==ERROR_SUCCESS)
@@ -69,9 +70,7 @@ void XBoxController::update(Entity &aEntity, float dt)
         WORD buttons = mControllerState.Gamepad.wButtons;
         bool jump = buttons & XINPUT_GAMEPAD_A;
 
-        aEntity.move(dt, xInput, jump);
-        int end = CL_System::get_time();
-        cl_log_event("info", "\t update details : state:%1, move:%2", middle-enter, end-middle);
+        aReceiver.receiveMessage( std::make_shared<MoveMessage>(MoveMessage(xInput, 0.f, jump)) );
     }
 }
 

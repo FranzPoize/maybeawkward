@@ -3,11 +3,11 @@
 
 namespace MA
 {
-class Visitor;
+class MessageVisitor;
 class Node
 {
 public:
-    virtual void getVisited(Visitor &aVisitor) =0;
+    virtual void getVisited(MessageVisitor &aVisitor) =0;
 };
 }
 #endif // Node_h__

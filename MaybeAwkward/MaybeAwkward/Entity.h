@@ -1,21 +1,25 @@
 #ifndef Entity_h__
 #define Entity_h__
 
-#include "Node.h"
-#include "Visitor.h"
 #include "Physics.h"
+#include "MessageVisitor.h"
+#include "MessageReceiver.h"
+#include "AbstractMessage.h"
 
 #include <assert.h>
 #include <memory>
 #include <stdio.h>
+#include <deque>
 
 namespace MA
 {
 
 class Controller;
 class Drawer;
+class AbstractMessage;
+class MoveMessage;
 
-class Entity : public Node
+class Entity : public MessageVisitor, public MessageReceiver
 {
 public:
     //Entity(std::shared_ptr<Controller> aController);
@@ -37,9 +41,9 @@ public:
         return PhysicsSystem::get(mPhysics)->y();
     }
 
-    virtual void getVisited(Visitor &aVisitor)
+    void receiveMessage(std::shared_ptr<AbstractMessage> aInputMessage)
     {
-        aVisitor.visit(this);
+        mMessageBox.push_back(aInputMessage);
     }
 
     void setPhysicsID(PhysicsID id) {
@@ -52,7 +56,15 @@ public:
         return mPhysics;
     }
 
-protected:
+    // To be overloaded in derived class (will cause name hiding problems...)
+    void visit(AbstractMessage *aVisitedNode, const VisitInfo &info);
+
+    void visit(MoveMessage *aMessage, const VisitInfo &info);
+
+    typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
+    typedef MessageBoxType::iterator MessageBoxIterator;
+
+    MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     PhysicsID mPhysics;

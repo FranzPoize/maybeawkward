@@ -28,8 +28,6 @@ public:
     void update(float dt);
     void draw();
 
-    void move(float dt, float aXInput, bool aJump);
-
     const float x() const
     {
         return PhysicsSystem::get(mPhysics)->x();

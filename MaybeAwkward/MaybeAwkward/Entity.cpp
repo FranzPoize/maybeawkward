@@ -38,12 +38,6 @@ void Entity::draw()
     mDrawer->draw(*this);
 }
 
-void Entity::move(float dt, float aXInput, bool aJump)
-{
-    float mv = aXInput*TOP_SPEED*dt;
-    PhysicsSystem::applyForce(mPhysics, mv, 0.0);
-}
-
 void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 {
     //do nothing (could log it for functionnal error tracing)

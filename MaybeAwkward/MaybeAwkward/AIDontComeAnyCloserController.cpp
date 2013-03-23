@@ -2,6 +2,7 @@
 #include "Entity.h"
 #include "constants.h"
 #include "MessageReceiver.h"
+#include "MoveMessage.h"
 
 using namespace MA;
 
@@ -23,6 +24,6 @@ AIDontComeAnyCloserController::AIDontComeAnyCloserController(Entity &aTarget):
 		float xComponent = dt*forceValue * (mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
 		float yComponent = dt*forceValue * (mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;
 
-		return 
+		return aMessageReceiver.receiveMessage(std::make_shared<MoveMessage>(xComponent,yComponent,false));
 	}
 }

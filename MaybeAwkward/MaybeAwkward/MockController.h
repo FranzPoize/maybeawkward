@@ -11,7 +11,7 @@ class Entity;
 class MockController : public Controller
 {
 public:
-    void update(Entity &aEntity, float dt) {}
+    virtual void update(MessageReceiver &aReceiver, float dt) override {};
 };
 
 }

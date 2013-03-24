@@ -10,7 +10,7 @@
 
 #include "XBoxController.h"
 #include "MessageReceiver.h"
-#include "MoveMessage.h"
+#include "SpeedMessage.h"
 #include "AttackMessage.h"
 
 using namespace MA;
@@ -25,6 +25,7 @@ XBoxController::XBoxController(int aControllerId) :
 void XBoxController::update(MessageReceiver &aReceiver, float dt)
 {
     int enter = CL_System::get_time();
+	aReceiver.receiveMessage( std::make_shared<SpeedMessage>(1.f, 0.f, false) );
     if (updateState()==ERROR_SUCCESS)
     {
 
@@ -50,7 +51,7 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
             WORD buttons = mControllerState.Gamepad.wButtons;
             bool jump = buttons & XINPUT_GAMEPAD_A;
 
-            aReceiver.receiveMessage( std::make_shared<MoveMessage>(MoveMessage(leftTrigger, rightTrigger, jump)) );
+            aReceiver.receiveMessage( std::make_shared<SpeedMessage>(SpeedMessage(leftTrigger*1000.f, rightTrigger*1000.f, jump)) );
         }
 
         if (mControlTypes & LEFT_ATTACK)

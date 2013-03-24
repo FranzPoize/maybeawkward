@@ -28,7 +28,6 @@ struct CollisionRule {
     void add(CollisionCallback* callback) {
         _callbacks.push_front(callback);
     }
-    ~CollisionRule();
 
     std::list<CollisionCallback*> _callbacks;
     Family _f1;

@@ -24,6 +24,7 @@ std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
 
     std::shared_ptr<Controller> controllerNull = std::make_shared<ControllerNull>();
     std::shared_ptr<Entity> bullet = std::make_shared<Entity>(controllerNull, bulletDrawer);
+    bullet->families().push_back(FRIEND_BULLET);
 
     PhysicsMaterial bulletMaterial(EPSILON, EPSILON, 10000.f, 13, 13);
     PhysicsSystem::addEntity(*bullet, PHYSICS_BOX);

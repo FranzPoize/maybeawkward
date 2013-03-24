@@ -25,6 +25,7 @@ class AttackMessage;
 class Attacker;
 class AnimationMessage;
 class DeletionHandler;
+class SpeedMessage;
 
 enum Family {
     ENEMY,
@@ -33,6 +34,7 @@ enum Family {
     ITEM,
     ENEMY_BULLET,
     FRIEND_BULLET,
+    TERRAIN,
 };
 
 typedef std::vector<Family> FamilyVector;
@@ -117,6 +119,7 @@ private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
 	void visit(AnimationMessage *aMessage,const VisitInfo &info);
+	void visit(SpeedMessage *aSpeedMessage,const VisitInfo &info);
 
     void translate(float x, float y)
     {

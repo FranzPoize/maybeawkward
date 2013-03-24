@@ -50,8 +50,11 @@ public:
         std::shared_ptr<MA::Controller> rightArmController = std::make_shared<MA::MockController>();
 #endif
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
-        MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY);
-        MA::PhysicsSystem::setPosition(pibi->physicsID(), 300.0f, 540.0f);
+
+		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,0.f,0.f);
+		MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY,&pibiMat);
+        MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+
 
         aWorld.getGraphicWrapper().camera().followEntity(pibi);
 

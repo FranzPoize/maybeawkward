@@ -57,6 +57,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 
 			std::shared_ptr<DrawerSprite> drawer(new DrawerSprite(gw,enemySprite));
 			enemy = std::make_shared<Entity>(controller,drawer);
+			enemy->families().push_back(ENEMY);
 
 			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),i->x,i->y);

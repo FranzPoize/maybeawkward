@@ -1,8 +1,10 @@
 #include "AIRoundingAroundYourDickController.h"
 #include "Entity.h"
 #include "MessageReceiver.h"
+#include "MoveMessage.h"
 #include "constants.h"
 #include <cmath>
+#include <memory>
 
 using namespace MA;
 
@@ -20,15 +22,15 @@ void AIRoundingAroundYourDickController::update(MessageReceiver &aMessageReceive
 	float radius = sqrt(pow(mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x(),2) + pow(mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y(),2));
 
 	//Strength of the pull on entity
-	float forceValue = (ORBITAL_ENEMY_WEIGHT)/radius;
+	float forceValue = (ORBITAL_ENEMY_WEIGHT*AI_ATTRACTION_TO_TARGET)/(radius*radius);
 
-	float xComponent = (mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
-	float yComponent = (mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;
+	float xComponent = -(mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
+	float yComponent = -(mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;
 
 	if (mTimeFromStart == 0)
 	{
 		//Initialize Starting speed perpendicular to target
-		mCurrentXSpeed = -yComponent * ORBITAL_STARTING_SPEED;
+		mCurrentXSpeed = yComponent * ORBITAL_STARTING_SPEED;
 		mCurrentYSpeed = xComponent * ORBITAL_STARTING_SPEED;
 	}
 
@@ -42,5 +44,6 @@ void AIRoundingAroundYourDickController::update(MessageReceiver &aMessageReceive
 	mCurrentYSpeed += yForceComponent * dt;
 
 	//generate message for physics engine
+	aMessageReceiver.receiveMessage(std::make_shared<MoveMessage>(mCurrentXSpeed,mCurrentYSpeed,false));
 
 }

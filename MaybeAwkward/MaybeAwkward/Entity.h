@@ -7,7 +7,6 @@
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
 
-
 #include <assert.h>
 #include <memory>
 #include <stdio.h>
@@ -26,6 +25,7 @@ class Attacker;
 class AnimationMessage;
 class DeletionHandler;
 class SpeedMessage;
+class Animator;
 
 enum Family {
     ENEMY,
@@ -115,6 +115,11 @@ public:
         mMarkedForDeletion = true;
     }
 
+    void setDrawer(std::shared_ptr<Drawer> aDrawer)
+    {
+        mDrawer = aDrawer;
+    }
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
@@ -135,6 +140,7 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
+    std::shared_ptr<Animator> mAnimator;
     std::shared_ptr<DeletionHandler> mDeletionHandler;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;

@@ -16,7 +16,15 @@ class World;
 
 class AttackerBullet : public Attacker
 {
+public:
+    AttackerBullet(CL_Pointf aRotationOrigin) :
+        mOrigin(aRotationOrigin)
+    {
+
+    }
     void attack(const AttackMessage *aAttackMessage, const Entity &aEntity);
+private:
+    CL_Pointf mOrigin;
 };
 
 class BulletPool

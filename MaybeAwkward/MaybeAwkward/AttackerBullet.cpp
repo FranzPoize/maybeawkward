@@ -42,12 +42,12 @@ void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &
 
 void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &aEntity)
 {
-    CL_Pointf dir(1.f, 0.f), origin(85.f, -62.f);
+    CL_Pointf dir(1.f, 0.f), origin=mOrigin;
     dir.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
  
     //origin.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
     origin += CL_Pointf(aEntity.x(), aEntity.y());
-    origin += dir*75;
+    origin += dir*95;
 
     std::shared_ptr<Entity> bullet(World::instance.gBulletPool->getNextBullet());
     fireBullet(bullet, origin, dir, aEntity);

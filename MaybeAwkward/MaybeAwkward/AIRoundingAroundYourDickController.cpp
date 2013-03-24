@@ -35,7 +35,7 @@ void AIRoundingAroundYourDickController::update(MessageReceiver &aMessageReceive
 	mTimeFromStart += dt;
 
 	float xForceComponent = forceValue * xComponent;
-	float yForceComponent = forceValue * yForceComponent;
+	float yForceComponent = forceValue * yComponent;
 
 	//now we calculate the new value of speed from the current time elapsed and the value of the force
 	mCurrentXSpeed += xForceComponent * dt;

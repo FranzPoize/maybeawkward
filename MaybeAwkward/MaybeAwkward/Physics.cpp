@@ -35,7 +35,7 @@ void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
     while (!objects.empty()) {
         if (objects.front()._y > PHYSICS_Y_LIMIT) {
             objects.front()._y = PHYSICS_Y_LIMIT;
-            objects.front()._dy = - objects.front()._dy * 0.5;
+            objects.front()._dy = - objects.front()._dy * 0.5f;
         }
         objects.shrinkLeft();
     }

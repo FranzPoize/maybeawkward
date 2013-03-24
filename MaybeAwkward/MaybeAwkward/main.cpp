@@ -25,7 +25,7 @@ public:
     static void createPibi(MA::World &aWorld)
     {
         CL_SpriteDescription pibiDescription;
-        pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_marche/nounours_marche_00.png");
+        pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_idle/nounours_idle_00.png");
 
         CL_Sprite pibiSprite(aWorld.getGraphicWrapper().cl(), pibiDescription);
         pibiSprite.set_alignment(origin_bottom_left);
@@ -36,7 +36,7 @@ public:
 
         CL_Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
         leftArmSprite.set_alignment(origin_bottom_left);
-        leftArmSprite.set_rotation_hotspot(origin_top_left, -33, -111);
+        leftArmSprite.set_rotation_hotspot(origin_top_left, -85, -108);
         std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
 
 #ifdef WIN32
@@ -51,13 +51,13 @@ public:
 #endif
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
         MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY);
-        MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+        MA::PhysicsSystem::setPosition(pibi->physicsID(), 300.0f, 540.0f);
 
         aWorld.getGraphicWrapper().camera().followEntity(pibi);
 
         std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
         MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
-        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
+        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 0.0f, 0.0f);
 
         std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>();
         rightArm->setAttacker(rightAttacker);

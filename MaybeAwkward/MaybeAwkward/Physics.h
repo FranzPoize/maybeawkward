@@ -56,6 +56,8 @@ public:
     void setAngle(float a) { _angle = a; }
     void setXVelocity(float vx) { _dx = vx; }
     void setYVelocity(float vy) { _dy = vy; }
+    const float getXVelocity() const { return _dx; }
+    const float getYVelocity() const { return _dy; }
 
     float x() const { return _x; }
     float y() const { return _y; }

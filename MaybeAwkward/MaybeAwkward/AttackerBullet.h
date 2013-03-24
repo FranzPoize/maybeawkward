@@ -12,6 +12,8 @@
 
 namespace MA
 {
+class World;
+
 class AttackerBullet : public Attacker
 {
     void attack(const AttackMessage *aAttackMessage, const Entity &aEntity);
@@ -20,9 +22,11 @@ class AttackerBullet : public Attacker
 class BulletPool
 {
 public:
-    BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitialSize=BULLET_POOL_SIZE);
     std::shared_ptr<Entity> getNextBullet();
 
+private:
+    BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitialSize=BULLET_POOL_SIZE);
+    friend class World;
 private:
     std::vector<std::shared_ptr<Entity> > mPoolContainer;
     std::vector<std::shared_ptr<Entity> >::iterator mNextBullet;

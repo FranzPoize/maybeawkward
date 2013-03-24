@@ -7,6 +7,7 @@
 #include "DrawerSprite.h"
 #include "ControllerNull.h"
 #include "DeletionHandlerTerrain.h"
+#include "AttackerBullet.h"
 
 #include "constants.h"
 
@@ -42,7 +43,7 @@ void drawTraversal(EntityList &aList)
    
 void World::step(float dt)
 {
-    mGameplay->update(dt);
+    //mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
 	if (everybodyList().size() < 100 && (rand() % 100) > 95)
@@ -77,6 +78,8 @@ void World::init()
         addTerrain(UN);
         addTerrain(UN);
         addTerrain(UN);
+        
+        gBulletPool.reset(new BulletPool());
 }
 namespace MA
 {

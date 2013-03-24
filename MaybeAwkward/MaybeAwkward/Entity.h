@@ -53,6 +53,16 @@ public:
         mDeletionHandler = aDeletionHandler;
     }
 
+    PhysicalObject *getPhysics()
+    {
+        return PhysicsSystem::get(mPhysics);
+    }
+
+    const PhysicalObject *getPhysics() const
+    {
+        return PhysicsSystem::get(mPhysics);
+    }
+
     bool update(float dt);
     void draw();
 

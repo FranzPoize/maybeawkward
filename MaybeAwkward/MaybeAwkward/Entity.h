@@ -46,7 +46,7 @@ enum AnimState {
     JUMPING_DOWN,
 };
 
-const char* sanimEnumToStr(AnimState);
+const char* animEnumToNounoursStr(AnimState);
 
 typedef std::vector<Family> FamilyVector;
 

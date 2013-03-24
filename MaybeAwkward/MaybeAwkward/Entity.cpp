@@ -129,7 +129,7 @@ void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
 }
 
 
-const char* sanimEnumToStr(AnimState state) {
+const char* animEnumToNounoursStr(AnimState state) {
     switch (state) {    
         case NO_CHANGE: return "";
         case IDLE: return "nounours_idle";

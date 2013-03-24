@@ -7,7 +7,9 @@ class SpawnPoint
 public:
 	enum EnemyType
 	{
-		NORMAL
+		NORMAL,
+		HIGH,
+		HIGHER
 	};
 	SpawnPoint(EnemyType aType,float aX, float aY,float aXSpeed, float aYSpeed):
 		mType(aType),

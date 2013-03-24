@@ -13,9 +13,9 @@ Camera::Camera(float aCameraXPos):
 
 void Camera::update()
 {
-	if(mFollowedEntity->x() - mCameraXPos > WIN_WIDTH / 2)
+	if(mFollowedEntity->x()+300.f - mCameraXPos > WIN_WIDTH / 2)
 	{
-		mCameraXPos = mFollowedEntity->x() - WIN_WIDTH/2;
+		mCameraXPos = mFollowedEntity->x()+300.f - WIN_WIDTH/2;
 	}
 
 }

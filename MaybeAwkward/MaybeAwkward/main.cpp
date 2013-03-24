@@ -66,6 +66,8 @@ public:
         pibi->addChild(rightArm, 1);
         pibi->families().push_back(MA::FRIEND);
 
+		aWorld.pibiRef = pibi;
+
         aWorld.everybodyList().push_back(pibi);
 		aWorld.createSpawner(*pibi);
     }

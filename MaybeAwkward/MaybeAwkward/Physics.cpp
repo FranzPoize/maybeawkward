@@ -15,6 +15,8 @@ void BoxPhysicalObject::applyVelocity(Slice<BoxPhysicalObject> objects, float dt
     while (it != objects.end()) {
         it->_x += dt * it->_dx;
         it->_y += dt * it->_dy;
+        if (it->_material.airFriction < 1.0) it->_material.airFriction = 1.0;
+        it->_dx = it->_dx / it->_material.airFriction;
         ++it;
     }
 }

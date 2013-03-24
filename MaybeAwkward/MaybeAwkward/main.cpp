@@ -66,7 +66,7 @@ public:
 #endif
         std::shared_ptr<MA::AnimatorSpriteSwitcher> spriteSwitch = std::make_shared<MA::AnimatorSpriteSwitcher>(ASSET_PATH+"design_export/nounoursSprites.xml");
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
-
+        aWorld.pibiRef = pibi;
         pibi->setAnimator(spriteSwitch);
         pibi->name() = "Nounours";
 

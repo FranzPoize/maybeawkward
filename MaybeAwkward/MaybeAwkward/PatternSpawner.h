@@ -2,6 +2,8 @@
 #define PatternSpawner_h__
 #include "Pattern.h"
 
+#include "SpawnPoint.h"
+
 namespace MA
 {
 class GraphicWrapper;
@@ -12,11 +14,11 @@ public:
 	PatternSpawner(Entity &aEntity):
 	  mEntity(aEntity)
 	  {}
-	void spawnAPattern(unsigned int lvl,Pattern::ControllerType type,GraphicWrapper &gw);
+	void spawnAPattern(unsigned int lvl,Pattern::ControllerType type,GraphicWrapper &gw,SpawnPoint::EnemyType eType);
 private:
-	void spawnLevelOne(Pattern::ControllerType type,GraphicWrapper &gw);
-	void spawnLevelTwo(Pattern::ControllerType type,GraphicWrapper &gw);
-	void spawnLevelThree(Pattern::ControllerType type,GraphicWrapper &gw);
+	void spawnLevelOne(Pattern::ControllerType type,GraphicWrapper &gw,SpawnPoint::EnemyType eType);
+	void spawnLevelTwo(Pattern::ControllerType type,GraphicWrapper &gw,SpawnPoint::EnemyType eType);
+	void spawnLevelThree(Pattern::ControllerType type,GraphicWrapper &gw,SpawnPoint::EnemyType eType);
 	Entity &mEntity;
 };
 }

@@ -24,10 +24,10 @@ const float SINUS_STYLE_MOVEMENT_SPEED = 450;
 const float SINUS_AMPLITUDE = 4000;
 
 const float AI_REACTION_DISTANCE = 300;
-const float AI_ATTRACTION_TO_TARGET = 100;
+const float AI_ATTRACTION_TO_TARGET = 10;
 
 //pixels/sec
-const float TOP_SPEED = 200;
+const float TOP_SPEED = 600;
 
 const float GRAVITY_X = 0.0f;
 const float GRAVITY_Y = 30.0f;

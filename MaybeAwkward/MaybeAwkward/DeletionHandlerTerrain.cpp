@@ -11,7 +11,7 @@ using namespace MA;
 
 bool DeletionHandlerTerrain::deletion(Entity &aEntity)
 {
-	if((aEntity.x() + 1280)/aEntity.cameraFactor() < World::instance.getGraphicWrapper().camera().pos())
+	if((aEntity.x() + 1280) < World::instance.getGraphicWrapper().camera().pos()*aEntity.cameraFactor())
 	{
 		if(aEntity.cameraFactor() > 0.5f)
 			World::instance.terrainManager()->addTerrain();

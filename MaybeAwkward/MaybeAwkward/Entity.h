@@ -185,6 +185,9 @@ public:
         if (isGrounded() && fabs(o->vx()) < 0.1f) {
             state = IDLE;
         }
+        if (isGrounded() && fabs(o->vx()) > 0.1f) {
+            state = WALKING;
+        }
         if (state != NO_CHANGE && state != mState) {
             mState = state;
             return mState;

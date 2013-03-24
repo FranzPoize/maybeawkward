@@ -85,6 +85,7 @@ namespace MA
 		}
         
         void step(float dt);
+		std::shared_ptr<Entity> pibiRef;
 	private:
         std::shared_ptr<GraphicWrapper> mGW;
 
@@ -92,6 +93,7 @@ namespace MA
 		EntityContainer mTerrainList;
 		EntityContainer mBackgroundThreeList;
 		EntityContainer mBackgroundFourList;
+		EntityContainer mSkyBackground;
 		
 		std::shared_ptr<TerrainManager> mTerrainManager;
 
@@ -102,8 +104,10 @@ namespace MA
 
 		std::shared_ptr<PatternSpawner> spawner;
 
+		void createBackground();
     public:
         std::unique_ptr<BulletPool> gBulletPool;
+
     };
 }
 

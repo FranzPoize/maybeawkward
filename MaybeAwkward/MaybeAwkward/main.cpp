@@ -47,6 +47,7 @@ public:
         rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
 #else 
         std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
+        std::shared_ptr<MA::Controller> rightArmController = std::make_shared<MA::MockController>();
 #endif
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
         MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY);

@@ -15,6 +15,7 @@ void BoxPhysicalObject::applyVelocity(Slice<BoxPhysicalObject> objects, float dt
     while (it != objects.end()) {
         it->_x += dt * it->_dx;
         it->_y += dt * it->_dy;
+        it->_dx = it->_dx / it->_material.airFriction;
         ++it;
     }
 }
@@ -34,8 +35,11 @@ void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (!objects.empty()) {
         if (objects.front()._y > PHYSICS_Y_LIMIT) {
+            if (objects.front()._y > PHYSICS_Y_LIMIT - 3) {
+                objects.front()._dx = objects.front()._dx * objects.front()._material.groundFriction;
+            }
             objects.front()._y = PHYSICS_Y_LIMIT;
-            objects.front()._dy = - objects.front()._dy * 0.5;
+            objects.front()._dy = - objects.front()._dy * 0.5f;
         }
         objects.shrinkLeft();
     }
@@ -94,7 +98,7 @@ void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMa
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
 {
-
+  // TODO
 }
 
 PhysicalObject* PhysicsSystem::get(PhysicsID id)
@@ -116,8 +120,8 @@ void PhysicsSystem::applyForce(PhysicsID id, float fx, float fy)
 void PhysicsSystem::setPosition(PhysicsID id, float px, float py)
 {
     PhysicalObject* obj = PhysicsSystem::get(id);
-    obj->_x += px;
-    obj->_y += py;
+    obj->_x = px;
+    obj->_y = py;
 }
 
 } // namespace

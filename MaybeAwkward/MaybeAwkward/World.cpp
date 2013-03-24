@@ -42,7 +42,7 @@ void drawTraversal(EntityList &aList)
    
 void World::step(float dt)
 {
-    //mGameplay->update(dt);
+    mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
 	if (everybodyList().size() < 100 && (rand() % 100) > 95)

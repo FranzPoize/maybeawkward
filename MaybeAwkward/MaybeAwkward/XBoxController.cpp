@@ -25,6 +25,7 @@ XBoxController::XBoxController(int aControllerId) :
 void XBoxController::update(MessageReceiver &aReceiver, float dt)
 {
     int enter = CL_System::get_time();
+	aReceiver.receiveMessage( std::make_shared<MoveMessage>(MoveMessage(0.f, 1.f, false)) );
     if (updateState()==ERROR_SUCCESS)
     {
 

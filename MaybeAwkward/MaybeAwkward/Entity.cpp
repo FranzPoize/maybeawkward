@@ -32,8 +32,7 @@ bool Entity::update(float dt)
     Camera &worldCam = World::instance.getGraphicWrapper().camera();
     if( (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) || (pow(y(), 2) > WIN_HEIGHT_SQUARED))
     {
-        mDeletionHandler->deletion(*this);
-        return true;
+        return mDeletionHandler->deletion(*this);;
     }
 
     mController->update(*this, dt);

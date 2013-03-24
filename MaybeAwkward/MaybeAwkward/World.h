@@ -6,10 +6,10 @@
 
 #include "GameLogic.h"
 #include "PatternSpawner.h"
+#include "TerrainManager.h"
 
 namespace MA
 {
-    std::shared_ptr<Entity> createDefaultEntity(const std::string &aRelativeFilepath, float aX, float aY);
 
 	class Entity;
     class GraphicWrapper;
@@ -47,9 +47,17 @@ namespace MA
 		std::list<std::shared_ptr<Entity>> &everybodyList()
 		{
 			return mEverybodyList;	
-		};
+		}
 
-        void addTerrain(TerrainValue);
+		std::list<std::shared_ptr<Entity>> &terrainList()
+		{
+			return mTerrainList;	
+		}
+
+		std::shared_ptr<TerrainManager> terrainManager()
+		{
+			return mTerrainManager;
+		}
         
         void step(float dt);
 	private:
@@ -57,8 +65,9 @@ namespace MA
 
 		EntityContainer mEverybodyList;
 		EntityContainer mTerrainList;
+		
+		std::shared_ptr<TerrainManager> mTerrainManager;
 
-        unsigned int mLastTerrainId;
         std::shared_ptr<MA::GameLogic> mGameplay;
 
 		std::shared_ptr<PatternSpawner> spawner;

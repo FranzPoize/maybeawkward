@@ -141,20 +141,5 @@ void World::createBackground() {
 
 	mSkyBackground.push_back(sun);
 
-	CL_SpriteDescription proxyDescriptionRay;
-    proxyDescriptionSun.add_frame(ASSET_PATH+"design_export/soleil.png");
-
-    CL_Sprite proxySpriteSun(World::instance.getGraphicWrapper().cl(), proxyDescriptionSun);
-    proxySpriteSun.set_alignment(origin_top_left);
-    std::shared_ptr<Drawer> proxySunDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteSun);
-
-	std::shared_ptr<Entity> sun = std::make_shared<Entity>(controllerNull, proxySunDrawer);
-	sun->setCameraFactor(0.f);
-
-	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
-
-    PhysicsSystem::addEntity(*sun, PHYSICS_BOX);
-	PhysicsSystem::setPosition(sun->physicsID(),400.f,215.f);
-
-	mSkyBackground.push_back(sun);
+	
 }

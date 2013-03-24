@@ -54,11 +54,16 @@ void World::step(float dt)
             
     updateTraversal(mEverybodyList, dt);
     updateTraversal(mTerrainList, dt);
+	updateTraversal(mBackgroundThreeList, dt);
+	updateTraversal(mBackgroundFourList, dt);
 
     getGraphicWrapper().camera().update();
 
+	drawTraversal(mBackgroundFourList);
+	drawTraversal(mBackgroundThreeList);
     drawTraversal(mTerrainList);
     drawTraversal(mEverybodyList);
+	
 }
 
 void World::init()
@@ -66,8 +71,18 @@ void World::init()
         mGameplay = std::make_shared<GameLogic>();
         init_gameplay(mGameplay.get());
 		mTerrainManager = std::make_shared<TerrainManager>();
+		mBThreeManager = std::make_shared<BackgroundPlanThreeManager>();
+		mBFourManager = std::make_shared<BackgroundPlanFourManager>();
 
 		mTerrainManager->addTerrain();
 		mTerrainManager->addTerrain();
 		mTerrainManager->addTerrain();
+
+		mBThreeManager->addTerrain();
+		mBThreeManager->addTerrain();
+		mBThreeManager->addTerrain();
+
+		mBFourManager->addTerrain();
+		mBFourManager->addTerrain();
+		mBFourManager->addTerrain();
 }

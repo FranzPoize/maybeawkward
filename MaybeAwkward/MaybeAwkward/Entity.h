@@ -6,6 +6,7 @@
 #include "MessageVisitor.h"
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
+#include "constants.h"
 
 #include <assert.h>
 #include <memory>
@@ -144,7 +145,7 @@ public:
     }
 
     bool isGrounded() {
-        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01f;
+        return PhysicsSystem::get(physicsID())->y() > PHYSICS_Y_LIMIT - 5;
     }
 
     bool isGoingUp() {
@@ -176,7 +177,7 @@ public:
             state = JUMPING_DOWN;
         }
 
-        if (isGrounded() && fabs(o->vx()) < 0.01f) {
+        if (isGrounded() && fabs(o->vx()) < 0.1f) {
             state = IDLE;
         }
         if (state != NO_CHANGE && state != mState) {

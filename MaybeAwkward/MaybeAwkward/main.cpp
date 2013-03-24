@@ -118,6 +118,8 @@ public:
         CL_GraphicContext gc = window.get_gc();
         CL_InputContext ic = window.get_ic();
 
+        MA::GameLogic logic;
+        init_gameplay(&logic);
 
         CL_FileLogger file_logger("logfile.txt");
 
@@ -143,6 +145,8 @@ public:
                 float delta = (current_time-last_time)/1000.f;
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
+
+                logic.update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 

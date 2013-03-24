@@ -98,7 +98,7 @@ void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMa
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
 {
-
+  // TODO
 }
 
 PhysicalObject* PhysicsSystem::get(PhysicsID id)

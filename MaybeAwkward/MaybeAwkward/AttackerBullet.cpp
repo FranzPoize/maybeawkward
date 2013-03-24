@@ -43,6 +43,7 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
     CL_Pointf dir(1.f, 0.f);
     dir.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
 
-    World::instance.everybodyList().push_back(generateBullet(CL_Pointf(aEntity.x(), aEntity.y()), dir));
+    CL_Pointf p(aEntity.x(), aEntity.y());
+    World::instance.everybodyList().push_back(generateBullet(p, dir));
 
 }

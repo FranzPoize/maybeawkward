@@ -7,6 +7,7 @@
 #include "MoveMessage.h"
 #include "AttackMessage.h"
 #include "AttackerNull.h"
+#include "DeletionHandlerNull.h"
 
 #include "World.h"
 #include "GraphicWrapper.h"
@@ -21,6 +22,7 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mController(aController),
     mDrawer(aDrawer),
     mAttacker(std::make_shared<AttackerNull>()),
+    mDeletionHandler(std::make_shared<DeletionHandlerNull>()),
     mChildEntities()
 {
 }
@@ -30,6 +32,7 @@ bool Entity::update(float dt)
     Camera &worldCam = World::instance.getGraphicWrapper().camera();
     if( (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) || (pow(y(), 2) > WIN_HEIGHT_SQUARED))
     {
+        mDeletionHandler->deletion(*this);
         return true;
     }
 

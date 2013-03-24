@@ -7,6 +7,7 @@
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
 
+
 #include <assert.h>
 #include <memory>
 #include <stdio.h>
@@ -22,6 +23,7 @@ class AbstractMessage;
 class MoveMessage;
 class AttackMessage;
 class Attacker;
+class DeletionHandler;
 
 enum Family {
     ENEMY,
@@ -44,6 +46,12 @@ public:
     {
         mAttacker = aAttacker;
     }
+
+    void setDeletionHandler(std::shared_ptr<DeletionHandler> aDeletionHandler)
+    {
+        mDeletionHandler = aDeletionHandler;
+    }
+
     bool update(float dt);
     void draw();
 
@@ -108,6 +116,7 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
+    std::shared_ptr<DeletionHandler> mDeletionHandler;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;
 

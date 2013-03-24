@@ -60,7 +60,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 			enemy->families().push_back(ENEMY);
 
 			PhysicsMaterial mat(1.0,1.0,1.0, 64, 64); // TODO actual sizes
-			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
+			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX, &mat);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),i->x,i->y);
 			MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(i->xSpeed);
 			MA::PhysicsSystem::get(enemy->physicsID())->setYVelocity(i->ySpeed);

@@ -50,7 +50,7 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
             WORD buttons = mControllerState.Gamepad.wButtons;
             bool jump = buttons & XINPUT_GAMEPAD_A;
 
-            aReceiver.receiveMessage( std::make_shared<SpeedMessage>(SpeedMessage(leftTrigger, rightTrigger*1000.f, jump)) );
+            aReceiver.receiveMessage( std::make_shared<SpeedMessage>(SpeedMessage(leftTrigger, rightTrigger, jump)) );
         }
 
         if (mControlTypes & LEFT_ATTACK)

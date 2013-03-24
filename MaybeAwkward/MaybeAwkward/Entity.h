@@ -43,6 +43,7 @@ class Entity : public MessageVisitor, public MessageReceiver
 public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
+    ~Entity();
 
     void setAttacker(std::shared_ptr<Attacker> aAttacker)
     {

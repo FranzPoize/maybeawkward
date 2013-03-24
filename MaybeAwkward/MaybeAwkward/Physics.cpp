@@ -53,6 +53,7 @@ void BoxPhysicalObject::update(const Entity &aEntity, float dt)
 
 void PhysicsSystem::init()
 {
+    _system->mPhysicsCount = 0;
     _system->_boxesWithGravity.reserve(1024);
 }
 
@@ -81,6 +82,8 @@ void PhysicsSystem::update(float dt)
 
 void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params)
 {
+    _system->mPhysicsCount++;
+    printf("num of physical objetcs: %i\n", _system->mPhysicsCount);
     switch (type) {
         case PHYSICS_BOX: {
             _system->_boxesNoGravity.push_back(BoxPhysicalObject(params));

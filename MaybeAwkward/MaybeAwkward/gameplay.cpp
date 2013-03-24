@@ -23,7 +23,7 @@ void init_gameplay(GameLogic* logic) {
     logic->onBoxCollision(FRIEND, ENEMY_BULLET).add(
         closure<EntityPair>(&on_friend_enemy_bullet_collision)
     );
-    logic->onBoxCollision(FRIEND, ENEMY).add(
+    logic->onBoxCollision(FRIEND_BULLET, ENEMY).add(
         closure<EntityPair>(&on_friend_enemy_collision)
     );
 }

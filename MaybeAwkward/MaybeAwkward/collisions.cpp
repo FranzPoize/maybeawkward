@@ -1,11 +1,16 @@
 
 #include "collisions.h"
 #include <assert.h>
+#include <stdio.h>
 
 namespace MA {
 
 bool rectCollision(const Rect& r1, const Rect& r2)
 {
+    if (r1.width != 0 && r2.width != 0)
+        printf("{%f %f %f %f} -- {%f %f %f %f}\n",
+            r1.x, r1.y, r1.width, r1.height,
+            r2.x, r2.y, r2.width, r2.height);
     float ax1 = r1.x;
     float ax2 = r1.x + r1.width;
     float bx1 = r2.x;

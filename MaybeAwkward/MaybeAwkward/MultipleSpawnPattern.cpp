@@ -59,6 +59,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 			enemy = std::make_shared<Entity>(controller,drawer);
 			enemy->families().push_back(ENEMY);
 
+			PhysicsMaterial mat(1.0,1.0,1.0, 64, 64); // TODO actual sizes
 			MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX);
 			MA::PhysicsSystem::setPosition(enemy->physicsID(),i->x,i->y);
 			MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(i->xSpeed);

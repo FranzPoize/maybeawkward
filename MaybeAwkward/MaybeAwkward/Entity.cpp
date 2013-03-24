@@ -133,13 +133,18 @@ void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
 }
 
 
+namespace MA
+{
+
 const char* animEnumToNounoursStr(AnimState state) {
     switch (state) {    
         case NO_CHANGE: return "";
         case IDLE: return "nounours_idle";
-        case WALKING: return "nounours_marche";
-        case JUMPING_UP: return "nounours_saut";
-        case JUMPING_DOWN: return "nounours_saut";
+        case WALKING: return "nounours_walk";
+        case JUMPING_UP: return "nounours_jump_up";
+        case JUMPING_DOWN: return "nounours_jump_down";
     }
     return "";
+}
+
 }

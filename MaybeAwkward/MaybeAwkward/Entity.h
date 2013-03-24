@@ -67,6 +67,11 @@ public:
         mDeletionHandler = aDeletionHandler;
     }
 
+    void setAnimator(std::shared_ptr<Animator> aAnimator)
+    {
+        mAnimator = aAnimator;
+    }
+
     PhysicalObject *getPhysics()
     {
         return PhysicsSystem::get(mPhysics);

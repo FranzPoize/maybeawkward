@@ -1,15 +1,16 @@
 #ifndef AnimatorSpriteSwitcher_h__
 #define AnimatorSpriteSwitcher_h__
 
+#include "Animator.h"
+#include "SpriteComponent.h"
+
 #include <memory>
 
 #include <string>
-#include "Animator.h"
 
 namespace MA
 {
     class Animator;
-    class SpriteComponent;
 
 class AnimatorSpriteSwitcher : public Animator
 {

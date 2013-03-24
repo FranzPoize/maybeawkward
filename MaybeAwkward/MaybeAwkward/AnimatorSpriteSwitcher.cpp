@@ -1,8 +1,8 @@
 #include "AnimatorSpriteSwitcher.h"
 
-#include "SpriteComponent.h"
 #include "World.h"
 #include "GraphicWrapper.h"
+#include "Entity.h"
 
 using namespace MA;
 
@@ -13,4 +13,13 @@ AnimatorSpriteSwitcher::AnimatorSpriteSwitcher(const std::string &aRessourcesfil
 
 void AnimatorSpriteSwitcher::animate(Entity &aEntity)
 {
+    AnimState aState = aEntity.checkStateChange();
+    if(aState != NO_CHANGE)
+    {
+        aEntity.setDrawer(mSpriteComponent->getDrawer(animEnumToNounoursStr(aState)));
+        if(aState== IDLE)
+        {
+            int i = 5;
+        }
+    }
 }

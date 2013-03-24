@@ -25,9 +25,12 @@ struct PhysicsID {
 };
 
 struct PhysicsMaterial {
-    PhysicsMaterial(float af = 0, float gf = 0, float m = 1.0, float w = 0, float h = 0)
+    PhysicsMaterial(float af = 1.0, float gf = 1.0, float m = 1.0, float w = 0, float h = 0)
     : airFriction(af), groundFriction(gf), mass(m)
-    , width(w), height(h) {}
+    , width(w), height(h) {
+        if (airFriction < 1.0) airFriction = 1.0;
+        if (groundFriction < 1.0) groundFriction = 1.0;
+    }
     float airFriction;
     float groundFriction;
     float mass;

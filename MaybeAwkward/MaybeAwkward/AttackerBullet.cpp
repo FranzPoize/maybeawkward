@@ -49,9 +49,6 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
     origin += CL_Pointf(aEntity.x(), aEntity.y());
     origin += dir*75;
 
-    
-
-    
     std::shared_ptr<Entity> bullet(BulletPool().getNextBullet());
     fireBullet(bullet, origin, dir);
     World::instance.everybodyList().push_back(bullet);

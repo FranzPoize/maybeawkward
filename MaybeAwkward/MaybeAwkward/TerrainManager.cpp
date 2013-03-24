@@ -27,6 +27,8 @@ TerrainManager::TerrainManager()
 		str << "design_export/level/level" << i << ".png";
 		std::shared_ptr<TerrainWrapper> entityOne = createDefaultEntity(str.str());
 		std::shared_ptr<TerrainWrapper> entityTwo = createDefaultEntity(str.str());
+        entityOne->families().push_back(TERRAIN);
+        entityTwo->families().push_back(TERRAIN);
 		mTerrainPool.push_back(entityOne);
 		mTerrainPool.push_back(entityTwo);
 	}

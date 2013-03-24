@@ -4,8 +4,8 @@
 #include "Camera.h"
 #include "World.h"
 
-#include "ClanLib\core.h"
-#include "ClanLib\application.h"
+#include "ClanLib/core.h"
+#include "ClanLib/application.h"
 
 using namespace MA;
 

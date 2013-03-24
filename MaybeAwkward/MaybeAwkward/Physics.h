@@ -28,6 +28,7 @@ struct PhysicsMaterial {
     PhysicsMaterial(float af = 1.0, float gf = 1.0, float m = 1.0, float w = 0, float h = 0)
     : airFriction(af), groundFriction(gf), mass(m)
     , width(w), height(h) {
+        if (mass < 1.0) mass = 1.0;
         if (airFriction < 1.0) airFriction = 1.0;
         if (groundFriction < 1.0) groundFriction = 1.0;
     }
@@ -91,7 +92,7 @@ public:
     static void applyForce(Slice<BoxPhysicalObject> objects, float fx, float fy);
     static void checkFloorCollision(Slice<BoxPhysicalObject> objects);
 
-    virtual Rect boundingRect() {
+    virtual Rect boundingRect() override {
         return Rect(x(), y(), _material.width, _material.height);
     }
 
@@ -113,6 +114,7 @@ public:
 private:
     std::vector<BoxPhysicalObject> _boxesWithGravity;
     std::vector<BoxPhysicalObject> _boxesNoGravity;
+    int mPhysicsCount;
 };
 
 } // namespace

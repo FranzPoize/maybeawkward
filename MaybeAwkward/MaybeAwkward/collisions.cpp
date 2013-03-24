@@ -1,6 +1,7 @@
 
 #include "collisions.h"
 #include <assert.h>
+#include <stdio.h>
 
 namespace MA {
 

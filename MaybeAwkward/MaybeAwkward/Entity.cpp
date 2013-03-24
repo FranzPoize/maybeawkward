@@ -2,6 +2,7 @@
 
 #include "Controller.h"
 #include "Drawer.h"
+#include "Physics.h"
 
 #include "constants.h"
 #include "MoveMessage.h"
@@ -28,6 +29,11 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mMarkedForDeletion(false),
 	mCameraFactor(1.0f)
 {
+}
+
+Entity::~Entity()
+{
+    PhysicsSystem::removeEntity(*this);
 }
 
 bool Entity::update(float dt)

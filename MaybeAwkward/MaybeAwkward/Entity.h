@@ -6,6 +6,7 @@
 #include "MessageVisitor.h"
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
+#include "constants.h"
 
 #include <assert.h>
 #include <memory>
@@ -13,6 +14,7 @@
 #include <deque>
 #include <map>
 #include <cmath>
+#include <string>
 
 namespace MA
 {
@@ -148,24 +150,24 @@ public:
     }
 
     bool isGrounded() {
-        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01;
+        return PhysicsSystem::get(physicsID())->y() > PHYSICS_Y_LIMIT - 5;
     }
 
     bool isGoingUp() {
-        return PhysicsSystem::get(physicsID())->vy() < 0.0;
+        return PhysicsSystem::get(physicsID())->vy() < 0.0f;
     }
 
     bool isGoingDown() {
-        return PhysicsSystem::get(physicsID())->vy() > 0.0;
+        return PhysicsSystem::get(physicsID())->vy() > 0.0f;
     }
 
     bool isWalkingRight() {
-        return PhysicsSystem::get(physicsID())->vx() > 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() > 0.0f &&
                isGrounded();
     }
 
     bool isWalkingLeft() {
-        return PhysicsSystem::get(physicsID())->vx() < 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() < 0.0f &&
                isGrounded();
     }
 
@@ -180,7 +182,7 @@ public:
             state = JUMPING_DOWN;
         }
 
-        if (isGrounded() && fabs(o->vx()) < 0.01) {
+        if (isGrounded() && fabs(o->vx()) < 0.1f) {
             state = IDLE;
         }
         if (state != NO_CHANGE && state != mState) {
@@ -188,6 +190,11 @@ public:
             return mState;
         } return NO_CHANGE;
     }
+
+    std::string& name() {
+        return mName;
+    }
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
@@ -221,6 +228,7 @@ private:
     bool mMarkedForDeletion;
     AnimState mState;
 	float mCameraFactor;
+    std::string mName;
 };
 
 }

@@ -62,10 +62,13 @@ public:
 #else 
         std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
         std::shared_ptr<MA::Controller> rightArmController = std::make_shared<MA::MockController>();
+        std::shared_ptr<MA::Controller> leftArmController = std::make_shared<MA::MockController>();
 #endif
         std::shared_ptr<MA::AnimatorSpriteSwitcher> spriteSwitch = std::make_shared<MA::AnimatorSpriteSwitcher>(ASSET_PATH+"design_export/nounoursSprites.xml");
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
+
         pibi->setAnimator(spriteSwitch);
+        pibi->name() = "Nounours";
 
 		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,0.f,0.f);
 		MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY,&pibiMat);
@@ -120,6 +123,8 @@ public:
         CL_GraphicContext gc = window.get_gc();
         CL_InputContext ic = window.get_ic();
 
+        MA::GameLogic logic;
+        init_gameplay(&logic);
 
         CL_FileLogger file_logger("logfile.txt");
 
@@ -145,6 +150,8 @@ public:
                 float delta = (current_time-last_time)/1000.f;
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
+
+                logic.update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 

@@ -16,6 +16,7 @@
 #include "GraphicWrapper.h"
 #include "Camera.h"
 
+#include <string>
 #include <ClanLib/core.h>
 
 using namespace MA;
@@ -70,7 +71,11 @@ bool Entity::update(float dt)
     {
         childIt->second->update(dt);
     }
-
+/*
+    if (name() == "Nounours" && checkStateChange() != NO_CHANGE) {
+        printf("State Change!\n");
+    }
+*/
     return false;
 }
 

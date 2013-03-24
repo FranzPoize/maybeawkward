@@ -15,7 +15,6 @@ void BoxPhysicalObject::applyVelocity(Slice<BoxPhysicalObject> objects, float dt
     while (it != objects.end()) {
         it->_x += dt * it->_dx;
         it->_y += dt * it->_dy;
-        if (it->_material.airFriction < 1.0) it->_material.airFriction = 1.0;
         it->_dx = it->_dx / it->_material.airFriction;
         ++it;
     }
@@ -36,6 +35,9 @@ void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (!objects.empty()) {
         if (objects.front()._y > PHYSICS_Y_LIMIT) {
+            if (objects.front()._y > PHYSICS_Y_LIMIT - 3) {
+                objects.front()._dx = objects.front()._dx * objects.front()._material.groundFriction;
+            }
             objects.front()._y = PHYSICS_Y_LIMIT;
             objects.front()._dy = - objects.front()._dy * 0.5;
         }

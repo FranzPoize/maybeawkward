@@ -11,8 +11,8 @@ public:
 	enum ControllerType
 	{
 		FORMATION,
-		AROUND,
 		CLOSE,
+		AROUND,
 	};
 	virtual ~Pattern(){};
 };

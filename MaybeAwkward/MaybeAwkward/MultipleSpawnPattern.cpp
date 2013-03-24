@@ -63,7 +63,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 			MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(i->xSpeed);
 			MA::PhysicsSystem::get(enemy->physicsID())->setYVelocity(i->ySpeed);
 
-			World::instance.everybodyList()->push_back(enemy);
+			World::instance.everybodyList().push_back(enemy);
 		}
 	}
 }

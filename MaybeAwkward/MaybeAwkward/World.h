@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "GameLogic.h"
+#include "PatternSpawner.h"
 
 namespace MA
 {
@@ -25,6 +26,11 @@ namespace MA
             mGameplay = std::make_shared<GameLogic>();
             init_gameplay(mGameplay.get());
         }
+
+		void createSpawner(Entity &aPibi)
+		{
+			spawner = std::make_shared<PatternSpawner>(aPibi);
+		}
 
         void setGraphicWrapper(std::shared_ptr<GraphicWrapper> aWrapper)
         {
@@ -48,6 +54,8 @@ namespace MA
 		EntityContainer mEverybodyList;
 
         std::shared_ptr<MA::GameLogic> mGameplay;
+
+		std::shared_ptr<PatternSpawner> spawner;
 
     };
 }

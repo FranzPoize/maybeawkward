@@ -87,3 +87,8 @@ void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
     }
     PhysicsSystem::get(mPhysics)->setAngle(aMessage->angle);
 }
+
+void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
+{
+	
+}

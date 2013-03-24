@@ -68,6 +68,7 @@ public:
         pibi->families().push_back(MA::FRIEND);
 
         aWorld.everybodyList().push_back(pibi);
+		aWorld.createSpawner(*pibi);
     }
 
     static int main(const std::vector<CL_String> &args)

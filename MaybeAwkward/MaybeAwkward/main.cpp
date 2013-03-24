@@ -16,13 +16,7 @@
 #include "XBoxController.h"
 #include "MockController.h"
 #include "Camera.h"
-#include "World.h"
-
-namespace MA {
-    void init_gameplay(GameLogic* logic);
-} // namespace
-
-
+#include "AttackerBullet.h"
 #include "World.h"
 
 class ConsoleProgram
@@ -63,6 +57,9 @@ public:
         std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
         MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
         MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
+
+        std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>();
+        rightArm->setAttacker(rightAttacker);
 
         pibi->addChild(rightArm, 1);
         pibi->families().push_back(MA::FRIEND);

@@ -9,6 +9,8 @@
 
 namespace MA
 {
+    std::shared_ptr<Entity> createDefaultEntity(const std::string &aRelativeFilepath, float aX, float aY);
+
 	class Entity;
     class GraphicWrapper;
 
@@ -21,17 +23,18 @@ namespace MA
 	public:
 		static World instance;
 
-        void init()
+        enum TerrainValue
         {
-            mGameplay = std::make_shared<GameLogic>();
-            init_gameplay(mGameplay.get());
-        }
+            UN
+        };
+
 
 		void createSpawner(Entity &aPibi)
 		{
 			spawner = std::make_shared<PatternSpawner>(aPibi);
 		}
 
+        void init();
         void setGraphicWrapper(std::shared_ptr<GraphicWrapper> aWrapper)
         {
             mGW = aWrapper;
@@ -45,14 +48,17 @@ namespace MA
 		{
 			return mEverybodyList;	
 		};
-        
 
+        void addTerrain(TerrainValue);
+        
         void step(float dt);
 	private:
         std::shared_ptr<GraphicWrapper> mGW;
 
 		EntityContainer mEverybodyList;
+		EntityContainer mTerrainList;
 
+        unsigned int mLastTerrainId;
         std::shared_ptr<MA::GameLogic> mGameplay;
 
 		std::shared_ptr<PatternSpawner> spawner;

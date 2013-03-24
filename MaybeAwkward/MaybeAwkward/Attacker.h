@@ -5,11 +5,12 @@ namespace MA
 {
 
 class AttackMessage;
+class Entity;
 
 class Attacker
 {
 public:
-   virtual void attack(const AttackMessage &aAttackMessage) =0;
+   virtual void attack(const AttackMessage *aAttackMessage, const Entity &aEntity) =0;
 };
 }
 #endif // Attacker_h__

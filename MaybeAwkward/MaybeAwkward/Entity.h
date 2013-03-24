@@ -7,6 +7,7 @@
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
 
+
 #include <assert.h>
 #include <memory>
 #include <stdio.h>
@@ -23,6 +24,7 @@ class MoveMessage;
 class AttackMessage;
 class Attacker;
 class AnimationMessage;
+class DeletionHandler;
 
 enum Family {
     ENEMY,
@@ -41,7 +43,17 @@ public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
 
-    void update(float dt);
+    void setAttacker(std::shared_ptr<Attacker> aAttacker)
+    {
+        mAttacker = aAttacker;
+    }
+
+    void setDeletionHandler(std::shared_ptr<DeletionHandler> aDeletionHandler)
+    {
+        mDeletionHandler = aDeletionHandler;
+    }
+
+    bool update(float dt);
     void draw();
 
     void move(float dt, float aXInput, bool aJump);
@@ -106,6 +118,7 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
+    std::shared_ptr<DeletionHandler> mDeletionHandler;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;
 

@@ -34,6 +34,6 @@ const float GRAVITY_Y = 30.0f;
 
 const int PHYSICS_Y_LIMIT = 710;
 
-const float BULLET_SPEED = 1000;
+const float BULLET_SPEED = 3000;
 
 #endif // constants_h__

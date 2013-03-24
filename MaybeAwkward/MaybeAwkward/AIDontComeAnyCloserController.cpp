@@ -27,7 +27,6 @@ AIDontComeAnyCloserController::AIDontComeAnyCloserController(Entity &aTarget):
 		float xComponent = dt*forceValue * AI_ATTRACTION_TO_TARGET * (mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x()) / radius;
 		float yComponent = dt*forceValue * AI_ATTRACTION_TO_TARGET * (mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y()) / radius;
 
-		aMessageReceiver.receiveMessage(std::make_shared<AttackMessage>(true,-atan(yComponent/xComponent)));
 		return aMessageReceiver.receiveMessage(std::make_shared<MoveMessage>(xComponent,yComponent,false));
 	}
 }

@@ -141,5 +141,20 @@ void World::createBackground() {
 
 	mSkyBackground.push_back(sun);
 
-	
+	CL_SpriteDescription proxyDescriptionRay;
+    proxyDescriptionRay.add_frame(ASSET_PATH+"design_export/rayon_soleil.png");
+
+    CL_Sprite proxySpriteRay(World::instance.getGraphicWrapper().cl(), proxyDescriptionRay);
+    proxySpriteRay.set_alignment(origin_top_left);
+    std::shared_ptr<Drawer> proxyRayDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteRay);
+
+	std::shared_ptr<Entity> ray = std::make_shared<Entity>(controllerNull, proxyRayDrawer);
+	sun->setCameraFactor(0.f);
+
+	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
+
+    PhysicsSystem::addEntity(*ray, PHYSICS_BOX);
+	PhysicsSystem::setPosition(ray->physicsID(),0.f,0.f);
+
+	mSkyBackground.push_back(ray);
 }

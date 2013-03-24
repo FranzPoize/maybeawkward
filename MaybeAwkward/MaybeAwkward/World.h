@@ -12,6 +12,9 @@
 
 namespace MA
 {
+    class BulletPool;
+
+   // std::shared_ptr<Entity> createDefaultEntity(const std::string &aRelativeFilepath, float aX, float aY);
 
 	class Entity;
     class GraphicWrapper;
@@ -99,6 +102,8 @@ namespace MA
 
 		std::shared_ptr<PatternSpawner> spawner;
 
+    public:
+        std::unique_ptr<BulletPool> gBulletPool;
     };
 }
 

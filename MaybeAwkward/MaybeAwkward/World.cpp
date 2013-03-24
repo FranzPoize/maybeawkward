@@ -7,6 +7,7 @@
 #include "DrawerSprite.h"
 #include "ControllerNull.h"
 #include "DeletionHandlerTerrain.h"
+#include "AttackerBullet.h"
 
 #include "constants.h"
 
@@ -42,7 +43,7 @@ void drawTraversal(EntityList &aList)
    
 void World::step(float dt)
 {
-    mGameplay->update(dt);
+    //mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
 	if (everybodyList().size() < 100 && (rand() % 100) > 95)
@@ -73,6 +74,8 @@ void World::init()
 		mTerrainManager = std::make_shared<TerrainManager>();
 		mBThreeManager = std::make_shared<BackgroundPlanThreeManager>();
 		mBFourManager = std::make_shared<BackgroundPlanFourManager>();
+
+        gBulletPool.reset(new BulletPool());
 
 		mTerrainManager->addTerrain();
 		mTerrainManager->addTerrain();

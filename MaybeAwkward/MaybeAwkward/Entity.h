@@ -7,7 +7,6 @@
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
 
-
 #include <assert.h>
 #include <memory>
 #include <stdio.h>
@@ -28,6 +27,7 @@ class Attacker;
 class AnimationMessage;
 class DeletionHandler;
 class SpeedMessage;
+class Animator;
 
 enum Family {
     ENEMY,
@@ -66,6 +66,16 @@ public:
     void setDeletionHandler(std::shared_ptr<DeletionHandler> aDeletionHandler)
     {
         mDeletionHandler = aDeletionHandler;
+    }
+
+    PhysicalObject *getPhysics()
+    {
+        return PhysicsSystem::get(mPhysics);
+    }
+
+    const PhysicalObject *getPhysics() const
+    {
+        return PhysicsSystem::get(mPhysics);
     }
 
 	void setCameraFactor(float aCameraFactor)
@@ -126,6 +136,11 @@ public:
 
     void markForDeletion() {
         mMarkedForDeletion = true;
+    }
+
+    void setDrawer(std::shared_ptr<Drawer> aDrawer)
+    {
+        mDrawer = aDrawer;
     }
 
     bool isGrounded() {
@@ -194,6 +209,7 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
+    std::shared_ptr<Animator> mAnimator;
     std::shared_ptr<DeletionHandler> mDeletionHandler;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;

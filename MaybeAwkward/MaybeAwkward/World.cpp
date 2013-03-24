@@ -55,11 +55,16 @@ void World::step(float dt)
             
     updateTraversal(mEverybodyList, dt);
     updateTraversal(mTerrainList, dt);
+	updateTraversal(mBackgroundThreeList, dt);
+	updateTraversal(mBackgroundFourList, dt);
 
     getGraphicWrapper().camera().update();
 
+	drawTraversal(mBackgroundFourList);
+	drawTraversal(mBackgroundThreeList);
     drawTraversal(mTerrainList);
     drawTraversal(mEverybodyList);
+	
 }
 
 void World::init()
@@ -67,33 +72,20 @@ void World::init()
         mGameplay = std::make_shared<GameLogic>();
         init_gameplay(mGameplay.get());
 		mTerrainManager = std::make_shared<TerrainManager>();
+		mBThreeManager = std::make_shared<BackgroundPlanThreeManager>();
+		mBFourManager = std::make_shared<BackgroundPlanFourManager>();
 
-        mTerrainManager->addTerrain();
-        mTerrainManager->addTerrain();
-        mTerrainManager->addTerrain();
-        
         gBulletPool.reset(new BulletPool());
-}
-namespace MA
-{
 
-//std::shared_ptr<Entity> createDefaultEntity(const std::string &aRelativeFilepath, float aX, float aY)
-//{
-//    CL_SpriteDescription proxyDescription;
-//    proxyDescription.add_frame(ASSET_PATH+aRelativeFilepath);
-//
-//    CL_Sprite proxySprite(World::instance.getGraphicWrapper().cl(), proxyDescription);
-//    proxySprite.set_alignment(origin_top_left);
-//    std::shared_ptr<Drawer> proxyDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySprite);
-//
-//    std::shared_ptr<Controller> controllerNull = std::make_shared<ControllerNull>();
-//    std::shared_ptr<Entity> proxy = std::make_shared<Entity>(controllerNull, proxyDrawer);
-//
-//    PhysicsMaterial proxyMaterial(EPSILON, EPSILON, 10000.f, 13, 13);
-//    PhysicsSystem::addEntity(*proxy, PHYSICS_BOX);
-//    PhysicsSystem::setPosition(proxy->physicsID(), aX, aY);
-//
-//    return proxy;
-//}
+		mTerrainManager->addTerrain();
+		mTerrainManager->addTerrain();
+		mTerrainManager->addTerrain();
 
+		mBThreeManager->addTerrain();
+		mBThreeManager->addTerrain();
+		mBThreeManager->addTerrain();
+
+		mBFourManager->addTerrain();
+		mBFourManager->addTerrain();
+		mBFourManager->addTerrain();
 }

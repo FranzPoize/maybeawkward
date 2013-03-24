@@ -2,6 +2,7 @@
 #include "Physics.h"
 #include "Entity.h"
 #include "constants.h"
+#include <assert.h>
 
 #include <stdio.h>
 
@@ -53,6 +54,7 @@ void BoxPhysicalObject::update(const Entity &aEntity, float dt)
 
 void PhysicsSystem::init()
 {
+    _system->mPhysicsCount = 0;
     _system->_boxesWithGravity.reserve(1024);
 }
 
@@ -92,13 +94,35 @@ void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMa
             aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
             break;    
         }
-        default: break;
+        default: return;
     }
+    _system->mPhysicsCount++;
+    //printf("num of physical objetcs: %i\n", _system->mPhysicsCount);
 }
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
 {
-  // TODO
+    PhysicsID id = aEntity.physicsID();
+    std::vector<BoxPhysicalObject>* container = nullptr;
+    switch (id.type) {
+        case PHYSICS_BOX: container = &_system->_boxesNoGravity; break;
+        case PHYSICS_BOX_GRAVITY: container = &_system->_boxesNoGravity; break;
+        default: assert(false);
+    }
+
+    if (container) {
+        std::vector<BoxPhysicalObject>::iterator it = container->begin();
+        std::vector<BoxPhysicalObject>::iterator stop = container->end();
+        bool darnit = false;
+        for (int i = 0; i < id.index; ++i) { 
+            if (it == stop) darnit = true;
+            ++it;
+        }
+        if (!darnit){
+            container->erase(it);
+            _system->mPhysicsCount--;
+        }
+    }
 }
 
 PhysicalObject* PhysicsSystem::get(PhysicsID id)

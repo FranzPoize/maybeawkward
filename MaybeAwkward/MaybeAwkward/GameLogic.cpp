@@ -57,13 +57,15 @@ void GameLogic::update(float dt)
                     if (families_matched) break;
                     ++family_it1;
                 }
-                Rect r1 = PhysicsSystem::get((*main_entity_it)->physicsID())->boundingRect();
-                Rect r2 = PhysicsSystem::get((*secondary_entity_it)->physicsID())->boundingRect();
                 if (families_matched) {
+                    Rect r1 = PhysicsSystem::get((*main_entity_it)->physicsID())->boundingRect();
+                    Rect r2 = PhysicsSystem::get((*secondary_entity_it)->physicsID())->boundingRect();
+                    //printf("               GameLogic::update families matched\n");
                     if (rectCollision(r1, r2)) {
                         CallbackList::iterator callbacks_it = it->second._callbacks.begin();
                         CallbackList::iterator callbacks_stop = it->second._callbacks.end();
                         EntityPair pair(&**main_entity_it, &**secondary_entity_it);
+                        //printf("                        GameLogic::update collision found\n");
                         while (callbacks_it != callbacks_stop) {
                             (*callbacks_it)->call(pair, dt);
                             ++callbacks_it;

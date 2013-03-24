@@ -44,6 +44,7 @@ class Entity : public MessageVisitor, public MessageReceiver
 public:
     //Entity(std::shared_ptr<Controller> aController);
     Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer);
+    ~Entity();
 
     void setAttacker(std::shared_ptr<Attacker> aAttacker)
     {
@@ -64,6 +65,16 @@ public:
     {
         return PhysicsSystem::get(mPhysics);
     }
+
+	void setCameraFactor(float aCameraFactor)
+	{
+		mCameraFactor = aCameraFactor;
+	}
+
+	float cameraFactor() const
+	{
+		return mCameraFactor;
+	}
 
     bool update(float dt);
     void draw();
@@ -151,6 +162,7 @@ private:
     typedef ChildrenMap::iterator ChildIterator;
     ChildrenMap mChildEntities;
     bool mMarkedForDeletion;
+	float mCameraFactor;
 };
 
 }

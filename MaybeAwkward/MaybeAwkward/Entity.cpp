@@ -23,14 +23,17 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mDrawer(aDrawer),
     mAttacker(std::make_shared<AttackerNull>()),
     mDeletionHandler(std::make_shared<DeletionHandlerNull>()),
-    mChildEntities()
+    mChildEntities(),
+    mMarkedForDeletion(false)
 {
 }
 
 bool Entity::update(float dt)
 {
     Camera &worldCam = World::instance.getGraphicWrapper().camera();
-    if( (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) || (pow(y(), 2) > WIN_HEIGHT_SQUARED))
+    if (mMarkedForDeletion || 
+        (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) ||
+        (pow(y(), 2) > WIN_HEIGHT_SQUARED))
     {
         mDeletionHandler->deletion(*this);
         return true;

@@ -120,8 +120,8 @@ void PhysicsSystem::applyForce(PhysicsID id, float fx, float fy)
 void PhysicsSystem::setPosition(PhysicsID id, float px, float py)
 {
     PhysicalObject* obj = PhysicsSystem::get(id);
-    obj->_x += px;
-    obj->_y += py;
+    obj->_x = px;
+    obj->_y = py;
 }
 
 } // namespace

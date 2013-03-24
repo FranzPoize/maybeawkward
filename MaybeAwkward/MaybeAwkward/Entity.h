@@ -99,6 +99,10 @@ public:
         mChildEntities.insert(ChildPair(aOrder, aEntity));
     }
 
+    void markForDeletion() {
+        mMarkedForDeletion = true;
+    }
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
@@ -127,6 +131,7 @@ private:
     typedef std::pair<int, std::shared_ptr<Entity> > ChildPair;
     typedef ChildrenMap::iterator ChildIterator;
     ChildrenMap mChildEntities;
+    bool mMarkedForDeletion;
 };
 
 }

@@ -14,6 +14,7 @@ void on_friend_enemy_bullet_collision(EntityPair& entities, float dt)
 
 void on_friend_enemy_collision(EntityPair& entities, float dt)
 {
+    entities.e2->markForDeletion();
     printf("[FRIEND,ENEMY] Collisioooooooooooon\n");
 }
 
@@ -25,10 +26,6 @@ void init_gameplay(GameLogic* logic) {
     logic->onBoxCollision(FRIEND, ENEMY).add(
         closure<EntityPair>(&on_friend_enemy_collision)
     );
-    logic->onBoxCollision(FRIEND, FRIEND).add(
-        closure<EntityPair>(&on_friend_enemy_collision)
-    );
-
 }
 
 } // namespace

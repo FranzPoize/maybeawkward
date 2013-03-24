@@ -1,9 +1,13 @@
 #include "constants.h"
 
+
 #include <ClanLib/core.h>
 #include <ClanLib/gl.h>
 #include <ClanLib/display.h>
 #include <ClanLib/application.h>
+
+#include <ClanLib/sound.h>
+
 #include <string>
 
 #include <memory>
@@ -140,6 +144,63 @@ public:
             MA::World &world = MA::World::instance;
             world.setGraphicWrapper(gw);
             world.init();
+
+
+
+
+
+
+
+
+            CL_SetupSound setup_sound;
+            CL_SoundOutput output(44100);
+
+            // Load a sample from a wave file:
+            CL_SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
+
+            // Play sample
+            sample.play();
+            //Title
+            CL_ResourceManager rCiel(ASSET_PATH+"design_export/ciel.xml");
+            CL_Sprite ciel(gc, "ciel", &rCiel);
+            CL_ResourceManager rTitre(ASSET_PATH+"design_export/titre.xml");
+            CL_Sprite titre(gc, "titre", &rTitre);
+
+
+            CL_ResourceManager rAnimatedBackground(ASSET_PATH+"design_export/animatedbackground.xml");
+            CL_Sprite animatedBackground(gc, "background", &rAnimatedBackground);
+
+
+            CL_ResourceManager rSoleil(ASSET_PATH+"design_export/soleil.xml");
+            CL_Sprite soleil(gc, "soleil", &rSoleil);
+
+            CL_ResourceManager rRayons(ASSET_PATH+"design_export/rayon_soleil.xml");
+            CL_Sprite rayons(gc, "rayon_soleil", &rRayons);
+
+            CL_Sprite forground(gc, "forground", &rRayons);
+
+
+            while (ic.get_keyboard().get_keycode(CL_KEY_ENTER) == false)
+            {
+                ciel.draw(gc,0,720);
+                //soleil.draw(gc,400,215);
+                //rayons.draw(gc,400,215);
+                //animatedBackground.draw(gc,0,720);
+                //animatedBackground.update();
+                titre.draw(gc,0,720);
+                //forground.draw(gc,1280,215);
+
+                window.flip(1);
+                CL_KeepAlive::process(0);
+            }
+
+
+
+
+
+
+
+
 
             createPibi(world);
 

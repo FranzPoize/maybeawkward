@@ -29,6 +29,7 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mAnimator(std::make_shared<AnimatorNull>()),
     mChildEntities(),
     mMarkedForDeletion(false),
+    mState(IDLE),
 	mCameraFactor(1.0f)
 {
 }
@@ -129,4 +130,16 @@ void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
 void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
 {
 	
+}
+
+
+const char* animEnumToNounoursStr(AnimState state) {
+    switch (state) {    
+        case NO_CHANGE: return "";
+        case IDLE: return "nounours_idle";
+        case WALKING: return "nounours_marche";
+        case JUMPING_UP: return "nounours_saut";
+        case JUMPING_DOWN: return "nounours_saut";
+    }
+    return "";
 }

@@ -102,6 +102,7 @@ void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMa
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
 {
+/* that's crap
     PhysicsID id = aEntity.physicsID();
     std::vector<BoxPhysicalObject>* container = nullptr;
     switch (id.type) {
@@ -123,6 +124,7 @@ void PhysicsSystem::removeEntity(Entity &aEntity)
             _system->mPhysicsCount--;
         }
     }
+*/
 }
 
 PhysicalObject* PhysicsSystem::get(PhysicsID id)

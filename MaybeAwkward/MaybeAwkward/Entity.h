@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <deque>
 #include <map>
+#include <cmath>
 
 namespace MA
 {
@@ -36,6 +37,16 @@ enum Family {
     FRIEND_BULLET,
     TERRAIN,
 };
+
+enum AnimState {
+    NO_CHANGE,
+    IDLE,
+    WALKING,
+    JUMPING_UP,
+    JUMPING_DOWN,
+};
+
+const char* sanimEnumToStr(AnimState);
 
 typedef std::vector<Family> FamilyVector;
 
@@ -106,6 +117,48 @@ public:
         mMarkedForDeletion = true;
     }
 
+    bool isGrounded() {
+        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01;
+    }
+
+    bool isGoingUp() {
+        return PhysicsSystem::get(physicsID())->vy() < 0.0;
+    }
+
+    bool isGoingDown() {
+        return PhysicsSystem::get(physicsID())->vy() > 0.0;
+    }
+
+    bool isWalkingRight() {
+        return PhysicsSystem::get(physicsID())->vx() > 0.0 &&
+               isGrounded();
+    }
+
+    bool isWalkingLeft() {
+        return PhysicsSystem::get(physicsID())->vx() < 0.0 &&
+               isGrounded();
+    }
+
+    AnimState checkStateChange() {
+        PhysicalObject* o = PhysicsSystem::get(physicsID());
+        if (!o) return NO_CHANGE;
+        AnimState state = NO_CHANGE;
+        if (isGoingUp()) {
+            state = JUMPING_UP;
+        }
+        if (isGoingDown()) {
+            state = JUMPING_DOWN;
+        }
+
+        if (isGrounded() && fabs(o->vx()) < 0.01) {
+            state = IDLE;
+        }
+        if (state != NO_CHANGE && state != mState) {
+            mState = state;
+            return mState;
+        } return NO_CHANGE;
+    }
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
@@ -136,6 +189,7 @@ private:
     typedef ChildrenMap::iterator ChildIterator;
     ChildrenMap mChildEntities;
     bool mMarkedForDeletion;
+    AnimState mState;
 };
 
 }

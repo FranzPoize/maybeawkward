@@ -60,6 +60,8 @@ public:
 
     float x() const { return _x; }
     float y() const { return _y; }
+    float vx() const { return _dx; }
+    float vy() const { return _dy; }
     float angle() const { return _angle; }
     virtual Rect boundingRect() {
         // default rect

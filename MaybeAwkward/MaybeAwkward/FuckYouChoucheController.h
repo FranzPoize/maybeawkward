@@ -8,12 +8,12 @@
 
 namespace MA
 {
-
+class MessageReceiver;
 class FuckYouChoucheController : public Controller
 {
 public:
     FuckYouChoucheController(CL_InputContext aIc);
-    void update(Entity &aEntity, float dt);
+    void update(MessageReceiver &aEntity, float dt);
 
 private:
 	CL_InputContext mIc;

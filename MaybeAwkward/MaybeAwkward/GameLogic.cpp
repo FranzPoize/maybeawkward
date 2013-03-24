@@ -78,13 +78,4 @@ void GameLogic::update(float dt)
     }
 }
 
-CollisionRule::~CollisionRule() {
-    std::list<CollisionCallback*>::iterator it = _callbacks.begin();
-    std::list<CollisionCallback*>::iterator stop = _callbacks.end();
-    while (it != stop) {
-        delete *it;
-    }
-}
-
-
 } // namespace

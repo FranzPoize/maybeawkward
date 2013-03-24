@@ -7,6 +7,7 @@ class AbstractMessage;
 class MoveMessage;
 class AttackMessage;
 class AnimationMessage;
+class SpeedMessage;
 
 struct VisitInfo
 {
@@ -22,6 +23,7 @@ public:
     virtual void visit(MoveMessage *aMoveMessage, const VisitInfo &info) =0;
 
 	virtual void visit(AnimationMessage *aAnimationMessage,const VisitInfo &info) =0;
+	virtual void visit(SpeedMessage *aSpeedMessage,const VisitInfo &info) =0;
 };
 
 }

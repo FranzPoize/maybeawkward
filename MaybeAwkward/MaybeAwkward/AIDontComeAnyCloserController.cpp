@@ -17,7 +17,7 @@ AIDontComeAnyCloserController::AIDontComeAnyCloserController(Entity &aTarget):
 	//calculate distance from target
 	float radius = sqrt(pow(mTarget.x() - dynamic_cast<Entity&>(aMessageReceiver).x(),2) + pow(mTarget.y() - dynamic_cast<Entity&>(aMessageReceiver).y(),2));
 	
-	float forceValue = ORBITAL_ENEMY_WEIGHT/sqrt(radius);
+	float forceValue = ORBITAL_ENEMY_WEIGHT/radius*radius;
 
 	//if target close enough -> rape its ass
 	if(radius < AI_REACTION_DISTANCE)

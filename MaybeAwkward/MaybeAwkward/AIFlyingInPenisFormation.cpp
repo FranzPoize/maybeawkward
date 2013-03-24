@@ -17,5 +17,5 @@ void AIFlyingInPenisFormation::update(MessageReceiver &aMessageReceiver,float dt
 {
 	//create message with xDiff = mXSpeed and yDiff = cos(mXSpeed)
 	mTimeFromStart += dt;
-	aMessageReceiver.receiveMessage(std::make_shared<MoveMessage>(0.0f,SINUS_STYLE_MOVEMENT_SPEED*20*cos(2*3.14f*mTimeFromStart/0.5f)*dt,false));
+	aMessageReceiver.receiveMessage(std::make_shared<MoveMessage>(0.0f,SINUS_AMPLITUDE*cos(2*3.14f*mTimeFromStart)*dt,false));
 }

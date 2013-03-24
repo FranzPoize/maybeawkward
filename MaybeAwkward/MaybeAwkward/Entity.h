@@ -14,6 +14,7 @@
 #include <deque>
 #include <map>
 #include <cmath>
+#include <string>
 
 namespace MA
 {
@@ -128,24 +129,24 @@ public:
     }
 
     bool isGrounded() {
-        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01;
+        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01f;
     }
 
     bool isGoingUp() {
-        return PhysicsSystem::get(physicsID())->vy() < 0.0;
+        return PhysicsSystem::get(physicsID())->vy() < 0.0f;
     }
 
     bool isGoingDown() {
-        return PhysicsSystem::get(physicsID())->vy() > 0.0;
+        return PhysicsSystem::get(physicsID())->vy() > 0.0f;
     }
 
     bool isWalkingRight() {
-        return PhysicsSystem::get(physicsID())->vx() > 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() > 0.0f &&
                isGrounded();
     }
 
     bool isWalkingLeft() {
-        return PhysicsSystem::get(physicsID())->vx() < 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() < 0.0f &&
                isGrounded();
     }
 
@@ -160,13 +161,17 @@ public:
             state = JUMPING_DOWN;
         }
 
-        if (isGrounded() && fabs(o->vx()) < 0.01) {
+        if (isGrounded() && fabs(o->vx()) < 0.01f) {
             state = IDLE;
         }
         if (state != NO_CHANGE && state != mState) {
             mState = state;
             return mState;
         } return NO_CHANGE;
+    }
+
+    std::string& name() {
+        return mName;
     }
 
 private:
@@ -201,6 +206,7 @@ private:
     bool mMarkedForDeletion;
     AnimState mState;
 	float mCameraFactor;
+    std::string mName;
 };
 
 }

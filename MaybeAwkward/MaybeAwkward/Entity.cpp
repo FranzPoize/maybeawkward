@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "MoveMessage.h"
 #include "AttackMessage.h"
+#include "SpeedMessage.h"
 #include "AttackerNull.h"
 #include "DeletionHandlerNull.h"
 
@@ -91,9 +92,16 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
     cl_log_event("warning", "Unhandled message.");
 }
 
+void Entity::visit(SpeedMessage *aMessage, const VisitInfo &info)
+{
+	PhysicsSystem::get(mPhysics)->setXVelocity(aMessage->X*TOP_SPEED - aMessage->Y*TOP_SPEED);
+    if(aMessage->jump)
+        PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
+}
+
 void Entity::visit(MoveMessage *aMessage, const VisitInfo &info)
 {
-    PhysicsSystem::applyForce(mPhysics, aMessage->Y-aMessage->X, 0.f);
+	PhysicsSystem::applyForce(mPhysics, aMessage->X, aMessage->Y);
     if(aMessage->jump)
         PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
 }

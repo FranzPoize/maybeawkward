@@ -48,7 +48,7 @@ void World::step(float dt)
 	if (everybodyList().size() < 100 && (rand() % 100) > 95)
 	{
 		if(mGW->camera().pos() < 1280 * 2) {
-			spawner->spawnAPattern(0,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%2))),*mGW);
+			spawner->spawnAPattern(0,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW);
 		}
 	}
             

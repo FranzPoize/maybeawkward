@@ -25,19 +25,29 @@ public:
     static void createPibi(MA::World &aWorld)
     {
         CL_SpriteDescription pibiDescription;
-        pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_marche/nounours_marche_00.png");
+        pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_idle/nounours_idle_00.png");
 
         CL_Sprite pibiSprite(aWorld.getGraphicWrapper().cl(), pibiDescription);
         pibiSprite.set_alignment(origin_bottom_left);
         std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), pibiSprite);
 
+        //RightArm
         CL_SpriteDescription rightArmDescritpion;
         rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
 
-        CL_Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
+        CL_Sprite rightArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
+        rightArmSprite.set_alignment(origin_bottom_left);
+        rightArmSprite.set_rotation_hotspot(origin_top_left, -85, -108);
+        std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), rightArmSprite);
+
+        // LeftArm
+        CL_SpriteDescription leftArmDescritpion;
+        leftArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_gauche/nounours_bra_gauche_00.png");
+
+        CL_Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), leftArmDescritpion);
         leftArmSprite.set_alignment(origin_bottom_left);
-        leftArmSprite.set_rotation_hotspot(origin_top_left, -33, -111);
-        std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
+        leftArmSprite.set_rotation_hotspot(origin_top_left, -109, -107);
+        std::shared_ptr<MA::Drawer> leftArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
 
 #ifdef WIN32
         std::shared_ptr<MA::XBoxController> pibiController = std::make_shared<MA::XBoxController>();
@@ -45,29 +55,45 @@ public:
 
         std::shared_ptr<MA::XBoxController> rightArmController = std::make_shared<MA::XBoxController>();
         rightArmController->switchControlType(MA::XBoxController::LEFT_ATTACK);
+
+        std::shared_ptr<MA::XBoxController> leftArmController = std::make_shared<MA::XBoxController>();
+        leftArmController->switchControlType(MA::XBoxController::RIGHT_ATTACK);
 #else 
         std::shared_ptr<MA::Controller> pibiController = std::make_shared<MA::MockController>();
         std::shared_ptr<MA::Controller> rightArmController = std::make_shared<MA::MockController>();
+        std::shared_ptr<MA::Controller> leftArmController = std::make_shared<MA::MockController>();
 #endif
         std::shared_ptr<MA::Entity> pibi = std::make_shared<MA::Entity>(pibiController, pibiDrawer);
+        pibi->name() = "Nounours";
 		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,0.f,0.f);
 		MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY,&pibiMat);
         MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+
 
         aWorld.getGraphicWrapper().camera().followEntity(pibi);
 
         std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
         MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
-        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 270.0f, 610.0f);
+        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 0.0f, 0.0f);
 
-        std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>();
+        CL_Pointf rightOrigin(85.f, -62.f);
+        std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>(rightOrigin);
         rightArm->setAttacker(rightAttacker);
 
         pibi->addChild(rightArm, 1);
-        pibi->families().push_back(MA::FRIEND);
 
 		aWorld.pibiRef = pibi;
+        std::shared_ptr<MA::Entity> leftArm = std::make_shared<MA::Entity>(leftArmController, leftArmDrawer);
+        MA::PhysicsSystem::addEntity(*leftArm, MA::PHYSICS_BOX);
+        MA::PhysicsSystem::setPosition(leftArm->physicsID(), 0.0f, 0.0f);
 
+        CL_Pointf leftOrigin(109.f, -63.f);
+        std::shared_ptr<MA::AttackerBullet> leftAttacker = std::make_shared<MA::AttackerBullet>(leftOrigin);
+        leftArm->setAttacker(leftAttacker);
+
+        pibi->addChild(leftArm, -1);
+
+        pibi->families().push_back(MA::FRIEND);
         aWorld.everybodyList().push_back(pibi);
 		aWorld.createSpawner(*pibi);
     }
@@ -93,6 +119,8 @@ public:
         CL_GraphicContext gc = window.get_gc();
         CL_InputContext ic = window.get_ic();
 
+        MA::GameLogic logic;
+        init_gameplay(&logic);
 
         CL_FileLogger file_logger("logfile.txt");
 
@@ -118,6 +146,8 @@ public:
                 float delta = (current_time-last_time)/1000.f;
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
+
+                logic.update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 

@@ -6,7 +6,7 @@
 #include "MessageVisitor.h"
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
-
+#include "constants.h"
 
 #include <assert.h>
 #include <memory>
@@ -14,6 +14,7 @@
 #include <deque>
 #include <map>
 #include <cmath>
+#include <string>
 
 namespace MA
 {
@@ -27,6 +28,7 @@ class Attacker;
 class AnimationMessage;
 class DeletionHandler;
 class SpeedMessage;
+class Animator;
 
 enum Family {
     ENEMY,
@@ -65,6 +67,16 @@ public:
     void setDeletionHandler(std::shared_ptr<DeletionHandler> aDeletionHandler)
     {
         mDeletionHandler = aDeletionHandler;
+    }
+
+    PhysicalObject *getPhysics()
+    {
+        return PhysicsSystem::get(mPhysics);
+    }
+
+    const PhysicalObject *getPhysics() const
+    {
+        return PhysicsSystem::get(mPhysics);
     }
 
 	void setCameraFactor(float aCameraFactor)
@@ -127,25 +139,30 @@ public:
         mMarkedForDeletion = true;
     }
 
+    void setDrawer(std::shared_ptr<Drawer> aDrawer)
+    {
+        mDrawer = aDrawer;
+    }
+
     bool isGrounded() {
-        return fabs(PhysicsSystem::get(physicsID())->vy()) < 0.01;
+        return PhysicsSystem::get(physicsID())->y() > PHYSICS_Y_LIMIT - 5;
     }
 
     bool isGoingUp() {
-        return PhysicsSystem::get(physicsID())->vy() < 0.0;
+        return PhysicsSystem::get(physicsID())->vy() < 0.0f;
     }
 
     bool isGoingDown() {
-        return PhysicsSystem::get(physicsID())->vy() > 0.0;
+        return PhysicsSystem::get(physicsID())->vy() > 0.0f;
     }
 
     bool isWalkingRight() {
-        return PhysicsSystem::get(physicsID())->vx() > 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() > 0.0f &&
                isGrounded();
     }
 
     bool isWalkingLeft() {
-        return PhysicsSystem::get(physicsID())->vx() < 0.0 &&
+        return PhysicsSystem::get(physicsID())->vx() < 0.0f &&
                isGrounded();
     }
 
@@ -160,13 +177,17 @@ public:
             state = JUMPING_DOWN;
         }
 
-        if (isGrounded() && fabs(o->vx()) < 0.01) {
+        if (isGrounded() && fabs(o->vx()) < 0.1f) {
             state = IDLE;
         }
         if (state != NO_CHANGE && state != mState) {
             mState = state;
             return mState;
         } return NO_CHANGE;
+    }
+
+    std::string& name() {
+        return mName;
     }
 
 private:
@@ -189,6 +210,7 @@ private:
     std::shared_ptr<Controller> mController;
     std::shared_ptr<Drawer> mDrawer;
     std::shared_ptr<Attacker> mAttacker;
+    std::shared_ptr<Animator> mAnimator;
     std::shared_ptr<DeletionHandler> mDeletionHandler;
     PhysicsID mPhysics;
     std::vector<Family> mFamilies;
@@ -201,6 +223,7 @@ private:
     bool mMarkedForDeletion;
     AnimState mState;
 	float mCameraFactor;
+    std::string mName;
 };
 
 }

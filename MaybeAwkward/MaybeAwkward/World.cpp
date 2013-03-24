@@ -7,6 +7,7 @@
 #include "DrawerSprite.h"
 #include "ControllerNull.h"
 #include "DeletionHandlerTerrain.h"
+#include "AttackerBullet.h"
 
 #include "SpawnPoint.h"
 
@@ -46,7 +47,7 @@ void drawTraversal(EntityList &aList)
    
 void World::step(float dt)
 {
-    mGameplay->update(dt);
+    //mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
 	if (everybodyList().size() < 400 && (rand() % 100) > 95)
@@ -87,6 +88,8 @@ void World::init()
 		mTerrainManager = std::make_shared<TerrainManager>();
 		mBThreeManager = std::make_shared<BackgroundPlanThreeManager>();
 		mBFourManager = std::make_shared<BackgroundPlanFourManager>();
+
+        gBulletPool.reset(new BulletPool());
 
 		mTerrainManager->addTerrain();
 		mTerrainManager->addTerrain();
@@ -134,7 +137,24 @@ void World::createBackground() {
 	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
 
     PhysicsSystem::addEntity(*sun, PHYSICS_BOX);
-	PhysicsSystem::setPosition(sun->physicsID(),400.f,315.f);
+	PhysicsSystem::setPosition(sun->physicsID(),400.f,215.f);
+
+	mSkyBackground.push_back(sun);
+
+	CL_SpriteDescription proxyDescriptionRay;
+    proxyDescriptionSun.add_frame(ASSET_PATH+"design_export/soleil.png");
+
+    CL_Sprite proxySpriteSun(World::instance.getGraphicWrapper().cl(), proxyDescriptionSun);
+    proxySpriteSun.set_alignment(origin_top_left);
+    std::shared_ptr<Drawer> proxySunDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteSun);
+
+	std::shared_ptr<Entity> sun = std::make_shared<Entity>(controllerNull, proxySunDrawer);
+	sun->setCameraFactor(0.f);
+
+	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
+
+    PhysicsSystem::addEntity(*sun, PHYSICS_BOX);
+	PhysicsSystem::setPosition(sun->physicsID(),400.f,215.f);
 
 	mSkyBackground.push_back(sun);
 }

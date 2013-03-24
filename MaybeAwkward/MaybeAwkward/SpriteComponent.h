@@ -17,7 +17,7 @@ namespace MA
         std::shared_ptr<MA::DrawerSprite> getDrawer(std::string drawerName);
 
     protected:
-        std::map<std::string, std::shared_ptr<MA::DrawerSprite>> drawersList;
+        std::map<std::string, std::shared_ptr<MA::DrawerSprite> > drawersList;
 
     };
 

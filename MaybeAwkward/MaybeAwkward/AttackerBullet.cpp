@@ -7,6 +7,7 @@
 #include "DrawerSprite.h"
 #include "ControllerNull.h"
 #include "Physics.h"
+#include "Entity.h"
 
 #include <memory>
 #include <list>
@@ -14,8 +15,6 @@
 using namespace MA;
 
 /// \todo : move out static declarations
-CL_Sprite BulletPool::gBulletSprite;
-BulletPool gBulletPool();
 
 CL_Pointf GUN_HOLE(105.f, -96.f);
 
@@ -33,25 +32,25 @@ std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
     return bullet;
 }
 
-void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &aDirection)
+void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &aDirection, const Entity &aEntity)
 {
     PhysicsSystem::setPosition(aBullet->physicsID(), aOrigin.x,  aOrigin.y);
 
-    PhysicsSystem::get(aBullet->physicsID())->setXVelocity(aDirection.x*BULLET_SPEED);
+    PhysicsSystem::get(aBullet->physicsID())->setXVelocity(aDirection.x*BULLET_SPEED+aEntity.getPhysics()->getXVelocity());
     PhysicsSystem::get(aBullet->physicsID())->setYVelocity(aDirection.y*BULLET_SPEED);
 }
 
 void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &aEntity)
 {
-    CL_Pointf dir(1.f, 0.f), origin(25.f, -52.f);
+    CL_Pointf dir(1.f, 0.f), origin=mOrigin;
     dir.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
  
     //origin.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
     origin += CL_Pointf(aEntity.x(), aEntity.y());
-    origin += dir*75;
+    origin += dir*95;
 
-    std::shared_ptr<Entity> bullet(BulletPool().getNextBullet());
-    fireBullet(bullet, origin, dir);
+    std::shared_ptr<Entity> bullet(World::instance.gBulletPool->getNextBullet());
+    fireBullet(bullet, origin, dir, aEntity);
     World::instance.everybodyList().push_back(bullet);
 }
 
@@ -60,12 +59,19 @@ BulletPool::BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitial
     CL_SpriteDescription bulletDescription;
     bulletDescription.add_frame(ASSET_PATH+"design_export/tir_bleu.png");
 
-    BulletPool::gBulletSprite = CL_Sprite(World::instance.getGraphicWrapper().cl(), bulletDescription);
-    gBulletSprite.set_alignment(origin_bottom_left);
+    CL_Sprite bulletSprite = CL_Sprite(World::instance.getGraphicWrapper().cl(), bulletDescription);
+    bulletSprite.set_alignment(origin_bottom_left);
     
-    mPoolContainer.assign(aInitialSize, generateBullet(gBulletSprite));
+    for (std::vector<std::shared_ptr<Entity> >::size_type bullId=0;
+        bullId != aInitialSize;
+        ++bullId)
+    {
+        mPoolContainer.push_back(generateBullet(bulletSprite));
+    }
+
     mNextBullet=mPoolContainer.begin();
 }
+
 std::shared_ptr<Entity> BulletPool::getNextBullet()
 {
     //Start at bullet[1], we don't care

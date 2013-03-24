@@ -10,11 +10,13 @@
 #include "SpeedMessage.h"
 #include "AttackerNull.h"
 #include "DeletionHandlerNull.h"
+#include "AnimatorNull.h"
 
 #include "World.h"
 #include "GraphicWrapper.h"
 #include "Camera.h"
 
+#include <string>
 #include <ClanLib/core.h>
 
 using namespace MA;
@@ -25,6 +27,7 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mDrawer(aDrawer),
     mAttacker(std::make_shared<AttackerNull>()),
     mDeletionHandler(std::make_shared<DeletionHandlerNull>()),
+    mAnimator(std::make_shared<AnimatorNull>()),
     mChildEntities(),
     mMarkedForDeletion(false),
     mState(IDLE),
@@ -49,6 +52,8 @@ bool Entity::update(float dt)
 
     mController->update(*this, dt);
 
+    mAnimator->animate(*this);
+
     VisitInfo info;
     info.dt = dt;
     for(MessageBoxIterator messageIt = mMessageBox.begin();
@@ -66,7 +71,11 @@ bool Entity::update(float dt)
     {
         childIt->second->update(dt);
     }
-
+/*
+    if (name() == "Nounours" && checkStateChange() != NO_CHANGE) {
+        printf("State Change!\n");
+    }
+*/
     return false;
 }
 
@@ -102,7 +111,7 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 
 void Entity::visit(SpeedMessage *aMessage, const VisitInfo &info)
 {
-	PhysicsSystem::get(mPhysics)->setXVelocity(aMessage->X*TOP_SPEED - aMessage->Y*TOP_SPEED);
+	PhysicsSystem::get(mPhysics)->setXVelocity(aMessage->Y*TOP_SPEED - aMessage->X*TOP_SPEED);
     if(aMessage->jump)
         PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
 }

@@ -33,6 +33,7 @@ enum Family {
     ITEM,
     ENEMY_BULLET,
     FRIEND_BULLET,
+    TERRAIN,
 };
 
 typedef std::vector<Family> FamilyVector;

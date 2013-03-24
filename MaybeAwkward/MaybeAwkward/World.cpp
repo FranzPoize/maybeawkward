@@ -64,6 +64,7 @@ void World::step(float dt)
 void World::addTerrain(TerrainValue)
 {
     std::shared_ptr<Entity> entity = createDefaultEntity("design_export/level/level1.png", (float)mLastTerrainId*WIN_WIDTH, 0.f);
+    entity->families().push_back(TERRAIN);
     entity->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
     mTerrainList.push_back(entity);
     ++mLastTerrainId;

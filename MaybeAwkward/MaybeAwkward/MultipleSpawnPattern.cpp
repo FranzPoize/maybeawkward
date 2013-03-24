@@ -7,7 +7,7 @@
 #include "AIRoundingAroundYourDickController.h"
 #include "DrawerSprite.h"
 #include "GraphicWrapper.h"
-#include "user_constants.h"
+#include "constants.h"
 #include "ClanLib/core.h"
 #include "ClanLib/display.h"
 #include "World.h"

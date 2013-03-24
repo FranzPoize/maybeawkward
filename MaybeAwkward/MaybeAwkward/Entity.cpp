@@ -25,7 +25,8 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mAttacker(std::make_shared<AttackerNull>()),
     mDeletionHandler(std::make_shared<DeletionHandlerNull>()),
     mChildEntities(),
-    mMarkedForDeletion(false)
+    mMarkedForDeletion(false),
+	mCameraFactor(1.0f)
 {
 }
 

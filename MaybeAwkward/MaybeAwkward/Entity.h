@@ -55,6 +55,16 @@ public:
         mDeletionHandler = aDeletionHandler;
     }
 
+	void setCameraFactor(float aCameraFactor)
+	{
+		mCameraFactor = aCameraFactor;
+	}
+
+	float cameraFactor() const
+	{
+		return mCameraFactor;
+	}
+
     bool update(float dt);
     void draw();
 
@@ -135,6 +145,7 @@ private:
     typedef ChildrenMap::iterator ChildIterator;
     ChildrenMap mChildEntities;
     bool mMarkedForDeletion;
+	float mCameraFactor;
 };
 
 }

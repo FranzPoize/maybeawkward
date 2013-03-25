@@ -36,8 +36,8 @@ void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &
 {
     PhysicsSystem::setPosition(aBullet->physicsID(), aOrigin.x,  aOrigin.y);
 
-    PhysicsSystem::get(aBullet->physicsID())->setXVelocity(aDirection.x*BULLET_SPEED+aEntity.getPhysics()->getXVelocity());
-    PhysicsSystem::get(aBullet->physicsID())->setYVelocity(aDirection.y*BULLET_SPEED);
+	PhysicsSystem::get(aBullet->physicsID())->setXVelocity((aDirection.x+rand()%2/10.f)*BULLET_SPEED+World::instance.pibiRef->getPhysics()->getXVelocity());
+    PhysicsSystem::get(aBullet->physicsID())->setYVelocity((aDirection.y+rand()%2/10.f)*BULLET_SPEED);
 }
 
 void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &aEntity)

@@ -50,7 +50,7 @@ void World::step(float dt)
     mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
-	if (everybodyList().size() < 400 && (rand() % 100) > 95 && everybodyList().size() > 0)
+	if (everybodyList().size() < 600 && (rand() % 100) > 95 && everybodyList().size() > 0)
     {
         if(mGW->camera().pos() < 1280 * 4) 
         {

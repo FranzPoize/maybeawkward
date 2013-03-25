@@ -149,9 +149,12 @@ public:
 
             // Load a sample from a wave file:
             CL_SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
+			CL_SoundBuffer_Session playback = sample.prepare();
 
             // Play sample
-            sample.play();
+			playback.set_looping(true);
+			playback.set_volume(1.f);
+			playback.play();
             //Title
             CL_ResourceManager rTitre(ASSET_PATH+"design_export/titre.xml");
             CL_Sprite titre(gc, "titre", &rTitre);

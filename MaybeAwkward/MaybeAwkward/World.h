@@ -85,6 +85,7 @@ namespace MA
 		}
         
         void step(float dt);
+		void empty();
 		std::shared_ptr<Entity> pibiRef;
 	private:
         std::shared_ptr<GraphicWrapper> mGW;

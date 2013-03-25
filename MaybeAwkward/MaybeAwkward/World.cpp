@@ -50,7 +50,7 @@ void World::step(float dt)
     mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
-    if (everybodyList().size() < 400 && (rand() % 100) > 95)
+	if (everybodyList().size() < 400 && (rand() % 100) > 95 && everybodyList().size() > 0)
     {
         if(mGW->camera().pos() < 1280 * 4) 
         {
@@ -104,6 +104,15 @@ void World::init()
 		mBFourManager->addTerrain();
 
 		createBackground();
+}
+
+void World::empty()
+{
+	mEverybodyList.clear();
+	mTerrainList.clear();
+	mBackgroundThreeList.clear();
+	mBackgroundFourList.clear();
+	mSkyBackground.clear();
 }
 
 void World::createBackground() {

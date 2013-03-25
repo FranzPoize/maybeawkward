@@ -14,6 +14,11 @@ public:
 	{
 		return mCameraXPos;
 	}
+
+	void setPos(float aCameraXPos)
+	{
+		mCameraXPos = aCameraXPos;
+	}
 	void followEntity(std::shared_ptr<Entity> aFollowedEntity)
 	{
 		mFollowedEntity = aFollowedEntity;

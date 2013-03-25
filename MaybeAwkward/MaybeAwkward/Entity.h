@@ -140,9 +140,15 @@ public:
         mChildEntities.insert(ChildPair(aOrder, aEntity));
     }
 
-    void markForDeletion() {
-        mMarkedForDeletion = true;
+    void markForDeletion(bool aMarkedForDeletion) {
+        mMarkedForDeletion = aMarkedForDeletion;
     }
+
+
+	bool isMarkedForDeletion()
+	{
+		return mMarkedForDeletion;
+	}
 
     void setDrawer(std::shared_ptr<Drawer> aDrawer)
     {

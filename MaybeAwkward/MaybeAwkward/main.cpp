@@ -76,7 +76,7 @@ public:
 
 		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,0.f,0.f);
 		MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY,&pibiMat);
-        MA::PhysicsSystem::setPosition(pibi->physicsID(), 100.0f, 540.0f);
+		MA::PhysicsSystem::setPosition(pibi->physicsID(), aWorld.getGraphicWrapper().camera().pos() + 100.0f, 540.0f);
 
 
         aWorld.getGraphicWrapper().camera().followEntity(pibi);
@@ -147,61 +147,24 @@ public:
             world.setGraphicWrapper(gw);
             world.init();
 
-
-
-
-
-
-
-
-
-
             // Load a sample from a wave file:
             CL_SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
 
             // Play sample
             sample.play();
             //Title
-            CL_ResourceManager rCiel(ASSET_PATH+"design_export/ciel.xml");
-            CL_Sprite ciel(gc, "ciel", &rCiel);
             CL_ResourceManager rTitre(ASSET_PATH+"design_export/titre.xml");
             CL_Sprite titre(gc, "titre", &rTitre);
 
 
-            CL_ResourceManager rAnimatedBackground(ASSET_PATH+"design_export/animatedbackground.xml");
-            CL_Sprite animatedBackground(gc, "background", &rAnimatedBackground);
-
-
-            CL_ResourceManager rSoleil(ASSET_PATH+"design_export/soleil.xml");
-            CL_Sprite soleil(gc, "soleil", &rSoleil);
-
-            CL_ResourceManager rRayons(ASSET_PATH+"design_export/rayon_soleil.xml");
-            CL_Sprite rayons(gc, "rayon_soleil", &rRayons);
-
-            CL_Sprite forground(gc, "forground", &rRayons);
-
-
             while (ic.get_keyboard().get_keycode(CL_KEY_ENTER) == false)
             {
-                ciel.draw(gc,0,720);
-                //soleil.draw(gc,400,215);
-                //rayons.draw(gc,400,215);
-                //animatedBackground.draw(gc,0,720);
-                //animatedBackground.update();
-                titre.draw(gc,0,720);
-                //forground.draw(gc,1280,215);
-
+				world.step(0.f);
+				titre.draw(gc,0,720);
+				world.getGraphicWrapper().camera().setPos(world.getGraphicWrapper().camera().pos() + 10);
                 window.flip(1);
                 CL_KeepAlive::process(0);
             }
-
-
-
-
-
-
-
-
 
             std::shared_ptr<MA::Entity> pibi = createPibi(world);
             world.createSpawner(*pibi);
@@ -232,6 +195,20 @@ public:
                 //if(timeToSleep > 0)
                 //    CL_System::sleep(timeToSleep);
                 //CL_System::sleep(10);
+
+				if(pibi->isMarkedForDeletion() && ic.get_keyboard().get_keycode(CL_KEY_ENTER))
+				{
+					world.empty();
+					pibi->getPhysics()->setX(100.0f);
+					pibi->getPhysics()->setY(540.0f);
+					pibi->getPhysics()->setXVelocity(0.f);
+					pibi->getPhysics()->setYVelocity(0.f);
+					world.getGraphicWrapper().camera().setPos(0.f);
+					pibi->markForDeletion(false);
+					world.init();
+					world.everybodyList().push_back(pibi);
+
+				}
             }
         }
         catch(CL_Exception &exception)

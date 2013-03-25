@@ -19,6 +19,8 @@
 #include <string>
 #include <ClanLib/core.h>
 
+#define DRAW_HITBOX
+
 using namespace MA;
 
 Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> aDrawer):
@@ -84,7 +86,14 @@ void Entity::draw()
     if(mChildEntities.size() == 0)
     {
         mDrawer->draw(*this);
+#ifdef DRAW_HITBOX
+        PhysicalObject *physic = getPhysics();
+        CL_Draw::box(World::instance.getGraphicWrapper().cl(),
+            CL_Rectf(physic->boundingRect()),
+            CL_Colorf::bisque);
+#endif
     }
+
     else
     {
         bool crossedZeroOrder = false;

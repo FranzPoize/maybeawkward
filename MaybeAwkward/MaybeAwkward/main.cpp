@@ -27,7 +27,7 @@
 class ConsoleProgram
 {
 public:
-    static void createPibi(MA::World &aWorld)
+    static std::shared_ptr<MA::Entity> createPibi(MA::World &aWorld)
     {
         CL_SpriteDescription pibiDescription;
         pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_idle/nounours_idle_00.png");
@@ -103,7 +103,7 @@ public:
 
         pibi->families().push_back(MA::FRIEND);
         aWorld.everybodyList().push_back(pibi);
-		aWorld.createSpawner(*pibi);
+        return pibi;
     }
 
     static int main(const std::vector<CL_String> &args)
@@ -117,6 +117,8 @@ public:
         CL_SetupCore setup_core;
         CL_SetupDisplay setup_display;
         CL_SetupGL setup_opengl;
+        CL_SetupSound setup_sound;
+        CL_SoundOutput output(44100);
 
         CL_ConsoleWindow console("Console", 80, 160);
         CL_DisplayWindowDescription windowDescription;
@@ -152,8 +154,7 @@ public:
 
 
 
-            CL_SetupSound setup_sound;
-            CL_SoundOutput output(44100);
+
 
             // Load a sample from a wave file:
             CL_SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
@@ -202,7 +203,8 @@ public:
 
 
 
-            createPibi(world);
+            std::shared_ptr<MA::Entity> pibi = createPibi(world);
+            world.createSpawner(*pibi);
 
             unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
             while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)

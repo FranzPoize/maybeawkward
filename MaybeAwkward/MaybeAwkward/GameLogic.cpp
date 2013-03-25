@@ -8,7 +8,7 @@
 namespace MA {
 
 static uint64_t key(Family f1, Family f2) {
-    return (uint64_t)f1 + (uint64_t) f2 << 32;
+    return (uint64_t)f1 + ((uint64_t) f2 << 32);
 }
 
 CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
@@ -23,17 +23,20 @@ CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
 void GameLogic::update(float dt)
 {
     //printf("GameLogic::update\n\n");
-    CollisionRuleMap::iterator it = _collisionRules.begin(); 
-    CollisionRuleMap::iterator stop = _collisionRules.end();
+    //CollisionRuleMap::iterator it = _collisionRules.begin(); 
+    //CollisionRuleMap::iterator stop = _collisionRules.end();
+    CollisionRuleMap::iterator it;
     EntityList& entities = World::instance.everybodyList();
 
-    while (it != stop) {
+   // while (it != stop)
+   // {
         //printf("GameLogic::update - iterating over the rules\n");
-        uint64_t pair_key = key(it->second._f1, it->second._f2);
+        //uint64_t pair_key = key(it->second._f1, it->second._f2);
 
         EntityList::iterator main_entity_it = entities.begin();
         EntityList::iterator main_entity_stop = entities.end();
-        while (main_entity_it != main_entity_stop) {
+        while (main_entity_it != main_entity_stop)
+        {
             //printf("   GameLogic::update - iterating over the first entity\n");
             EntityList::iterator secondary_entity_it = entities.begin();
             EntityList::iterator secondary_entity_stop = entities.end();
@@ -47,7 +50,7 @@ void GameLogic::update(float dt)
                     FamilyVector::iterator family_it2 = (*secondary_entity_it)->families().begin();
                     FamilyVector::iterator family_stop2 = (*secondary_entity_it)->families().end();
                     while (family_it2 != family_stop2) {
-                        if (key(*family_it1, *family_it2) == pair_key) {
+                        if ( (it=_collisionRules.find(key(*family_it1, *family_it2)))!=_collisionRules.end() ) {
                             //printf("            GameLogic::update - iterating over the second family\n");
                             families_matched = true;
                             break;
@@ -76,8 +79,8 @@ void GameLogic::update(float dt)
             }
             ++main_entity_it;
         }
-        ++it;
-    }
+     //   ++it;
+    //}
 }
 
 } // namespace

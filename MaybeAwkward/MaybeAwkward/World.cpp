@@ -47,24 +47,24 @@ void drawTraversal(EntityList &aList)
    
 void World::step(float dt)
 {
-    //mGameplay->update(dt);
+    mGameplay->update(dt);
     PhysicsSystem::update(dt);
 
-	if (everybodyList().size() < 400 && (rand() % 100) > 95)
-	{
-		if(mGW->camera().pos() < 1280 * 4) 
-		{
-			spawner->spawnAPattern(0,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::NORMAL);
-		}
-		else if(mGW->camera().pos() < 1280 * 8) 
-		{
-			spawner->spawnAPattern(1,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::HIGH);
-		}
-		else
-		{
-			spawner->spawnAPattern(2,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::HIGHER);
-		}
-	}
+    if (everybodyList().size() < 400 && (rand() % 100) > 95)
+    {
+        if(mGW->camera().pos() < 1280 * 4) 
+        {
+            spawner->spawnAPattern(1,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::NORMAL);
+        }
+        else if(mGW->camera().pos() < 1280 * 8) 
+        {
+            spawner->spawnAPattern(2,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::HIGH);
+        }
+        else
+        {
+            spawner->spawnAPattern(3,static_cast<Pattern::ControllerType>((int)floor(static_cast<float>(rand()%3))),*mGW,SpawnPoint::HIGHER);
+        }
+    }
             
     updateTraversal(mEverybodyList, dt);
     updateTraversal(mTerrainList, dt);
@@ -149,9 +149,9 @@ void World::createBackground() {
     std::shared_ptr<Drawer> proxyRayDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteRay);
 
 	std::shared_ptr<Entity> ray = std::make_shared<Entity>(controllerNull, proxyRayDrawer);
-	sun->setCameraFactor(0.f);
+	ray->setCameraFactor(0.f);
 
-	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
+	ray->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
 
     PhysicsSystem::addEntity(*ray, PHYSICS_BOX);
 	PhysicsSystem::setPosition(ray->physicsID(),0.f,0.f);

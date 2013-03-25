@@ -47,8 +47,10 @@ void XBoxController::update(MessageReceiver &aReceiver, float dt)
                 rightTrigger = float(RT)/BYTE_MAX;
             }
 
+            static const WORD JUMP_BUTTONS = XINPUT_GAMEPAD_A | XINPUT_GAMEPAD_B | XINPUT_GAMEPAD_LEFT_SHOULDER | XINPUT_GAMEPAD_RIGHT_SHOULDER
+                | XINPUT_GAMEPAD_LEFT_THUMB | XINPUT_GAMEPAD_RIGHT_THUMB;
             WORD buttons = mControllerState.Gamepad.wButtons;
-            bool jump = buttons & XINPUT_GAMEPAD_A;
+            bool jump = buttons & JUMP_BUTTONS;
 
             aReceiver.receiveMessage( std::make_shared<SpeedMessage>(SpeedMessage(leftTrigger, rightTrigger, jump)) );
         }

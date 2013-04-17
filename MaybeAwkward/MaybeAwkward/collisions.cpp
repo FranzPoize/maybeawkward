@@ -12,12 +12,12 @@ bool rectCollision(const Rect& r1, const Rect& r2)
     float bx1 = r2.x;
     float bx2 = r2.x + r2.width;
     float ay1 = r1.y;
-    float ay2 = r1.y + r1.height;
+    float ay2 = r1.y - r1.height;
     float by1 = r2.y;
-    float by2 = r2.y + r2.height;
+    float by2 = r2.y - r2.height;
     return (
         (ax2 > bx1) && (bx2 > ax1)
-        &&(ay2 > by1) && (by2 > ay1)
+        &&(ay2 < by1) && (by2 < ay1)
     );
 }
 

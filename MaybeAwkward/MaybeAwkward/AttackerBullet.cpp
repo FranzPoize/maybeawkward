@@ -36,6 +36,7 @@ void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &
 {
     PhysicsSystem::setPosition(aBullet->physicsID(), aOrigin.x,  aOrigin.y);
 
+    /// \todo : decouple this component from PiBi (that is exactly why you should not have globals...)
 	PhysicsSystem::get(aBullet->physicsID())->setXVelocity((aDirection.x+rand()%2/10.f)*BULLET_SPEED+World::instance.pibiRef->getPhysics()->getXVelocity());
     PhysicsSystem::get(aBullet->physicsID())->setYVelocity((aDirection.y+rand()%2/10.f)*BULLET_SPEED);
 }

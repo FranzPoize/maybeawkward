@@ -2,6 +2,7 @@
 #define QuadTree_h__
 
 #include <list>
+#include <vector>
 #define QUADSUBTREE 4
 
 namespace BHQT
@@ -11,7 +12,8 @@ template <class T_Element, class T_BoundingBox,
 class QuadTree
 {
 public:
-	typedef std::list<T_Element *> ElementsContainer;
+	//typedef std::list<T_Element *> ElementsContainer;
+	typedef std::vector<T_Element *> ElementsContainer;
 	//typedef SubTreeContainer::iterator SubTreeIterator;
 
 
@@ -68,32 +70,36 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::insertElement(
 		&& mDirectElements.size() >= MAX_OBJECTS)
 	{
 		mLevelFull = true;
-		ElementsContainer::iterator elemIt = mDirectElements.end();
-		do
-		{
-			--elemIt;
-			insertElement(*elemIt);
-			elemIt = mDirectElements.erase(elemIt);
-		}
-		while(elemIt != mDirectElements.begin());
+		//ElementsContainer::iterator elemIt = mDirectElements.end();
+		//do
+		//{
+		//	--elemIt;
+		//	insertElement(*elemIt);
+		//	elemIt = mDirectElements.erase(elemIt);
+		//}
+		//while(elemIt != mDirectElements.begin());
 
 		insertElement(aElement);
 	}
 	else
 	{
-		for(size_t subTreeId = 0;
-			subTreeId != QUADSUBTREE;
-			++subTreeId)
-		{
-			if(mSubTrees[subTreeId]->doesItFit(aElement->getBoundingBox()))
+		 if(mDepth != MAX_LEVELS)	
+		 {
+			for(size_t subTreeId = 0;
+				subTreeId != QUADSUBTREE;
+				++subTreeId)
 			{
-				mSubTrees[subTreeId]->insertElement(aElement);
-				return;
+				if(mSubTrees[subTreeId]->doesItFit(aElement->getBoundingBox()))
+				{
+					mSubTrees[subTreeId]->insertElement(aElement);
+					return;
+				}
 			}
-		}
+		 }
 
 		concreteInsert(aElement);
 	}
+	
 
 }
 
@@ -130,6 +136,10 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::clear()
 {
 	mDirectElements.clear();
 
+	if(!mSubTrees[0])
+	{
+		return;
+	}
 	for(size_t subTreeId = 0;
 		subTreeId != QUADSUBTREE;
 		++subTreeId)
@@ -166,6 +176,10 @@ template <class T_Element, class T_BoundingBox,
 	int MAX_OBJECTS, int MAX_LEVELS>
 void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::addChildrenElements(ElementsContainer &aContainer)
 {
+	if(!mSubTrees[0])
+	{
+		return;
+	}
 	for(int subTreeId = 0; subTreeId < QUADSUBTREE;++subTreeId)
 	{
 		QuadTree *childQuad = mSubTrees[subTreeId].get();

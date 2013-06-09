@@ -6,4 +6,4 @@
 
 using namespace MA;
 
-typedef BHQT::QuadTree<Entity,AABB,MAX_LEVELS_QUAD_TREE,MAX_OBJECTS_QUAD_TREE> BHQuadTree;
+typedef BHQT::QuadTree<Entity,AABB,MAX_OBJECTS_QUAD_TREE,MAX_LEVELS_QUAD_TREE> BHQuadTree;

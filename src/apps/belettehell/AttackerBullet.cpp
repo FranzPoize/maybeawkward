@@ -11,6 +11,7 @@
 #include "constants.h"
 
 #include <memory>
+#include <sstream>
 #include <list>
 
 using namespace MA;
@@ -39,9 +40,9 @@ void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &
 
     /// \todo : decouple this component from PiBi (that is exactly why you should not have globals...)
 	aBullet->getPhysicalObject()->setXVelocity(
-		(aDirection.x+rand()%2/10.f) * BULLET_SPEED + World::instance.pibiRef->getPhysicalObject()->getXVelocity());
+		(aDirection.x) * BULLET_SPEED + World::instance.pibiRef->getPhysicalObject()->getXVelocity());
     aBullet->getPhysicalObject()->setYVelocity(
-		(aDirection.y+rand()%2/10.f) * BULLET_SPEED);
+		(aDirection.y) * BULLET_SPEED);
 }
 
 void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &aEntity)
@@ -49,7 +50,7 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
     static int DROP = 1;
     static int cnt = 0;
 
-    if(cnt%DROP)
+    if(++cnt%DROP)
     {
         return;
     }
@@ -62,7 +63,13 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
 
     std::shared_ptr<Entity> bullet(World::instance.gBulletPool->getNextBullet());
     fireBullet(bullet, origin, dir, aEntity);
-    World::instance.everybodyList().push_back(bullet);
+	if(!bullet->getLive())
+	{
+		World::instance.everybodyList().push_back(bullet);
+		bullet->setLive(true);
+	}
+
+	cnt = 0;
 }
 
 BulletPool::BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitialSize)

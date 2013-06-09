@@ -12,7 +12,7 @@
 using namespace MA;
 #define INTEGRAL_SCROLLING
 
-#define DRAW_HITBOX
+//#define DRAW_HITBOX
 
 #include "Entity.h"
 
@@ -43,9 +43,9 @@ void DrawerSprite::draw(const Entity &aEntity)
         CL_Rectf(offsetBox.x,offsetBox.y,offsetBox.z,offsetBox.w),
         CL_Colorf::bisque);
 
-	std::ostringstream oss;
-	oss << "Entity : " << aEntity.x() << "," << aEntity.y() 
-		<< ". Bounding Box : " << CL_Vec4d(aEntity.getBoundingBox()).x << "," << CL_Vec4d(aEntity.getBoundingBox()).w << std::endl;
-	CL_Console::write_line(oss.str());
+	//std::ostringstream oss;
+	//oss << "Entity : " << aEntity.x() << "," << aEntity.y() 
+	//	<< ". Bounding Box : " << CL_Vec4d(aEntity.getBoundingBox()).x << "," << CL_Vec4d(aEntity.getBoundingBox()).w << std::endl;
+	//CL_Console::write_line(oss.str());
 #endif
 }

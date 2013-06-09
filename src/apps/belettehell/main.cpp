@@ -179,7 +179,8 @@ public:
                 last_time = current_time;
                 //CL_Console::write_line("dt : %1", delta);
 
-                logic.update(delta);
+				// Yup, we did that
+                //logic.update(delta);
 
                 gc.clear(CL_Colorf::whitesmoke);
 

@@ -111,15 +111,15 @@ public:
         mMessageBox.push_back(aInputMessage);
     }
 
-    void setPhysicsID(PhysicsID id) {
-        assert(mPhysics.type == PHYSICS_INVALID || 
-               id.type == PHYSICS_INVALID);
-        mPhysics = id;
-    }
+    //void setPhysicsID(PhysicsID id) {
+    //    assert(mPhysics.type == PHYSICS_INVALID || 
+    //           id.type == PHYSICS_INVALID);
+    //    mPhysics = id;
+    //}
 
-    PhysicsID physicsID() const {
-        return mPhysics;
-    }
+    //PhysicsID physicsID() const {
+    //    return mPhysics;
+    //}
 
     std::vector<Family>& families() { return mFamilies; }
 
@@ -258,7 +258,16 @@ public:
 	{
 		mQuadTreeBackPtr = aQuadTreeBackPtr;
 	}
+	
+	void setLive(bool aLiveValue)
+	{
+		mIsLive = aLiveValue;
+	}
 
+	bool getLive() const
+	{
+		return mIsLive;
+	}
 
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
@@ -268,12 +277,15 @@ private:
 
 
 private:
-    typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
-    typedef MessageBoxType::iterator MessageBoxIterator;
+    std::string mName;
 
 	CL_Vec2d mPosition;
 	std::unique_ptr<AABB> mBoundingBox;
 	std::unique_ptr<PhysicalObject> mPhysicalObject;
+
+	// Message system
+    typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
+    typedef MessageBoxType::iterator MessageBoxIterator;
 
     MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
@@ -281,19 +293,22 @@ private:
     std::shared_ptr<Attacker> mAttacker;
     std::shared_ptr<Animator> mAnimator;
     std::shared_ptr<DeletionHandler> mDeletionHandler;
-    PhysicsID mPhysics;
-    std::vector<Family> mFamilies;
 
     // (order, entity) order : of drawing, negative before parent, positive after
     typedef std::map<int, std::shared_ptr<Entity> > ChildrenMap;
     typedef std::pair<int, std::shared_ptr<Entity> > ChildPair;
     typedef ChildrenMap::iterator ChildIterator;
     ChildrenMap mChildEntities;
-    bool mMarkedForDeletion;
     AnimState mState;
 	float mCameraFactor;
-    std::string mName;
+
+	// Physics World
+    std::vector<Family> mFamilies;
+
+	//Containers World
 	BHQuadTree *mQuadTreeBackPtr;
+    bool mMarkedForDeletion;
+	bool mIsLive;
 	
 };
 

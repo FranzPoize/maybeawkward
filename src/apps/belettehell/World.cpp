@@ -26,6 +26,7 @@ void updateTraversal(EntityList &aList, float dt)
     {
         if ((*entityIt)->update(dt))
         {
+			(*entityIt)->setLive(false);
             entityIt = aList.erase(entityIt);
         }
         else

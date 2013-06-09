@@ -59,57 +59,50 @@ void GameLogic::update(float dt)
 		for(;main_entity_it != main_entity_stop;main_entity_it++)
 		{
 		 	BHQuadTree::ElementsContainer container = mQuadTree.searchNeighbors(**main_entity_it);
-		}
-		
 
-        while (main_entity_it != main_entity_stop)
-        {
             //printf("   GameLogic::update - iterating over the first entity\n");
-            EntityList::iterator secondary_entity_it = entities.begin();
-            EntityList::iterator secondary_entity_stop = entities.end();
-            while (secondary_entity_it != secondary_entity_stop) {
-                //printf("      GameLogic::update - iterating over the second entity\n");
-                bool families_matched = false;
-                FamilyVector::iterator family_it1 = (*main_entity_it)->families().begin();
-                FamilyVector::iterator family_stop1 = (*main_entity_it)->families().end();
-                while (family_it1 != family_stop1) {
-                    //printf("         GameLogic::update - iterating over the first family\n");
-                    FamilyVector::iterator family_it2 = (*secondary_entity_it)->families().begin();
-                    FamilyVector::iterator family_stop2 = (*secondary_entity_it)->families().end();
-                    while (family_it2 != family_stop2) {
-                        if ( (it=_collisionRules.find(key(*family_it1, *family_it2)))!=_collisionRules.end() ) {
-                            //printf("            GameLogic::update - iterating over the second family\n");
-                            families_matched = true;
-                            break;
-                        }
-                        ++family_it2;
-                    }
-                    if (families_matched) break;
-                    ++family_it1;
-                }
-                if (families_matched) {
-                    const AABB& bb1= (*main_entity_it)->getBoundingBox();
-                    const AABB& bb2= (*secondary_entity_it)->getBoundingBox();
-                    //printf("               GameLogic::update families matched\n");
-                    if (bb1.isColliding(bb2))
-					{
-                        CallbackList::iterator callbacks_it = it->second._callbacks.begin();
-                        CallbackList::iterator callbacks_stop = it->second._callbacks.end();
-                        EntityPair pair(&**main_entity_it, &**secondary_entity_it);
-                        //printf("                        GameLogic::update collision found\n");
-                        while (callbacks_it != callbacks_stop)
-						{
-                            (*callbacks_it)->call(pair, dt);
-                            ++callbacks_it;
-                        }
-                    }
+            BHQuadTree::ElementsContainer::iterator secondary_entity_it = container.begin();
+            BHQuadTree::ElementsContainer::iterator secondary_entity_stop = container.end();
+
+            while (secondary_entity_it != secondary_entity_stop)
+			{
+                const AABB& bb1= (*main_entity_it)->getBoundingBox();
+                const AABB& bb2= (*secondary_entity_it)->getBoundingBox();
+
+                if (bb1.isColliding(bb2))
+				{
+	                FamilyVector::iterator family_it1 = (*main_entity_it)->families().begin();
+	                FamilyVector::iterator family_stop1 = (*main_entity_it)->families().end();
+	                while (family_it1 != family_stop1) {
+	                    //printf("         GameLogic::update - iterating over the first family\n");
+	                    FamilyVector::iterator family_it2 = (*secondary_entity_it)->families().begin();
+	                    FamilyVector::iterator family_stop2 = (*secondary_entity_it)->families().end();
+	                    while (family_it2 != family_stop2) {
+	                        if ( (it=_collisionRules.find(key(*family_it1, *family_it2)))!=_collisionRules.end() ) {
+	                            //printf("            GameLogic::update - iterating over the second family\n");
+			                    CallbackList::iterator callbacks_it = it->second._callbacks.begin();
+			                    CallbackList::iterator callbacks_stop = it->second._callbacks.end();
+			                    EntityPair pair(&**main_entity_it, &**secondary_entity_it);
+			                    //printf("                        GameLogic::update collision found\n");
+			                    while (callbacks_it != callbacks_stop)
+								{
+			                        (*callbacks_it)->call(pair, dt);
+			                        ++callbacks_it;
+			                    }
+	                            break;
+	                        }
+	                        ++family_it2;
+	                    }
+	                    ++family_it1;
+	                }
                 }
                 ++secondary_entity_it;
             }
-            ++main_entity_it;
         }
      //   ++it;
     //}
+
+		mQuadTree.clear();
 }
 
 } // namespace

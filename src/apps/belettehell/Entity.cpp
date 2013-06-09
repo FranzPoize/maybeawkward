@@ -34,7 +34,8 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mState(IDLE),
 	mCameraFactor(1.0f),
 	//mBoundingBox(new AABB(CL_Vec2d(10., 10.), 0., 0.))
-	mBoundingBox()
+	mBoundingBox(),
+	mIsLive(false)
 {
 }
 
@@ -50,6 +51,8 @@ bool Entity::update(float dt)
 	    abs(x()-(worldCam.pos() + WIN_WIDTH/2)) > CULLING_FACTOR_H * WIN_WIDTH ||
         abs(y()-(WIN_HEIGHT/2)) > CULLING_FACTOR_V * WIN_HEIGHT)
     {
+		// If the Entity is to be re inserted (eg. it lives in a pool)
+		mMarkedForDeletion = false;
         return mDeletionHandler->deletion(*this);
     }
 

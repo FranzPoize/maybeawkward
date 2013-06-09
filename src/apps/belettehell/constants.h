@@ -7,8 +7,8 @@
 #define WIN_HEIGHT 720
 #define EPSILON 0.0000001f
 #define ORIGIN origin_bottom_left
-#define MAX_OBJECTS_QUAD_TREE 10
-#define MAX_LEVELS_QUAD_TREE 5
+#define MAX_OBJECTS_QUAD_TREE 15
+#define MAX_LEVELS_QUAD_TREE 0 
 #define CULLING_FACTOR_H 1.5f
 #define CULLING_FACTOR_V 1.5f
 

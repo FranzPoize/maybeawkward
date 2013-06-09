@@ -63,6 +63,7 @@ set(${PROJECT_NAME}_HEADERS
 	AbstractMessage.h
 	AIDontComeAnyCloserController.h
 	FuckYouChoucheController.h
+	QuadTreeProxy.h
 )
 
 SOURCE_GROUP("Controllers Headers"

@@ -1,31 +1,41 @@
 #ifndef QuadTree_h__
 #define QuadTree_h__
 
+#include <list>
 #define QUADSUBTREE 4
 
+namespace BHQT
+{
 template <class T_Element, class T_BoundingBox,
 	int MAX_OBJECTS, int MAX_LEVELS>
 class QuadTree
 {
 public:
-	QuadTree(int aDepth, BoundingBox aBox);
-	void insertElement(T *element);
+	typedef std::list<T_Element *> ElementsContainer;
+	//typedef SubTreeContainer::iterator SubTreeIterator;
+
+
+	QuadTree(int aDepth, T_BoundingBox aBox,QuadTree *aParent = 0);
+	void insertElement(T_Element *element);
 	void clear();
-	std::vector<T*> searchNeighbors();
+	ElementsContainer searchNeighbors(const T_Element &element);
 
 protected:
+	void addChildrenElements(ElementsContainer &aContainer);
+	void addParentsDirectElements(ElementsContainer &aContainer);
 	void split();
-	bool doesItFit(BoundingBox box);
+
+	void concreteInsert(T_Element *aElement);
+	bool doesItFit(const T_BoundingBox& box);
 
 private:
-	typedef std::list<T_Element *> SubTreeContainer
-	typedef SubTreeContainer::iterator SubTreeIterator;
 
 	int mDepth;
 	T_BoundingBox mBox;
-	SubTreeContainer mDirectElements;
+	ElementsContainer mDirectElements;
 
 	std::unique_ptr<QuadTree> mSubTrees[QUADSUBTREE];
+	QuadTree* mParent;
 
 	bool mLevelFull;
 
@@ -38,11 +48,15 @@ private:
 
 template <class T_Element, class T_BoundingBox,
 	int MAX_OBJECTS, int MAX_LEVELS>
-QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::QuadTree(int aDepth, T_BoundingBox aBox):
+QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::QuadTree(int aDepth, T_BoundingBox aBox, QuadTree *aParent):
 	mDepth(aDepth),
-	mBox(aBox)
+	mBox(aBox),
+	mParent(aParent)
 {
-	split();
+	if(MAX_LEVELS != aDepth)
+	{
+		split();
+	}
 }
 
 template <class T_Element, class T_BoundingBox,
@@ -54,16 +68,16 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::insertElement(
 		&& mDirectElements.size() >= MAX_OBJECTS)
 	{
 		mLevelFull = true;
-		SubTreeContainer::elemIt = mDirectElements.end();
+		ElementsContainer::iterator elemIt = mDirectElements.end();
 		do
 		{
 			--elemIt;
-			insertElement(elemIt);
+			insertElement(*elemIt);
 			elemIt = mDirectElements.erase(elemIt);
 		}
-		while(elemIt != mDirectElements.begin())
+		while(elemIt != mDirectElements.begin());
 
-		insertElement(aElement)
+		insertElement(aElement);
 	}
 	else
 	{
@@ -71,16 +85,24 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::insertElement(
 			subTreeId != QUADSUBTREE;
 			++subTreeId)
 		{
-			if(mSubTrees[subTreeId]->doesItFit(aElement.getBB()))
+			if(mSubTrees[subTreeId]->doesItFit(aElement->getBoundingBox()))
 			{
 				mSubTrees[subTreeId]->insertElement(aElement);
 				return;
 			}
 		}
 
-		mDirectElements.push_back(aElement);
+		concreteInsert(aElement);
 	}
 
+}
+
+template <class T_Element, class T_BoundingBox,
+	int MAX_OBJECTS, int MAX_LEVELS>
+void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::concreteInsert(T_Element *aElement)
+{
+	mDirectElements.push_back(aElement);
+	aElement->setQuadTree(this);
 }
 
 template <class T_Element, class T_BoundingBox,
@@ -91,13 +113,13 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::split()
 		subTreeId != QUADSUBTREE;
 		++subTreeId)
 	{
-		mSubTrees[subTreeId].reset(new QuadTree(mDepth+1, mBox.getQuadrant(subTreeId)))
+		mSubTrees[subTreeId].reset(new QuadTree(mDepth+1, mBox.getQuadrant(subTreeId),this));
 	}
 }
 
 template <class T_Element, class T_BoundingBox,
 	int MAX_OBJECTS, int MAX_LEVELS>
-void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::doesItFit(const T_BoundingBox &aBbox)
+bool QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::doesItFit(const T_BoundingBox &aBbox)
 {
 	return mBox.contains(aBbox);
 }
@@ -116,6 +138,45 @@ void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::clear()
 	}
 }
 
+template <class T_Element, class T_BoundingBox,
+	int MAX_OBJECTS, int MAX_LEVELS>
+typename QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::ElementsContainer
+	QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::searchNeighbors(const T_Element &element)
+{
+	ElementsContainer result;
+	
+	addParentsDirectElements(result);
+	addChildrenElements(result);
+
+	return result;
+}
+
+template <class T_Element, class T_BoundingBox,
+	int MAX_OBJECTS, int MAX_LEVELS>
+void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::addParentsDirectElements(ElementsContainer &aContainer)
+{
+	aContainer.insert(aContainer.end(), mDirectElements.begin(), mDirectElements.end());	
+	if(mParent)
+	{
+		mParent->addParentsDirectElements(aContainer);
+	}
+}
+
+template <class T_Element, class T_BoundingBox,
+	int MAX_OBJECTS, int MAX_LEVELS>
+void QuadTree<T_Element, T_BoundingBox, MAX_OBJECTS, MAX_LEVELS>::addChildrenElements(ElementsContainer &aContainer)
+{
+	for(int subTreeId = 0; subTreeId < QUADSUBTREE;++subTreeId)
+	{
+		QuadTree *childQuad = mSubTrees[subTreeId].get();
+		aContainer.insert(aContainer.end(), childQuad->mDirectElements.begin(), childQuad->mDirectElements.end());
+
+		childQuad->addChildrenElements(aContainer);
+	}
+}
+
+
+}
 #endif // QuadTree_h__
 
 

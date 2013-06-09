@@ -67,7 +67,7 @@ void TerrainManager::addTerrain()
 		if(!((*terrainIt)->isOccupied()))
 		{
 			notSelected = false;
-			PhysicsSystem::get((*terrainIt)->physicsID())->setX((float)WIN_WIDTH*mLastTerrainId);
+			(*terrainIt)->setX((float)WIN_WIDTH*mLastTerrainId);
 			(*terrainIt)->setOccupied(true);
 			World::instance.terrainList().push_back((*terrainIt));
 			cl_log_event("info","Creation terrain. mLastTerrainId %1 x: %2, entityX: %3",mLastTerrainId,(float)WIN_WIDTH*mLastTerrainId,(*terrainIt)->x());

@@ -4,6 +4,7 @@
 
 #include "Closure.h"
 #include "Entity.h"
+#include "QuadTreeProxy.h"
 
 #include <map>
 #include <list>
@@ -38,11 +39,13 @@ typedef std::map<uint64_t, CollisionRule> CollisionRuleMap;
 
 class GameLogic {
 public:
+	GameLogic();
     CollisionRule& onBoxCollision(Family f1, Family f2);
 
     void update(float dt);
 private:
     CollisionRuleMap _collisionRules;
+	BHQuadTree mQuadTree;
 };
 
 

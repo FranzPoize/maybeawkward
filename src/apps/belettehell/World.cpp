@@ -48,7 +48,7 @@ void drawTraversal(EntityList &aList)
 void World::step(float dt)
 {
     mGameplay->update(dt);
-    PhysicsSystem::update(dt);
+    //PhysicsSystem::update(dt);
 
 	if (everybodyList().size() < 600 && (rand() % 100) > 95 && everybodyList().size() > 0)
     {
@@ -146,7 +146,7 @@ void World::createBackground() {
 	sun->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
 
     PhysicsSystem::addEntity(*sun, PHYSICS_BOX);
-	PhysicsSystem::setPosition(sun->physicsID(),400.f,215.f);
+	sun->setPosition(400.f, 215.f);
 
 	mSkyBackground.push_back(sun);
 
@@ -163,7 +163,7 @@ void World::createBackground() {
 	ray->setDeletionHandler(std::make_shared<DeletionHandlerTerrain>());
 
     PhysicsSystem::addEntity(*ray, PHYSICS_BOX);
-	PhysicsSystem::setPosition(ray->physicsID(),0.f,0.f);
+	ray->setPosition(0.f,0.f);
 
 	mSkyBackground.push_back(ray);
 }

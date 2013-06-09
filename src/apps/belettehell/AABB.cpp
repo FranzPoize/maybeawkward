@@ -1,13 +1,16 @@
 #include "AABB.h"
 
+#include "constants.h"
+
 using namespace MA;
 
-AABB::AABB(CL_Vec2d aCenter, int aHalfWidth, int aHalfHeight) :
+AABB::AABB(CL_Vec2d aCenter, double aHalfWidth, double aHalfHeight, CL_Origin aOrigin) :
 	mCenter(aCenter),
 	mHalfWidth(aHalfWidth),
 	mHalfHeight(aHalfHeight)
 {
-
+	mHAlignFactor = aOrigin%3 - 1;
+	mVAlignFactor = aOrigin/3 - 1;
 }
 
 bool AABB::isColliding(const AABB& aLeftBB) const 
@@ -25,7 +28,8 @@ AABB AABB::getQuadrant(unsigned int aQuadrantId) const
 	return AABB(
 		mCenter + CL_Vec2d(xMultiplier*mHalfWidth, yMultiplier*mHalfHeight),
 		mHalfWidth / 2,
-		mHalfHeight / 2);
+		mHalfHeight / 2,
+		ORIGIN);
 		
 }
 

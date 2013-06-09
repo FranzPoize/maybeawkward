@@ -33,7 +33,7 @@ public:
         pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_idle/nounours_idle_00.png");
 
         CL_Sprite pibiSprite(aWorld.getGraphicWrapper().cl(), pibiDescription);
-        pibiSprite.set_alignment(origin_bottom_left);
+        pibiSprite.set_alignment(ORIGIN);
         std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), pibiSprite);
 
         //RightArm
@@ -41,7 +41,7 @@ public:
         rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
 
         CL_Sprite rightArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
-        rightArmSprite.set_alignment(origin_bottom_left);
+        rightArmSprite.set_alignment(ORIGIN);
         rightArmSprite.set_rotation_hotspot(origin_top_left, -85, -108);
         std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), rightArmSprite);
 
@@ -50,7 +50,7 @@ public:
         leftArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_gauche/nounours_bra_gauche_00.png");
 
         CL_Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), leftArmDescritpion);
-        leftArmSprite.set_alignment(origin_bottom_left);
+        leftArmSprite.set_alignment(ORIGIN);
         leftArmSprite.set_rotation_hotspot(origin_top_left, -109, -107);
         std::shared_ptr<MA::Drawer> leftArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
 
@@ -74,16 +74,15 @@ public:
         pibi->setAnimator(spriteSwitch);
         pibi->name() = "Nounours";
 
-		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,0.f,0.f);
+		MA::PhysicsMaterial pibiMat(1.f,1.3f,1.f,200.f,170.f);
 		MA::PhysicsSystem::addEntity(*pibi, MA::PHYSICS_BOX_GRAVITY,&pibiMat);
-		MA::PhysicsSystem::setPosition(pibi->physicsID(), aWorld.getGraphicWrapper().camera().pos() + 100.0f, 540.0f);
-
+		pibi->setPosition(aWorld.getGraphicWrapper().camera().pos() + 100.0f, 540.0f);
 
         aWorld.getGraphicWrapper().camera().followEntity(pibi);
 
         std::shared_ptr<MA::Entity> rightArm = std::make_shared<MA::Entity>(rightArmController, rightArmDrawer);
         MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
-        MA::PhysicsSystem::setPosition(rightArm->physicsID(), 0.0f, 0.0f);
+		rightArm->setPosition(0.0f, 0.0f);
 
         CL_Pointf rightOrigin(85.f, -62.f);
         std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>(rightOrigin);
@@ -93,7 +92,7 @@ public:
 
         std::shared_ptr<MA::Entity> leftArm = std::make_shared<MA::Entity>(leftArmController, leftArmDrawer);
         MA::PhysicsSystem::addEntity(*leftArm, MA::PHYSICS_BOX);
-        MA::PhysicsSystem::setPosition(leftArm->physicsID(), 0.0f, 0.0f);
+		leftArm->setPosition(0.0f, 0.0f);
 
         CL_Pointf leftOrigin(109.f, -63.f);
         std::shared_ptr<MA::AttackerBullet> leftAttacker = std::make_shared<MA::AttackerBullet>(leftOrigin);
@@ -202,10 +201,10 @@ public:
 				if(pibi->isMarkedForDeletion() && ic.get_keyboard().get_keycode(CL_KEY_ENTER))
 				{
 					world.empty();
-					pibi->getPhysics()->setX(100.0f);
-					pibi->getPhysics()->setY(540.0f);
-					pibi->getPhysics()->setXVelocity(0.f);
-					pibi->getPhysics()->setYVelocity(0.f);
+					pibi->setX(100.0f);
+					pibi->setY(540.0f);
+					pibi->getPhysicalObject()->setXVelocity(0.f);
+					pibi->getPhysicalObject()->setYVelocity(0.f);
 					world.getGraphicWrapper().camera().setPos(0.f);
 					pibi->markForDeletion(false);
 					world.init();

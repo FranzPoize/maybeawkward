@@ -44,15 +44,11 @@ class PhysicsSystem;
 class PhysicalObject
 {
 public:
-    virtual void update(const Entity &aEntity, float dt) = 0;
+    virtual void update(float dt) = 0;
+    virtual void applyForce(float fx, float fy) =0;
 
-    PhysicalObject(const PhysicsMaterial* m)
-    : _x(0), _y(0), _dx(0), _dy(0), _angle(0) {
-        if (m) {
-            _material = *m;
-        }
-    }
-
+    PhysicalObject(Entity *const aEntity, const PhysicsMaterial* m);
+		
     virtual ~PhysicalObject() {};
     void setAngle(float a) { _angle = a; }
     void setXVelocity(float vx) { _dx = vx; }
@@ -60,45 +56,64 @@ public:
     const float getXVelocity() const { return _dx; }
     const float getYVelocity() const { return _dy; }
 
-    float x() const { return _x; }
-    float y() const { return _y; }
+    //float x() const { return _x; }
+    //float y() const { return _y; }
     float vx() const { return _dx; }
     float vy() const { return _dy; }
     float angle() const { return _angle; }
-    virtual Rect boundingRect() {
-        // default rect
-        return Rect(x(), y(), 0.0, 0.0);
-    }
+    //virtual Rect boundingRect() {
+    //    // default rect
+    //    return Rect(x(), y(), 0.0, 0.0);
+    //}
 
-    void setX(float x) {_x=x;}
-    void setY(float y) {_y=y;}
+    //void setX(float x) {_x=x;}
+    //void setY(float y) {_y=y;}
 protected:
 
     // position
-    float _x, _y;
+    //float _x, _y;
     // velocity
     float _dx, _dy;
     float _angle;
     PhysicsMaterial _material;
     friend class MA::PhysicsSystem;
+
+	//back pointer
+	Entity* mBackEntity;
 };
 
 class BoxPhysicalObject : public PhysicalObject
 {
 public:
 
-    BoxPhysicalObject(const PhysicsMaterial* m)
-    : PhysicalObject(m) {}
+    BoxPhysicalObject(Entity *const aEntity, const PhysicsMaterial* m)
+    : PhysicalObject(aEntity, m) {}
 
-    virtual void update(const Entity &aEntity, float dt) override;
+    virtual void update(float dt) override;
+
+	void applyVelocity(float dt);
+    virtual void applyForce(float fx, float fy);
+    void checkFloorCollision();
 
     static void applyVelocity(Slice<BoxPhysicalObject> objects, float dt);
     static void applyForce(Slice<BoxPhysicalObject> objects, float fx, float fy);
     static void checkFloorCollision(Slice<BoxPhysicalObject> objects);
 
-    virtual Rect boundingRect() override {
-        return Rect(x(), y(), _material.width, _material.height);
-    }
+    //virtual Rect boundingRect() override {
+    //    return Rect(x(), y(), _material.width, _material.height);
+    //}
+
+    friend class MA::PhysicsSystem;
+protected:
+};
+
+class BoxPhysicalObjectNoGravity : public BoxPhysicalObject
+{
+public:
+    BoxPhysicalObjectNoGravity(Entity *const aEntity, const PhysicsMaterial* m)
+    : BoxPhysicalObject(aEntity, m) {}
+
+    virtual void update(float dt) override;
 
     friend class MA::PhysicsSystem;
 protected:
@@ -110,7 +125,7 @@ public:
     static void init();
     static void update(float dt); // in seconds
     static void applyForce(PhysicsID id, float fx, float fy);
-    static void setPosition(PhysicsID id, float px, float py);
+    //static void setPosition(PhysicsID id, float px, float py);
 
     static void addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params = 0);
     static void removeEntity(Entity &aEntity);

@@ -4,6 +4,7 @@
 namespace BHQT
 {
 
+	/// \todo : move to a common ancestor instead of crtp
 	/// \brief Interface for collision detection service.
 template <class T>
 class BoundingBox

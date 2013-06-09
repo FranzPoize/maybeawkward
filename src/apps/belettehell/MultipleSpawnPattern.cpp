@@ -64,17 +64,17 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 			break;
 		}
 		CL_Sprite enemySprite(gw.cl(),enemyDescription);
-		enemySprite.set_alignment(origin_bottom_left);
+		enemySprite.set_alignment(ORIGIN);
 
 		std::shared_ptr<DrawerSprite> drawer(new DrawerSprite(gw,enemySprite));
 		enemy = std::make_shared<Entity>(controller,drawer);
 		enemy->families().push_back(ENEMY);
 
-		PhysicsMaterial mat(1.0,1.0,1.0, 64, 64); // TODO actual sizes
+		PhysicsMaterial mat(1.0,1.0,1.0, 100., 100.); // TODO actual sizes
 		MA::PhysicsSystem::addEntity(*enemy,MA::PHYSICS_BOX, &mat);
-		MA::PhysicsSystem::setPosition(enemy->physicsID(),i->x,i->y);
-		MA::PhysicsSystem::get(enemy->physicsID())->setXVelocity(i->xSpeed);
-		MA::PhysicsSystem::get(enemy->physicsID())->setYVelocity(i->ySpeed);
+		enemy->setPosition(i->x, i->y);
+		enemy->getPhysicalObject()->setXVelocity(i->xSpeed);
+		enemy->getPhysicalObject()->setYVelocity(i->ySpeed);
 
 		World::instance.everybodyList().push_back(enemy);
 	}

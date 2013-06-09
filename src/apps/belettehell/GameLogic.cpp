@@ -1,14 +1,29 @@
 
 #include "GameLogic.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include "World.h"
 #include "collisions.h"
+#include "AABB.h"
+#include "constants.h"
+
+#include <QuadTree/BoundingBox.h>
 
 namespace MA {
 
 static uint64_t key(Family f1, Family f2) {
     return (uint64_t)f1 + ((uint64_t) f2 << 32);
+}
+
+GameLogic::GameLogic():
+	mQuadTree(0,
+		AABB(CL_Vec2d(WIN_WIDTH/2, WIN_HEIGHT/2),
+			WIN_HEIGHT*CULLING_FACTOR_V,
+			WIN_WIDTH*CULLING_FACTOR_H,
+			ORIGIN))
+{
+
 }
 
 CollisionRule& GameLogic::onBoxCollision(Family f1, Family f2)
@@ -35,6 +50,18 @@ void GameLogic::update(float dt)
 
         EntityList::iterator main_entity_it = entities.begin();
         EntityList::iterator main_entity_stop = entities.end();
+		for(;main_entity_it != main_entity_stop;main_entity_it++)
+		{
+			mQuadTree.insertElement(main_entity_it->get());
+		}
+
+        main_entity_it = entities.begin();
+		for(;main_entity_it != main_entity_stop;main_entity_it++)
+		{
+		 	BHQuadTree::ElementsContainer container = mQuadTree.searchNeighbors(**main_entity_it);
+		}
+		
+
         while (main_entity_it != main_entity_stop)
         {
             //printf("   GameLogic::update - iterating over the first entity\n");
@@ -61,15 +88,17 @@ void GameLogic::update(float dt)
                     ++family_it1;
                 }
                 if (families_matched) {
-                    Rect r1 = PhysicsSystem::get((*main_entity_it)->physicsID())->boundingRect();
-                    Rect r2 = PhysicsSystem::get((*secondary_entity_it)->physicsID())->boundingRect();
+                    const AABB& bb1= (*main_entity_it)->getBoundingBox();
+                    const AABB& bb2= (*secondary_entity_it)->getBoundingBox();
                     //printf("               GameLogic::update families matched\n");
-                    if (rectCollision(r1, r2)) {
+                    if (bb1.isColliding(bb2))
+					{
                         CallbackList::iterator callbacks_it = it->second._callbacks.begin();
                         CallbackList::iterator callbacks_stop = it->second._callbacks.end();
                         EntityPair pair(&**main_entity_it, &**secondary_entity_it);
                         //printf("                        GameLogic::update collision found\n");
-                        while (callbacks_it != callbacks_stop) {
+                        while (callbacks_it != callbacks_stop)
+						{
                             (*callbacks_it)->call(pair, dt);
                             ++callbacks_it;
                         }

@@ -10,16 +10,58 @@ namespace MA {
 
 static PhysicsSystem* _system = new PhysicsSystem();
 
+PhysicalObject::PhysicalObject(Entity *const aEntity, const PhysicsMaterial* m) :
+	/* _x(0), _y(0),*/ _dx(0),
+	_dy(0),
+	_angle(0),
+	mBackEntity(aEntity)
+{
+    if (m)
+	{
+        _material = *m;
+		mBackEntity->setBoundingBox(m->width/2, m->height/2);
+    }
+	else
+	{
+		mBackEntity->setBoundingBox(0., 0.);
+	}
+}
+
+void BoxPhysicalObject::applyVelocity(float dt)
+{
+    mBackEntity->translate(dt * _dx, dt * _dy);
+    _dx = _dx / _material.airFriction;
+}
+
+void BoxPhysicalObject::applyForce(float fx, float fy)
+{
+	_dx += fx / _material.mass;
+	_dy += fy / _material.mass;
+}
+
+void BoxPhysicalObject::checkFloorCollision()
+{
+    if (mBackEntity->y() > PHYSICS_Y_LIMIT) 
+	{
+        if (mBackEntity->y() > PHYSICS_Y_LIMIT - 3) 
+		{
+            _dx = _dx * _material.groundFriction;
+        }
+        mBackEntity->setY(PHYSICS_Y_LIMIT);
+        _dy = - _dy * 0.5f;
+    }
+}
+
 void BoxPhysicalObject::applyVelocity(Slice<BoxPhysicalObject> objects, float dt)
 {
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (it != objects.end()) {
-        it->_x += dt * it->_dx;
-        it->_y += dt * it->_dy;
+        it->mBackEntity->translate(dt * it->_dx, dt * it->_dy);
         it->_dx = it->_dx / it->_material.airFriction;
         ++it;
     }
 }
+
 
 void BoxPhysicalObject::applyForce(Slice<BoxPhysicalObject> objects, float fx, float fy)
 {
@@ -35,11 +77,11 @@ void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
 {
     Slice<BoxPhysicalObject>::iterator it = objects.begin();
     while (!objects.empty()) {
-        if (objects.front()._y > PHYSICS_Y_LIMIT) {
-            if (objects.front()._y > PHYSICS_Y_LIMIT - 3) {
+        if (objects.front().mBackEntity->y() > PHYSICS_Y_LIMIT) {
+            if (objects.front().mBackEntity->y() > PHYSICS_Y_LIMIT - 3) {
                 objects.front()._dx = objects.front()._dx * objects.front()._material.groundFriction;
             }
-            objects.front()._y = PHYSICS_Y_LIMIT;
+            objects.front().mBackEntity->setY(PHYSICS_Y_LIMIT);
             objects.front()._dy = - objects.front()._dy * 0.5f;
         }
         objects.shrinkLeft();
@@ -47,9 +89,16 @@ void BoxPhysicalObject::checkFloorCollision(Slice<BoxPhysicalObject> objects)
 }
 
 
-void BoxPhysicalObject::update(const Entity &aEntity, float dt)
+void BoxPhysicalObject::update(float dt)
 {
+	applyForce(GRAVITY_X, GRAVITY_Y);
+	applyVelocity(dt);
+	checkFloorCollision();
+}
 
+void BoxPhysicalObjectNoGravity::update(float dt)
+{
+	applyVelocity(dt);
 }
 
 void PhysicsSystem::init()
@@ -84,21 +133,23 @@ void PhysicsSystem::update(float dt)
 
 void PhysicsSystem::addEntity(Entity &aEntity, PhysicsType type, const PhysicsMaterial* params)
 {
-    switch (type) {
-        case PHYSICS_BOX: {
-            _system->_boxesNoGravity.push_back(BoxPhysicalObject(params));
-            aEntity.setPhysicsID(PhysicsID(_system->_boxesNoGravity.size()-1, type));
-            break;
-        }
-        case PHYSICS_BOX_GRAVITY: {
-            _system->_boxesWithGravity.push_back(BoxPhysicalObject(params));
-            aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
-            break;    
-        }
-        default: return;
-    }
-    _system->mPhysicsCount++;
-    //printf("num of physical objetcs: %i\n", _system->mPhysicsCount);
+//    switch (type) {
+//        case PHYSICS_BOX: {
+//            _system->_boxesNoGravity.push_back(BoxPhysicalObject(&aEntity, params));
+//            aEntity.setPhysicsID(PhysicsID(_system->_boxesNoGravity.size()-1, type));
+//            break;
+//        }
+//        case PHYSICS_BOX_GRAVITY: {
+//            _system->_boxesWithGravity.push_back(BoxPhysicalObject(&aEntity, params));
+//            aEntity.setPhysicsID(PhysicsID(_system->_boxesWithGravity.size()-1, type));
+//            break;    
+//        }
+//        default: return;
+//    }
+//    _system->mPhysicsCount++;
+//    //printf("num of physical objetcs: %i\n", _system->mPhysicsCount);
+
+	aEntity.buildPhysicalObject(type, params);
 }
 
 void PhysicsSystem::removeEntity(Entity &aEntity)
@@ -144,11 +195,11 @@ void PhysicsSystem::applyForce(PhysicsID id, float fx, float fy)
     obj->_dy += fy;
 }
 
-void PhysicsSystem::setPosition(PhysicsID id, float px, float py)
-{
-    PhysicalObject* obj = PhysicsSystem::get(id);
-    obj->_x = px;
-    obj->_y = py;
-}
+//void PhysicsSystem::setPosition(PhysicsID id, float px, float py)
+//{
+//    PhysicalObject* obj = PhysicsSystem::get(id);
+//    obj->_x = px;
+//    obj->_y = py;
+//}
 
 } // namespace

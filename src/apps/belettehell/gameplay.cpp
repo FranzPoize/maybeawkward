@@ -8,7 +8,7 @@ namespace MA {
 void on_friend_enemy_bullet_collision(EntityPair& entities, float dt)
 {
     entities.e1->markForDeletion(true);
-	entities.e1->getPhysics()->setXVelocity(0.f);
+	entities.e1->getPhysicalObject()->setXVelocity(0.f);
     printf("[FRIEND,ENEMY_BULLET] Collisioooooooooooon\n");
 	entities.e1->markForDeletion(true);
     // entities.e1 is the first entity invloved in the collision

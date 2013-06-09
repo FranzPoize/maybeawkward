@@ -8,6 +8,7 @@
 #include "ControllerNull.h"
 #include "Physics.h"
 #include "Entity.h"
+#include "constants.h"
 
 #include <memory>
 #include <list>
@@ -26,7 +27,7 @@ std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
     std::shared_ptr<Entity> bullet = std::make_shared<Entity>(controllerNull, bulletDrawer);
     bullet->families().push_back(FRIEND_BULLET);
 
-    PhysicsMaterial bulletMaterial(EPSILON, EPSILON, 10000.f, 13, 13);
+    PhysicsMaterial bulletMaterial(EPSILON, EPSILON, 10000.f, 24., 24.);
     PhysicsSystem::addEntity(*bullet, PHYSICS_BOX, &bulletMaterial);
 
     return bullet;
@@ -34,11 +35,13 @@ std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
 
 void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &aDirection, const Entity &aEntity)
 {
-    PhysicsSystem::setPosition(aBullet->physicsID(), aOrigin.x,  aOrigin.y);
+	aBullet->setPosition(aOrigin.x,  aOrigin.y);
 
     /// \todo : decouple this component from PiBi (that is exactly why you should not have globals...)
-	PhysicsSystem::get(aBullet->physicsID())->setXVelocity((aDirection.x+rand()%2/10.f)*BULLET_SPEED+World::instance.pibiRef->getPhysics()->getXVelocity());
-    PhysicsSystem::get(aBullet->physicsID())->setYVelocity((aDirection.y+rand()%2/10.f)*BULLET_SPEED);
+	aBullet->getPhysicalObject()->setXVelocity(
+		(aDirection.x+rand()%2/10.f) * BULLET_SPEED + World::instance.pibiRef->getPhysicalObject()->getXVelocity());
+    aBullet->getPhysicalObject()->setYVelocity(
+		(aDirection.y+rand()%2/10.f) * BULLET_SPEED);
 }
 
 void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &aEntity)
@@ -68,7 +71,7 @@ BulletPool::BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitial
     bulletDescription.add_frame(ASSET_PATH+"design_export/tir_bleu.png");
 
     CL_Sprite bulletSprite = CL_Sprite(World::instance.getGraphicWrapper().cl(), bulletDescription);
-    bulletSprite.set_alignment(origin_bottom_left);
+    bulletSprite.set_alignment(ORIGIN);
     
     for (std::vector<std::shared_ptr<Entity> >::size_type bullId=0;
         bullId != aInitialSize;

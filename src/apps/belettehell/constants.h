@@ -6,6 +6,11 @@
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
 #define EPSILON 0.0000001f
+#define ORIGIN origin_bottom_left
+#define MAX_OBJECTS_QUAD_TREE 10
+#define MAX_LEVELS_QUAD_TREE 5
+#define CULLING_FACTOR_H 1.5f
+#define CULLING_FACTOR_V 1.5f
 
 const float PLAN_THREE_FACTOR = 0.5f;
 const float PLAN_FOUR_FACTOR = 0.2f;
@@ -35,5 +40,6 @@ const float GRAVITY_Y = 30.0f;
 const int PHYSICS_Y_LIMIT = 710;
 
 const float BULLET_SPEED = 1000;
+
 
 #endif // constants_h__

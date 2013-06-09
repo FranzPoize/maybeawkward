@@ -2,11 +2,13 @@
 #ifndef Entity_h__
 #define Entity_h__
 
+#include "AABB.h"
 #include "Physics.h"
 #include "MessageVisitor.h"
 #include "MessageReceiver.h"
 #include "AbstractMessage.h"
 #include "constants.h"
+#include "QuadTreeProxy.h"
 
 #include <assert.h>
 #include <memory>
@@ -74,16 +76,6 @@ public:
         mAnimator = aAnimator;
     }
 
-    PhysicalObject *getPhysics()
-    {
-        return PhysicsSystem::get(mPhysics);
-    }
-
-    const PhysicalObject *getPhysics() const
-    {
-        return PhysicsSystem::get(mPhysics);
-    }
-
 	void setCameraFactor(float aCameraFactor)
 	{
 		mCameraFactor = aCameraFactor;
@@ -99,20 +91,19 @@ public:
 
     void move(float dt, float aXInput, bool aJump);
 
-    const float x() const
+    const double x() const
     {
-        return PhysicsSystem::get(mPhysics)->x();
-        printf("get x: %f\n", PhysicsSystem::get(mPhysics)->x());
+		return mPosition.x;
     }
 
-    const float y() const
+    const double y() const
     {
-        return PhysicsSystem::get(mPhysics)->y();
+		return mPosition.y;
     }
 
     const float angle() const
     {
-        return PhysicsSystem::get(mPhysics)->angle();
+        return mPhysicalObject->angle();
     }
 
     void receiveMessage(std::shared_ptr<AbstractMessage> aInputMessage)
@@ -156,30 +147,29 @@ public:
     }
 
     bool isGrounded() {
-        return PhysicsSystem::get(physicsID())->y() > PHYSICS_Y_LIMIT - 5;
+        return x() > PHYSICS_Y_LIMIT - 5;
     }
 
     bool isGoingUp() {
-        return PhysicsSystem::get(physicsID())->vy() < 0.0f;
+        return mPhysicalObject->vy() < 0.0f;
     }
 
     bool isGoingDown() {
-        return PhysicsSystem::get(physicsID())->vy() > 0.0f;
+        return mPhysicalObject->vy() > 0.0f;
     }
 
     bool isWalkingRight() {
-        return PhysicsSystem::get(physicsID())->vx() > 0.0f &&
+        return mPhysicalObject->vx() > 0.0f &&
                isGrounded();
     }
 
     bool isWalkingLeft() {
-        return PhysicsSystem::get(physicsID())->vx() < 0.0f &&
+        return mPhysicalObject->vx() < 0.0f &&
                isGrounded();
     }
 
     AnimState checkStateChange() {
-        PhysicalObject* o = PhysicsSystem::get(physicsID());
-        if (!o) return NO_CHANGE;
+        if (!mPhysicalObject.get()) return NO_CHANGE;
         AnimState state = NO_CHANGE;
         if (isGoingUp()) {
             state = JUMPING_UP;
@@ -188,10 +178,10 @@ public:
             state = JUMPING_DOWN;
         }
 
-        if (isGrounded() && fabs(o->vx()) < 0.1f) {
+        if (isGrounded() && fabs(mPhysicalObject->vx()) < 0.1f) {
             state = IDLE;
         }
-        if (isGrounded() && fabs(o->vx()) > 0.1f) {
+        if (isGrounded() && fabs(mPhysicalObject->vx()) > 0.1f) {
             state = WALKING;
         }
         if (state != NO_CHANGE && state != mState) {
@@ -204,21 +194,86 @@ public:
         return mName;
     }
 
+    void setPosition(double x, double y)
+    {
+		mPosition.x = x;
+		mPosition.y = y;
+		mBoundingBox->setPosition(x, y);
+    }
+
+	void setY(double y)
+	{
+		mPosition.y = y;
+		mBoundingBox->setPosition(x(), y);
+	}
+
+	void setX(double x)
+	{
+		mPosition.x = x;
+		mBoundingBox->setPosition(x, y());
+	}
+
+	void translate(double x, double y)
+	{
+		mPosition += CL_Vec2d(x, y);
+		mBoundingBox->setPosition(mPosition.x, mPosition.y);
+	}
+
+	//void setBoundingBox(CL_Vec2d aBoxCenter, double aBoxHalfWidth, double aBoxHalfHeight)
+	//{
+	//	mBoundingBox.reset(new AABB(aBoxCenter, aBoxHalfWidth, aBoxHalfHeight));
+	//}
+
+	void setBoundingBox(double aBoxHalfWidth, double aBoxHalfHeight)
+	{
+		mBoundingBox.reset(new AABB(mPosition+CL_Vec2d(aBoxHalfWidth, -aBoxHalfHeight),
+									aBoxHalfWidth,
+									aBoxHalfHeight,
+									ORIGIN));
+	}
+
+	const AABB& getBoundingBox()
+	{
+		return *mBoundingBox;
+	}
+
+	const AABB& getBoundingBox() const
+	{
+		return *mBoundingBox;
+	}
+
+
+	void buildPhysicalObject(PhysicsType aType, const PhysicsMaterial* params);
+	PhysicalObject * const getPhysicalObject()
+	{
+		return mPhysicalObject.get();
+	}
+
+	BHQuadTree *getQuadTree()
+	{
+		return mQuadTreeBackPtr;
+	}
+
+	void setQuadTree(BHQuadTree *aQuadTreeBackPtr)
+	{
+		mQuadTreeBackPtr = aQuadTreeBackPtr;
+	}
+
+
 private:
     void visit(MoveMessage *aMessage, const VisitInfo &info);
     void visit(AttackMessage *aMessage, const VisitInfo &info);
 	void visit(AnimationMessage *aMessage,const VisitInfo &info);
 	void visit(SpeedMessage *aSpeedMessage,const VisitInfo &info);
 
-    void translate(float x, float y)
-    {
-        PhysicsSystem::get(mPhysics)->setX(x);
-        PhysicsSystem::get(mPhysics)->setY(y);
-    }
 
 private:
     typedef std::deque<std::shared_ptr<AbstractMessage> > MessageBoxType;
     typedef MessageBoxType::iterator MessageBoxIterator;
+
+	CL_Vec2d mPosition;
+	std::unique_ptr<AABB> mBoundingBox;
+	std::unique_ptr<PhysicalObject> mPhysicalObject;
 
     MessageBoxType mMessageBox;
     std::shared_ptr<Controller> mController;
@@ -238,6 +293,8 @@ private:
     AnimState mState;
 	float mCameraFactor;
     std::string mName;
+	BHQuadTree *mQuadTreeBackPtr;
+	
 };
 
 }

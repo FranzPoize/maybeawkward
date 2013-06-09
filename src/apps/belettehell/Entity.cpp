@@ -19,7 +19,6 @@
 #include <string>
 #include <ClanLib/core.h>
 
-#define DRAW_HITBOX
 
 using namespace MA;
 
@@ -33,7 +32,9 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mChildEntities(),
     mMarkedForDeletion(false),
     mState(IDLE),
-	mCameraFactor(1.0f)
+	mCameraFactor(1.0f),
+	//mBoundingBox(new AABB(CL_Vec2d(10., 10.), 0., 0.))
+	mBoundingBox()
 {
 }
 
@@ -46,11 +47,13 @@ bool Entity::update(float dt)
 {
     Camera &worldCam = World::instance.getGraphicWrapper().camera();
     if (mMarkedForDeletion || 
-        (pow(x()-worldCam.pos(), 2) > WIN_WIDTH_SQUARED) ||
-        (pow(y(), 2) > WIN_HEIGHT_SQUARED))
+	    abs(x()-(worldCam.pos() + WIN_WIDTH/2)) > CULLING_FACTOR_H * WIN_WIDTH ||
+        abs(y()-(WIN_HEIGHT/2)) > CULLING_FACTOR_V * WIN_HEIGHT)
     {
-        return mDeletionHandler->deletion(*this);;
+        return mDeletionHandler->deletion(*this);
     }
+
+	mPhysicalObject->update(dt);
 
     mController->update(*this, dt);
 
@@ -86,12 +89,6 @@ void Entity::draw()
     if(mChildEntities.size() == 0)
     {
         mDrawer->draw(*this);
-#ifdef DRAW_HITBOX
-        PhysicalObject *physic = getPhysics();
-        CL_Draw::box(World::instance.getGraphicWrapper().cl(),
-            CL_Rectf(physic->boundingRect()),
-            CL_Colorf::bisque);
-#endif
     }
 
     else
@@ -106,7 +103,7 @@ void Entity::draw()
                 mDrawer->draw(*this);
                 crossedZeroOrder = true;
             }
-            childIt->second->translate(x(), y());
+            childIt->second->setPosition(x(), y());
             childIt->second->draw();
         }
     }
@@ -120,16 +117,16 @@ void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 
 void Entity::visit(SpeedMessage *aMessage, const VisitInfo &info)
 {
-	PhysicsSystem::get(mPhysics)->setXVelocity(aMessage->Y*TOP_SPEED - aMessage->X*TOP_SPEED);
+	mPhysicalObject->setXVelocity(aMessage->Y*TOP_SPEED - aMessage->X*TOP_SPEED);
     if(aMessage->jump)
-        PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
+        mPhysicalObject->setYVelocity(-500.f);
 }
 
 void Entity::visit(MoveMessage *aMessage, const VisitInfo &info)
 {
-	PhysicsSystem::applyForce(mPhysics, aMessage->X, aMessage->Y);
+	mPhysicalObject->applyForce(aMessage->X, aMessage->Y);
     if(aMessage->jump)
-        PhysicsSystem::get(mPhysics)->setYVelocity(-500.f);
+        mPhysicalObject->setYVelocity(-500.f);
 }
 
 void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
@@ -138,7 +135,7 @@ void Entity::visit(AttackMessage *aMessage, const VisitInfo &info)
     {
         mAttacker->attack(aMessage, *this);
     }
-    PhysicsSystem::get(mPhysics)->setAngle(aMessage->angle);
+    mPhysicalObject->setAngle(aMessage->angle);
 }
 
 void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
@@ -146,6 +143,23 @@ void Entity::visit(AnimationMessage *aMessage, const VisitInfo &info)
 	
 }
 
+
+void Entity::buildPhysicalObject(PhysicsType aType, const PhysicsMaterial* params)
+{
+	switch(aType)	
+	{
+        case PHYSICS_BOX: {
+            mPhysicalObject.reset(new BoxPhysicalObjectNoGravity(this, params));
+            break;
+        }
+        case PHYSICS_BOX_GRAVITY: {
+            mPhysicalObject.reset(new BoxPhysicalObject(this, params));
+            break;    
+        }
+
+        default: assert(false);
+	}
+}
 
 namespace MA
 {

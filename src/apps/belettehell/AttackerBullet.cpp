@@ -18,9 +18,9 @@ using namespace MA;
 
 /// \todo : move out static declarations
 
-CL_Pointf GUN_HOLE(105.f, -96.f);
+clan::Pointf GUN_HOLE(105.f, -96.f);
 
-std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
+std::shared_ptr<Entity> generateBullet(clan::Sprite &aSprite)
 {
     std::shared_ptr<Drawer> bulletDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), aSprite);
 
@@ -34,7 +34,7 @@ std::shared_ptr<Entity> generateBullet(CL_Sprite &aSprite)
     return bullet;
 }
 
-void fireBullet(std::shared_ptr<Entity> aBullet, CL_Pointf &aOrigin, CL_Pointf &aDirection, const Entity &aEntity)
+void fireBullet(std::shared_ptr<Entity> aBullet, clan::Pointf &aOrigin, clan::Pointf &aDirection, const Entity &aEntity)
 {
 	aBullet->setPosition(aOrigin.x,  aOrigin.y);
 
@@ -54,11 +54,11 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
     {
         return;
     }
-    CL_Pointf dir(1.f, 0.f), origin=mOrigin;
-    dir.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
+    clan::Pointf dir(1.f, 0.f), origin=mOrigin;
+    dir.rotate(clan::Vec2<float>(0.f, 0.f), clan::Angle::from_radians(aAttackMessage->angle));
  
-    //origin.rotate(CL_Vec2<float>(0.f, 0.f), CL_Angle::from_radians(aAttackMessage->angle));
-    origin += CL_Pointf(aEntity.x(), aEntity.y());
+    //origin.rotate(clan::Vec2<float>(0.f, 0.f), clan::Angle::from_radians(aAttackMessage->angle));
+    origin += clan::Pointf(aEntity.x(), aEntity.y());
     origin += dir*95;
 
     std::shared_ptr<Entity> bullet(World::instance.gBulletPool->getNextBullet());
@@ -74,10 +74,10 @@ void AttackerBullet::attack(const AttackMessage *aAttackMessage, const Entity &a
 
 BulletPool::BulletPool(std::vector<std::shared_ptr<Entity> >::size_type aInitialSize)
 {
-    CL_SpriteDescription bulletDescription;
+    clan::SpriteDescription bulletDescription;
     bulletDescription.add_frame(ASSET_PATH+"design_export/tir_bleu.png");
 
-    CL_Sprite bulletSprite = CL_Sprite(World::instance.getGraphicWrapper().cl(), bulletDescription);
+    clan::Sprite bulletSprite = clan::Sprite(World::instance.getGraphicWrapper().cl(), bulletDescription);
     bulletSprite.set_alignment(ORIGIN);
     
     for (std::vector<std::shared_ptr<Entity> >::size_type bullId=0;

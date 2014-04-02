@@ -17,14 +17,14 @@ class World;
 class AttackerBullet : public Attacker
 {
 public:
-    AttackerBullet(CL_Pointf aRotationOrigin) :
+    AttackerBullet(clan::Pointf aRotationOrigin) :
         mOrigin(aRotationOrigin)
     {
 
     }
     void attack(const AttackMessage *aAttackMessage, const Entity &aEntity);
 private:
-    CL_Pointf mOrigin;
+    clan::Pointf mOrigin;
 };
 
 class BulletPool
@@ -39,7 +39,7 @@ private:
     std::vector<std::shared_ptr<Entity> > mPoolContainer;
     std::vector<std::shared_ptr<Entity> >::iterator mNextBullet;
 
-    static CL_Sprite gBulletSprite;
+    static clan::Sprite gBulletSprite;
 };
 }
 #endif // AttackerBullet_h__

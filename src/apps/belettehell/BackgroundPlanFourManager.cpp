@@ -41,10 +41,10 @@ BackgroundPlanFourManager::BackgroundPlanFourManager()
 
 std::shared_ptr<TerrainWrapper> BackgroundPlanFourManager::createDefaultEntity(const std::string &aRelativeFilepath)
 {
-    CL_SpriteDescription proxyDescription;
+    clan::SpriteDescription proxyDescription;
     proxyDescription.add_frame(ASSET_PATH+aRelativeFilepath);
 
-    CL_Sprite proxySprite(World::instance.getGraphicWrapper().cl(), proxyDescription);
+    clan::Sprite proxySprite(World::instance.getGraphicWrapper().cl(), proxyDescription);
     proxySprite.set_alignment(origin_top_left);
     std::shared_ptr<Drawer> proxyDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySprite);
 
@@ -75,7 +75,7 @@ void BackgroundPlanFourManager::addTerrain()
 			(*terrainIt)->setX((float)WIN_WIDTH*mLastTerrainId);
 			(*terrainIt)->setOccupied(true);
 			World::instance.backgroundFourList().push_back((*terrainIt));
-			cl_log_event("info","Creation terrain. mLastTerrainId %1 x: %2, entityX: %3",mLastTerrainId,(float)WIN_WIDTH*mLastTerrainId,(*terrainIt)->x());
+			clan::log_event("info","Creation terrain. mLastTerrainId %1 x: %2, entityX: %3",mLastTerrainId,(float)WIN_WIDTH*mLastTerrainId,(*terrainIt)->x());
 			mLastTerrainId++;
 		}
 	}

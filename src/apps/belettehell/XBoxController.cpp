@@ -24,7 +24,7 @@ XBoxController::XBoxController(int aControllerId) :
     
 void XBoxController::update(MessageReceiver &aReceiver, float dt)
 {
-    int enter = CL_System::get_time();
+    int enter = clan::System::get_time();
     if (updateState()==ERROR_SUCCESS)
     {
 

@@ -60,6 +60,9 @@ MACRO(ClanLib_FIND_COMPONENT COMPONENT)
   FIND_LIBRARY(ClanLib_${COMPONENT}_LIBRARY_RELEASE clan${COMPONENT}-static-mt
     ${ClanLib_ROOT_DIR}/lib/Win32 /lib /usr/lib /usr/local/lib
     DOC "Library name for clan${COMPONENT}.")
+  FIND_LIBRARY(ClanLib_${COMPONENT}_LIBRARY libclan${ClanLib_MAJOR_VERSION}${ClanLib_MINOR_VERSION}${COMPONENT}.a
+    ${ClanLib_ROOT_DIR}/lib /lib /usr/lib /usr/local/lib
+    DOC "Library name for clan${COMPONENT}.")
 	
   IF(ClanLib_${COMPONENT}_LIBRARY_RELEASE)
     SET(ClanLib_${COMPONENT}_FOUND TRUE)

@@ -17,7 +17,7 @@ void AnimatorSpriteSwitcher::animate(Entity &aEntity)
     if(aState != NO_CHANGE)
     {
         aEntity.setDrawer(mSpriteComponent->getDrawer(animEnumToNounoursStr(aState)));
-        CL_Console::write_line("anim : %1", animEnumToNounoursStr(aState));
+        clan::Console::write_line("anim : %1", animEnumToNounoursStr(aState));
         if(aState== IDLE)
         {
             int i = 5;

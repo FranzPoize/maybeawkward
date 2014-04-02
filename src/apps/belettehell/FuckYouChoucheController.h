@@ -12,11 +12,11 @@ class MessageReceiver;
 class FuckYouChoucheController : public Controller
 {
 public:
-    FuckYouChoucheController(CL_InputContext aIc);
+    FuckYouChoucheController(clan::InputContext aIc);
     void update(MessageReceiver &aEntity, float dt);
 
 private:
-	CL_InputContext mIc;
+	clan::InputContext mIc;
 };
 
 }

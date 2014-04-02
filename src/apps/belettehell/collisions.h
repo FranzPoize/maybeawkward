@@ -13,9 +13,9 @@ struct Rect {
     : x(aX), y(aY), width(aW), height(aH) {}
 
 
-    operator CL_Rectf() 
+    operator clan::Rectf() 
     {
-        return CL_Rectf(x, y-height, CL_Sizef(width, height));
+        return clan::Rectf(x, y-height, clan::Sizef(width, height));
     }
 
 

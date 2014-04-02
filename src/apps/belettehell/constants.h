@@ -1,12 +1,12 @@
 #ifndef constants_h__
 #define constants_h__
 
-#include "user_constants.h"
+//#include "user_constants.h"
 
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
 #define EPSILON 0.0000001f
-#define ORIGIN origin_bottom_left
+#define ORIGIN clan::origin_bottom_left
 #define MAX_OBJECTS_QUAD_TREE 15
 #define MAX_LEVELS_QUAD_TREE 0 
 #define CULLING_FACTOR_H 1.5f

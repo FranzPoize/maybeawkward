@@ -117,10 +117,10 @@ void World::empty()
 }
 
 void World::createBackground() {
-	CL_SpriteDescription proxyDescription;
+	clan::SpriteDescription proxyDescription;
     proxyDescription.add_frame(ASSET_PATH+"design_export/ciel.png");
 
-    CL_Sprite proxySprite(World::instance.getGraphicWrapper().cl(), proxyDescription);
+    clan::Sprite proxySprite(World::instance.getGraphicWrapper().cl(), proxyDescription);
     proxySprite.set_alignment(origin_top_left);
     std::shared_ptr<Drawer> proxyDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySprite);
 
@@ -134,10 +134,10 @@ void World::createBackground() {
 
 	mSkyBackground.push_back(sky);
 
-	CL_SpriteDescription proxyDescriptionSun;
+	clan::SpriteDescription proxyDescriptionSun;
     proxyDescriptionSun.add_frame(ASSET_PATH+"design_export/soleil.png");
 
-    CL_Sprite proxySpriteSun(World::instance.getGraphicWrapper().cl(), proxyDescriptionSun);
+    clan::Sprite proxySpriteSun(World::instance.getGraphicWrapper().cl(), proxyDescriptionSun);
     proxySpriteSun.set_alignment(origin_top_left);
     std::shared_ptr<Drawer> proxySunDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteSun);
 
@@ -151,10 +151,10 @@ void World::createBackground() {
 
 	mSkyBackground.push_back(sun);
 
-	CL_SpriteDescription proxyDescriptionRay;
+	clan::SpriteDescription proxyDescriptionRay;
     proxyDescriptionRay.add_frame(ASSET_PATH+"design_export/rayon_soleil.png");
 
-    CL_Sprite proxySpriteRay(World::instance.getGraphicWrapper().cl(), proxyDescriptionRay);
+    clan::Sprite proxySpriteRay(World::instance.getGraphicWrapper().cl(), proxyDescriptionRay);
     proxySpriteRay.set_alignment(origin_top_left);
     std::shared_ptr<Drawer> proxyRayDrawer = std::make_shared<DrawerSprite>(World::instance.getGraphicWrapper(), proxySpriteRay);
 

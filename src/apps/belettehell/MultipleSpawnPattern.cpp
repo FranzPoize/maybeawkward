@@ -46,7 +46,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 		}
 
 		std::shared_ptr<Entity> enemy;
-		CL_SpriteDescription enemyDescription;
+		clan::SpriteDescription enemyDescription;
 
 		switch(i->mType)
 		{
@@ -63,7 +63,7 @@ void MultipleSpawnPattern::launchPattern(GraphicWrapper &gw) {
 			enemyDescription.add_frame(ASSET_PATH+"design_export/ennemi/sprite_skybull_rouge_00.png");
 			break;
 		}
-		CL_Sprite enemySprite(gw.cl(),enemyDescription);
+		clan::Sprite enemySprite(gw.cl(),enemyDescription);
 		enemySprite.set_alignment(ORIGIN);
 
 		std::shared_ptr<DrawerSprite> drawer(new DrawerSprite(gw,enemySprite));

@@ -29,20 +29,20 @@ class AABB : public BHQT::BoundingBox<AABB>
 	friend class Entity;
 
 public:
-	AABB(CL_Vec2d aCenter, double aHalfWidth, double aHalfHeight, CL_Origin aOrigin);
+	AABB(clan::Vec2d aCenter, double aHalfWidth, double aHalfHeight, clan::Origin aOrigin);
 	virtual bool isColliding(const AABB& aLeftBB) const ;
 	virtual AABB getQuadrant(unsigned int aQuadrantId) const ;
 	virtual bool contains(const AABB& aBBox) const ;
 
-	operator CL_Rectd() const
+	operator clan::Rectd() const
 	{
-		return CL_Rectd(mCenter.x-mHalfWidth, mCenter.y-mHalfHeight, mCenter.x+mHalfWidth, mCenter.y+mHalfHeight);
+		return clan::Rectd(mCenter.x-mHalfWidth, mCenter.y-mHalfHeight, mCenter.x+mHalfWidth, mCenter.y+mHalfHeight);
 	}
 
 	/// \brief : returns x1, y1, x2, y2
-	operator CL_Vec4d() const
+	operator clan::Vec4d() const
 	{
-		return CL_Vec4d(mCenter.x-mHalfWidth, mCenter.y-mHalfHeight, mCenter.x+mHalfWidth, mCenter.y+mHalfHeight);
+		return clan::Vec4d(mCenter.x-mHalfWidth, mCenter.y-mHalfHeight, mCenter.x+mHalfWidth, mCenter.y+mHalfHeight);
 	}
 
 	void setPosition(double x, double y)
@@ -55,7 +55,7 @@ public:
 private:
 	int mHAlignFactor;
 	int mVAlignFactor;
-	CL_Vec2d mCenter;
+	clan::Vec2d mCenter;
 	double mHalfWidth;
 	double mHalfHeight;
 };

@@ -18,7 +18,7 @@ static uint64_t key(Family f1, Family f2) {
 
 GameLogic::GameLogic():
 	mQuadTree(0,
-		AABB(CL_Vec2d(WIN_WIDTH/2, WIN_HEIGHT/2),
+		AABB(clan::Vec2d(WIN_WIDTH/2, WIN_HEIGHT/2),
 			WIN_HEIGHT*CULLING_FACTOR_V,
 			WIN_WIDTH*CULLING_FACTOR_H,
 			ORIGIN))

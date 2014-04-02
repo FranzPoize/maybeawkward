@@ -16,7 +16,7 @@ using namespace MA;
 
 #include "Entity.h"
 
-DrawerSprite::DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite):
+DrawerSprite::DrawerSprite(GraphicWrapper &gc, clan::Sprite aSprite):
     mGc(gc),
     mSprite(aSprite)
 {
@@ -24,7 +24,7 @@ DrawerSprite::DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite):
 
 void DrawerSprite::draw(const Entity &aEntity)
 {
-    mSprite.set_angle(CL_Angle(aEntity.angle(), cl_radians));
+    mSprite.set_angle(clan::Angle(aEntity.angle(), clan::radians));
     mSprite.update();
 #ifdef INTEGRAL_SCROLLING 
 	mSprite.draw(mGc.cl(), (float)floor(aEntity.x()+0.5f - mGc.camera().pos()*(aEntity.cameraFactor())), (float)floor(aEntity.y()+0.5f));
@@ -33,19 +33,19 @@ void DrawerSprite::draw(const Entity &aEntity)
 #endif
 
 #ifdef DRAW_HITBOX
-	CL_Vec4d offsetBox = CL_Vec4d(-mGc.camera().pos()*(aEntity.cameraFactor()),
+	clan::Vec4d offsetBox = clan::Vec4d(-mGc.camera().pos()*(aEntity.cameraFactor()),
 									0.f,
 									-mGc.camera().pos()*(aEntity.cameraFactor()),
 									0.f)
 						+ aEntity.getBoundingBox();
 
-    CL_Draw::box(mGc.cl(),
-        CL_Rectf(offsetBox.x,offsetBox.y,offsetBox.z,offsetBox.w),
-        CL_Colorf::bisque);
+    clan::Draw::box(mGc.cl(),
+        clan::Rectf(offsetBox.x,offsetBox.y,offsetBox.z,offsetBox.w),
+        clan::Colorf::bisque);
 
 	//std::ostringstream oss;
 	//oss << "Entity : " << aEntity.x() << "," << aEntity.y() 
-	//	<< ". Bounding Box : " << CL_Vec4d(aEntity.getBoundingBox()).x << "," << CL_Vec4d(aEntity.getBoundingBox()).w << std::endl;
-	//CL_Console::write_line(oss.str());
+	//	<< ". Bounding Box : " << clan::Vec4d(aEntity.getBoundingBox()).x << "," << clan::Vec4d(aEntity.getBoundingBox()).w << std::endl;
+	//clan::Console::write_line(oss.str());
 #endif
 }

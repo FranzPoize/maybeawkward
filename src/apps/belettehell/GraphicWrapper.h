@@ -13,9 +13,9 @@ class Camera;
 class GraphicWrapper
 {
 public:
-	GraphicWrapper(CL_GraphicContext &aGC,std::shared_ptr<Camera> aCamera);
+	GraphicWrapper(clan::GraphicContext &aGC,std::shared_ptr<Camera> aCamera);
 
-    CL_GraphicContext& cl() const
+    clan::GraphicContext& cl() const
     {
         return mGC;
     }
@@ -25,7 +25,7 @@ public:
         return *mCamera;
     }
 private:
-    CL_GraphicContext &mGC;
+    clan::GraphicContext &mGC;
     std::shared_ptr<Camera> mCamera;
 };
 

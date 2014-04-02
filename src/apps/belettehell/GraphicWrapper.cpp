@@ -6,7 +6,7 @@
 
 using namespace MA;
 
-GraphicWrapper::GraphicWrapper(CL_GraphicContext &aGC,std::shared_ptr<Camera> aCamera):
+GraphicWrapper::GraphicWrapper(clan::GraphicContext &aGC,std::shared_ptr<Camera> aCamera):
 	mGC(aGC),
 	mCamera(aCamera)
 {

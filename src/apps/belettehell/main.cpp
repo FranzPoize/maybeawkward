@@ -29,27 +29,27 @@ class ConsoleProgram
 public:
     static std::shared_ptr<MA::Entity> createPibi(MA::World &aWorld)
     {
-        CL_SpriteDescription pibiDescription;
+        clan::SpriteDescription pibiDescription;
         pibiDescription.add_frame(ASSET_PATH+"design_export/nounours_idle/nounours_idle_00.png");
 
-        CL_Sprite pibiSprite(aWorld.getGraphicWrapper().cl(), pibiDescription);
+        clan::Sprite pibiSprite(aWorld.getGraphicWrapper().cl(), pibiDescription);
         pibiSprite.set_alignment(ORIGIN);
         std::shared_ptr<MA::Drawer> pibiDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), pibiSprite);
 
         //RightArm
-        CL_SpriteDescription rightArmDescritpion;
+        clan::SpriteDescription rightArmDescritpion;
         rightArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_droit/nounours_bra_droit_00.png");
 
-        CL_Sprite rightArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
+        clan::Sprite rightArmSprite(aWorld.getGraphicWrapper().cl(), rightArmDescritpion);
         rightArmSprite.set_alignment(ORIGIN);
         rightArmSprite.set_rotation_hotspot(origin_top_left, -85, -108);
         std::shared_ptr<MA::Drawer> rightArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), rightArmSprite);
 
         // LeftArm
-        CL_SpriteDescription leftArmDescritpion;
+        clan::SpriteDescription leftArmDescritpion;
         leftArmDescritpion.add_frame(ASSET_PATH+"design_export/nounours_bra_gauche/nounours_bra_gauche_00.png");
 
-        CL_Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), leftArmDescritpion);
+        clan::Sprite leftArmSprite(aWorld.getGraphicWrapper().cl(), leftArmDescritpion);
         leftArmSprite.set_alignment(ORIGIN);
         leftArmSprite.set_rotation_hotspot(origin_top_left, -109, -107);
         std::shared_ptr<MA::Drawer> leftArmDrawer = std::make_shared<MA::DrawerSprite>(aWorld.getGraphicWrapper(), leftArmSprite);
@@ -84,7 +84,7 @@ public:
         MA::PhysicsSystem::addEntity(*rightArm, MA::PHYSICS_BOX);
 		rightArm->setPosition(0.0f, 0.0f);
 
-        CL_Pointf rightOrigin(85.f, -62.f);
+        clan::Pointf rightOrigin(85.f, -62.f);
         std::shared_ptr<MA::AttackerBullet> rightAttacker = std::make_shared<MA::AttackerBullet>(rightOrigin);
         rightArm->setAttacker(rightAttacker);
 
@@ -94,7 +94,7 @@ public:
         MA::PhysicsSystem::addEntity(*leftArm, MA::PHYSICS_BOX);
 		leftArm->setPosition(0.0f, 0.0f);
 
-        CL_Pointf leftOrigin(109.f, -63.f);
+        clan::Pointf leftOrigin(109.f, -63.f);
         std::shared_ptr<MA::AttackerBullet> leftAttacker = std::make_shared<MA::AttackerBullet>(leftOrigin);
         leftArm->setAttacker(leftAttacker);
 
@@ -105,7 +105,7 @@ public:
         return pibi;
     }
 
-    static int main(const std::vector<CL_String> &args)
+    static int main(const std::vector<clan::String> &args)
     {
 #ifdef WIN32
         HANDLE process = GetCurrentProcess();
@@ -113,29 +113,29 @@ public:
 #endif
         MA::PhysicsSystem::init();
 
-        CL_SetupCore setup_core;
-        CL_SetupDisplay setup_display;
-        CL_SetupGL setup_opengl;
-        CL_SetupSound setup_sound;
-        CL_SoundOutput output(44100);
+        clan::SetupCore setup_core;
+        clan::SetupDisplay setup_display;
+        clan::SetupGL setup_opengl;
+        clan::SetupSound setup_sound;
+        clan::SoundOutput output(44100);
 
-        CL_ConsoleWindow console("Console", 80, 160);
-        CL_DisplayWindowDescription windowDescription;
+        clan::ConsoleWindow console("Console", 80, 160);
+        clan::DisplayWindowDescription windowDescription;
         //Fucked up default value of "client area" to false... so this line is very important to get sensible behavior.
-        windowDescription.set_size(CL_Size(WIN_WIDTH, WIN_HEIGHT), true);
+        windowDescription.set_size(clan::Size(WIN_WIDTH, WIN_HEIGHT), true);
         windowDescription.set_title("MaybeAwkward");
-        CL_DisplayWindow window(windowDescription);
-        CL_GraphicContext gc = window.get_gc();
-        CL_InputContext ic = window.get_ic();
+        clan::DisplayWindow window(windowDescription);
+        clan::GraphicContext gc = window.get_gc();
+        clan::InputContext ic = window.get_ic();
 
         MA::GameLogic logic;
         init_gameplay(&logic);
 
-        CL_FileLogger file_logger("logfile.txt");
+        clan::FileLogger file_logger("logfile.txt");
 
-        //gc.set_map_mode(cl_map_2d_upper_left);
+        //gc.set_map_mode(clan::map_2d_upper_left);
 
-        //CL_InputDevice gamepad = ic.get_joystick_count() ? ic.get_joystick() : ic.get_keyboard();
+        //clan::InputDevice gamepad = ic.get_joystick_count() ? ic.get_joystick() : ic.get_keyboard();
 
         //Business starts here
         try
@@ -147,59 +147,59 @@ public:
             world.init();
 
             // Load a sample from a wave file:
-            CL_SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
-			CL_SoundBuffer_Session playback = sample.prepare();
+            clan::SoundBuffer sample(ASSET_PATH+"design_export/Music_Awkward_West.wav");
+			clan::SoundBuffer_Session playback = sample.prepare();
 
             // Play sample
 			playback.set_looping(true);
 			playback.set_volume(1.f);
 			playback.play();
             //Title
-            CL_ResourceManager rTitre(ASSET_PATH+"design_export/titre.xml");
-            CL_Sprite titre(gc, "titre", &rTitre);
+            clan::ResourceManager rTitre(ASSET_PATH+"design_export/titre.xml");
+            clan::Sprite titre(gc, "titre", &rTitre);
 
 
-            while (ic.get_keyboard().get_keycode(CL_KEY_ENTER) == false)
+            while (ic.get_keyboard().get_keycode(clan::KEY_ENTER) == false)
             {
 				world.step(0.f);
 				titre.draw(gc,0,720);
 				world.getGraphicWrapper().camera().setPos(world.getGraphicWrapper().camera().pos() + 10);
                 window.flip(1);
-                CL_KeepAlive::process(0);
+                clan::KeepAlive::process(0);
             }
 
             std::shared_ptr<MA::Entity> pibi = createPibi(world);
             world.createSpawner(*pibi);
 
-            unsigned int current_time=CL_System::get_time(), last_time=current_time-1;
-            while (ic.get_keyboard().get_keycode(CL_KEY_ESCAPE) == false)
+            unsigned int current_time=clan::System::get_time(), last_time=current_time-1;
+            while (ic.get_keyboard().get_keycode(clan::KEY_ESCAPE) == false)
             {
-                current_time = CL_System::get_time();
+                current_time = clan::System::get_time();
                 float delta = (current_time-last_time)/1000.f;
                 last_time = current_time;
-                //CL_Console::write_line("dt : %1", delta);
+                //clan::Console::write_line("dt : %1", delta);
 
 				// Yup, we did that
                 //logic.update(delta);
 
-                gc.clear(CL_Colorf::whitesmoke);
+                gc.clear(clan::Colorf::whitesmoke);
 
                 world.step(delta);
 
                 window.flip(1);
-                CL_KeepAlive::process(0);
+                clan::KeepAlive::process(0);
 
-                current_time = CL_System::get_time();
+                current_time = clan::System::get_time();
                 if(current_time-last_time>ABNORMAL_TIME)
                 {
-                    cl_log_event("info", "ABNORMAL time : %1 ms", current_time-last_time);
+                    clan::log_event("info", "ABNORMAL time : %1 ms", current_time-last_time);
                 }
                 //int timeToSleep = FRAME_TIME_TARGET - (current_time-last_time);
                 //if(timeToSleep > 0)
-                //    CL_System::sleep(timeToSleep);
-                //CL_System::sleep(10);
+                //    clan::System::sleep(timeToSleep);
+                //clan::System::sleep(10);
 
-				if(pibi->isMarkedForDeletion() && ic.get_keyboard().get_keycode(CL_KEY_ENTER))
+				if(pibi->isMarkedForDeletion() && ic.get_keyboard().get_keycode(clan::KEY_ENTER))
 				{
 					world.empty();
 					pibi->setX(100.0f);
@@ -214,11 +214,11 @@ public:
 				}
             }
         }
-        catch(CL_Exception &exception)
+        catch(clan::Exception &exception)
         {
             // Create a console window for text-output if notf available
-            //CL_ConsoleWindow console("Console", 80, 160);
-            CL_Console::write_line("Error: " + exception.get_message_and_stack_trace());
+            //clan::ConsoleWindow console("Console", 80, 160);
+            clan::Console::write_line("Error: " + exception.get_message_and_stack_trace());
             console.display_close_message();
             return -1;
         }
@@ -230,4 +230,4 @@ public:
 // Create global application object, you MUST include this line or
 // the application start-up will fail to locate your application object.
 
-CL_ClanApplication app(&ConsoleProgram::main);
+clan::ClanApplication app(&ConsoleProgram::main);

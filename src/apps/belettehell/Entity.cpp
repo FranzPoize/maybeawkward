@@ -33,7 +33,7 @@ Entity::Entity(std::shared_ptr<Controller> aController, std::shared_ptr<Drawer> 
     mMarkedForDeletion(false),
     mState(IDLE),
 	mCameraFactor(1.0f),
-	//mBoundingBox(new AABB(CL_Vec2d(10., 10.), 0., 0.))
+	//mBoundingBox(new AABB(clan::Vec2d(10., 10.), 0., 0.))
 	mBoundingBox(),
 	mIsLive(false)
 {
@@ -115,7 +115,7 @@ void Entity::draw()
 void Entity::visit(AbstractMessage *aVisitedNode, const VisitInfo &info)
 {
     //do nothing (could log it for functionnal error tracing)
-    cl_log_event("warning", "Unhandled message.");
+    clan::log_event("warning", "Unhandled message.");
 }
 
 void Entity::visit(SpeedMessage *aMessage, const VisitInfo &info)

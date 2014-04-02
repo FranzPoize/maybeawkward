@@ -13,7 +13,7 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/Export.h.in
 set(${PROJECT_NAME}_HEADERS
 	${CMAKE_BINARY_DIR}/include/${PROJECT_NAME}_Export.h
 	AABB.h
-	user_constants.h
+	#user_constants.h
 	XBoxController.h
 	World.h
 	TerrainManager.h
@@ -105,12 +105,12 @@ set(${PROJECT_NAME}_SOURCES
 
 set(CMAKE_CXX_FLAGS_DEBUG
   "/MTd"
-  CACHE STRING "Debug compiler flags" FORCE
+  CACHE STRING "Debug compiler flags"
 )
 
 set(CMAKE_CXX_FLAGS_RELEASE
   "/MT"
-  CACHE STRING "Release compiler flags" FORCE
+  CACHE STRING "Release compiler flags"
 )
 
 add_executable(${PROJECT_NAME} WIN32

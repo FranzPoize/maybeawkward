@@ -215,18 +215,18 @@ public:
 
 	void translate(double x, double y)
 	{
-		mPosition += CL_Vec2d(x, y);
+		mPosition += clan::Vec2d(x, y);
 		mBoundingBox->setPosition(mPosition.x, mPosition.y);
 	}
 
-	//void setBoundingBox(CL_Vec2d aBoxCenter, double aBoxHalfWidth, double aBoxHalfHeight)
+	//void setBoundingBox(clan::Vec2d aBoxCenter, double aBoxHalfWidth, double aBoxHalfHeight)
 	//{
 	//	mBoundingBox.reset(new AABB(aBoxCenter, aBoxHalfWidth, aBoxHalfHeight));
 	//}
 
 	void setBoundingBox(double aBoxHalfWidth, double aBoxHalfHeight)
 	{
-		mBoundingBox.reset(new AABB(mPosition+CL_Vec2d(aBoxHalfWidth, -aBoxHalfHeight),
+		mBoundingBox.reset(new AABB(mPosition+clan::Vec2d(aBoxHalfWidth, -aBoxHalfHeight),
 									aBoxHalfWidth,
 									aBoxHalfHeight,
 									ORIGIN));
@@ -279,7 +279,7 @@ private:
 private:
     std::string mName;
 
-	CL_Vec2d mPosition;
+	clan::Vec2d mPosition;
 	std::unique_ptr<AABB> mBoundingBox;
 	std::unique_ptr<PhysicalObject> mPhysicalObject;
 

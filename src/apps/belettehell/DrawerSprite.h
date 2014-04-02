@@ -16,13 +16,13 @@ class GraphicWrapper;
 class DrawerSprite : public Drawer
 {
 public:
-    DrawerSprite(GraphicWrapper &gc, CL_Sprite aSprite);
+    DrawerSprite(GraphicWrapper &gc, clan::Sprite aSprite);
 
     void draw(const Entity &aEntity);
 
 private:
     GraphicWrapper &mGc;
-    CL_Sprite mSprite;
+    clan::Sprite mSprite;
 };
 
 }
